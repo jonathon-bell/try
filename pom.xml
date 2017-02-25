@@ -67,8 +67,19 @@
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.1.5</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.scalafx</groupId>
+      <artifactId>scalafx_2.12</artifactId>
+      <version>8.0.102-R11</version>
     </dependency>    
-        
+    <dependency>
+      <groupId>de.codecentric.centerdevice</groupId>
+      <artifactId>centerdevice-nsmenufx</artifactId>
+      <version>2.1.4</version>
+    </dependency>
+    
     <dependency>
       <groupId>com.wolery.owl</groupId>
       <artifactId>owl</artifactId>
@@ -121,7 +132,7 @@
                 <transformer
                   implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
-                    <Main-Class>com.wolery.try.Main</Main-Class>
+                    <Main-Class>com.wolery.owl.Main</Main-Class>
                   </manifestEntries>
                 </transformer>
               </transformers>

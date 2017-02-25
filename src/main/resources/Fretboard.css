@@ -1,0 +1,46 @@
+//**************************** Copyright © Jonathon Bell. All rights reserved.
+//*
+//*
+//*  Version : $Header:$
+//*
+//*
+//*  Purpose :
+//*
+//*
+//*  Comments: This file uses a tab size of 2 spaces.
+//*
+//*
+//****************************************************************************
+
+.stage 
+{
+  -fx-background-image:          url("Linen.jpg");
+}
+
+.binding 
+{
+//-fx-background-color:          rgb(250,250,235);
+//-fx-border-width:              0;
+}
+
+.fingerboard 
+{
+  -fx-background-image:          url("Ebony%202.jpg");
+//-fx-background-size:           75% 100%
+//-fx-background-repeat:         repeat;
+  -fx-background-size:           cover;
+}
+
+.fret
+{
+}
+
+.string
+{
+}
+
+.marker
+{
+}
+
+//****************************************************************************
