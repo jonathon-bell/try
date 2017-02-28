@@ -7,35 +7,42 @@
 //*  Purpose :
 //*
 //*
-//*  Comments: This file uses a tab size of 2 spaces.
+//*  Comments: This file uses a tab size of 3 spaces.
 //*
 //*
 //****************************************************************************
 
 .binding 
 {
-//-fx-background-color:          rgb(250,250,235);
-//-fx-border-width:              0;
+   -fx-background-color:          rgb(250,250,235);
 }
 
 .fingerboard 
 {
   -fx-background-image:          url("ebony-2.jpg");
-//-fx-background-size:           75% 100%
-//-fx-background-repeat:         repeat;
   -fx-background-size:           cover;
 }
 
 .fret
 {
+   -fx-stroke:                   #f2ebbc;
+   -fx-stroke-width:             6;
+   -fx-stroke-line-cap:          round;
+   -fx-stroke-line-join:         round;
 }
 
 .string
 {
+   -fx-stroke:                   #c6c4c4;
+   -fx-stroke-width:             2;
 }
 
 .marker
 {
+  -fx-fill:                      #e1dddd;
+  -fx-stroke:                    black;
+  -fx-stroke-type:               inside;
+  -fx-stroke-width:              1;
 }
 
 //****************************************************************************

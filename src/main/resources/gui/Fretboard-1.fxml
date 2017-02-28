@@ -12,75 +12,67 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="1400.0" stylesheets="@Fretboard-1.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wolery.owl.gui.FretboardController">
    <children>
-      <Pane style="-fx-background-color: rgb(250,250,235);" styleClass="binding">
-         <StackPane.margin>
-            <Insets bottom="-0.0" left="-0.0" top="-0.0" />
-         </StackPane.margin>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </Pane>
-      <Pane prefHeight="261.0" prefWidth="1373.0" style="-fx-background-size: cover;" styleClass="fingerboard">
+      <Pane styleClass="binding" />
+      <Pane styleClass="fingerboard">
          <StackPane.margin>
             <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
-         </StackPane.margin>
-      </Pane>
+         </StackPane.margin></Pane>
       <Pane fx:id="frets">
          <children>
-            <Line endY="300.0" layoutX="56.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="112.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="168.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="224.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="280.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="336.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="392.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="448.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="504.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="560.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="616.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="672.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="728.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="784.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="840.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="896.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="952.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="1008.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="1064.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="1120.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="1176.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="1232.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="1288.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="1344.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
-            <Line endY="300.0" layoutX="1395.0" stroke="#f2ebbc" strokeLineCap="ROUND" strokeLineJoin="ROUND" strokeWidth="4.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="56.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="112.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="168.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="224.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="280.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="336.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="392.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="448.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="504.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="560.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="616.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="672.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="728.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="784.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="840.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="896.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="952.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="1008.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="1064.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="1120.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="1176.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="1232.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="1288.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="1344.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="1395.0" styleClass="fret" />
          </children>
       </Pane>
-      <Pane fx:id="strings" prefHeight="200.0" prefWidth="200.0">
+      <Pane fx:id="strings">
          <children>
-            <Line endX="1400.0" fill="WHITE" layoutY="25.0" stroke="#c6c4c4" strokeWidth="2.0" styleClass="string" />
-            <Line endX="1400.0" fill="WHITE" layoutY="76.0" stroke="#c6c4c4" strokeWidth="2.0" styleClass="string" />
-            <Line endX="1400.0" fill="WHITE" layoutY="125.0" stroke="#c6c4c4" strokeWidth="2.0" styleClass="string" />
-            <Line endX="1400.0" fill="WHITE" layoutY="176.0" stroke="#c6c4c4" strokeWidth="2.0" styleClass="string" />
-            <Line endX="1400.0" fill="WHITE" layoutY="224.0" stroke="#c6c4c4" strokeWidth="2.0" styleClass="string" />
-            <Line endX="1400.0" fill="WHITE" layoutY="275.0" stroke="#c6c4c4" strokeLineCap="BUTT" strokeWidth="2.0" styleClass="string" />
+            <Line endX="1400.0" layoutY="25.0" styleClass="string" />
+            <Line endX="1400.0" layoutY="76.0" styleClass="string" />
+            <Line endX="1400.0" layoutY="125.0" styleClass="string" />
+            <Line endX="1400.0" layoutY="176.0" styleClass="string" />
+            <Line endX="1400.0" layoutY="224.0" styleClass="string" />
+            <Line endX="1400.0" layoutY="275.0" styleClass="string" />
          </children>
       </Pane>
       <Pane fx:id="markers">
          <children>
-            <Circle fill="#e1dddd" layoutX="196.0" layoutY="150.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="308.0" layoutY="150.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="420.0" layoutY="150.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="532.0" layoutY="150.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="700.0" layoutY="102.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="700.0" layoutY="200.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="869.0" layoutY="150.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="980.0" layoutY="150.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="1092.0" layoutY="150.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="1204.0" layoutY="150.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="1371.0" layoutY="102.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
-            <Circle fill="#e1dddd" layoutX="1371.0" layoutY="200.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" styleClass="marker" />
+            <Circle layoutX="196.0" layoutY="150.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="308.0" layoutY="150.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="420.0" layoutY="150.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="532.0" layoutY="150.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="700.0" layoutY="102.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="700.0" layoutY="200.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="869.0" layoutY="150.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="980.0" layoutY="150.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="1092.0" layoutY="150.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="1204.0" layoutY="150.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="1371.0" layoutY="102.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="1371.0" layoutY="200.0" radius="8.0" styleClass="marker" />
          </children>
       </Pane>
-      <GridPane fx:id="grid" alignment="CENTER_RIGHT">
+      <GridPane fx:id="grid">
          <columnConstraints>
             <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
             <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
