@@ -12,7 +12,7 @@
 //*
 //****************************************************************************
 
-package com.wolery.owl.scraps
+package com.wolery.owl
 
 import  com.wolery.owl.core._
 

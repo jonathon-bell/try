@@ -1,0 +1,20 @@
+//**************************** Copyright © Jonathon Bell. All rights reserved.
+//*
+//*
+//*  Version : $Header:$
+//*
+//*
+//*  Purpose :
+//*
+//*
+//*  Comments: This file uses a tab size of 3 spaces.
+//*
+//*
+//****************************************************************************
+
+.main-window
+{
+   -fx-background-image: url("linen-1.jpg")
+}
+
+//****************************************************************************

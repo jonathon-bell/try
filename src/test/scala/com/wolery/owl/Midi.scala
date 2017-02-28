@@ -12,7 +12,7 @@
 //*
 //****************************************************************************
 
-package com.wolery.owl.scraps
+package com.wolery.owl
 import javax.sound.midi._
 import com.wolery.owl.utils.Logging
 
