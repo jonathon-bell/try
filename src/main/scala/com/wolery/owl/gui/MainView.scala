@@ -17,7 +17,7 @@ package com.wolery.owl.gui
 import com.wolery.owl.utils.Logging
 
 import de.codecentric.centerdevice.MenuToolkit
-import javafx.fxml.FXML
+import javafx.fxml.{FXML ⇒ fx}
 import javafx.scene.control.MenuBar
 import javafx.scene.layout.{BorderPane,Pane}
 import scalafx.Includes.jfxBorderPane2sfx
@@ -28,7 +28,7 @@ import scalafx.scene.Scene
 
 class MainController extends Logging
 {
-  @FXML var menubar: MenuBar = _
+  @fx var menubar: MenuBar = _
 
   def initialize() =
   {
