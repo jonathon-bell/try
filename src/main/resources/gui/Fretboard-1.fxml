@@ -12,12 +12,12 @@
 
 <StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="1400.0" stylesheets="@Fretboard-1.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.wolery.owl.gui.FretboardController">
    <children>
-      <Pane styleClass="binding" />
-      <Pane styleClass="fingerboard">
+      <Pane cache="true" styleClass="binding" />
+      <Pane cache="true" styleClass="fingerboard">
          <StackPane.margin>
             <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
          </StackPane.margin></Pane>
-      <Pane fx:id="frets">
+      <Pane fx:id="frets" cache="true">
          <children>
             <Line endY="300.0" layoutX="56.0" styleClass="fret" />
             <Line endY="300.0" layoutX="112.0" styleClass="fret" />
@@ -46,7 +46,7 @@
             <Line endY="300.0" layoutX="1395.0" styleClass="fret" />
          </children>
       </Pane>
-      <Pane fx:id="strings">
+      <Pane fx:id="strings" cache="true">
          <children>
             <Line endX="1400.0" layoutY="25.0" styleClass="string" />
             <Line endX="1400.0" layoutY="76.0" styleClass="string" />
@@ -56,7 +56,7 @@
             <Line endX="1400.0" layoutY="275.0" styleClass="string" />
          </children>
       </Pane>
-      <Pane fx:id="markers">
+      <Pane fx:id="markers" cache="true">
          <children>
             <Circle layoutX="196.0" layoutY="150.0" radius="8.0" styleClass="marker" />
             <Circle layoutX="308.0" layoutY="150.0" radius="8.0" styleClass="marker" />
@@ -74,31 +74,31 @@
       </Pane>
       <GridPane fx:id="grid">
          <columnConstraints>
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
-            <ColumnConstraints halignment="CENTER" prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
+            <ColumnConstraints prefWidth="100.0" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints percentHeight="16.7" prefHeight="50.0" />
@@ -108,12 +108,6 @@
             <RowConstraints percentHeight="16.7" prefHeight="50.0" />
             <RowConstraints percentHeight="16.7" prefHeight="50.0" />
          </rowConstraints>
-         <children>
-            <Circle fill="DODGERBLUE" radius="8.0" strokeType="INSIDE" />
-            <Circle fill="DODGERBLUE" radius="8.0" strokeType="INSIDE" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Circle fill="DODGERBLUE" radius="8.0" strokeType="INSIDE" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Circle fill="DODGERBLUE" radius="8.0" strokeType="INSIDE" />
-         </children>
          <cursor>
             <Cursor fx:constant="CROSSHAIR" />
          </cursor>
