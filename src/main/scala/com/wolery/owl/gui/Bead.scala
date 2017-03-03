@@ -14,9 +14,13 @@
 
 package com.wolery.owl.gui
 
-import javafx.scene.layout.Region
-import javafx.scene.layout.StackPane
-import javafx.scene.text.Text
+//****************************************************************************
+
+import scalafx.scene.input.MouseEvent
+import scalafx.scene.layout.Region.USE_PREF_SIZE
+import scalafx.scene.layout.StackPane
+import scalafx.scene.text.Text
+import scalafx.Includes._
 
 //****************************************************************************
 
@@ -24,13 +28,16 @@ class Bead(text: String,style: String = "bead") extends StackPane
 {
   val t = new Text(text)
 
-  t.getStyleClass().add(style+"-text")
-    getStyleClass().add(style)
-    getChildren.add(t)
+  t.setStyle("-fx-fill:inherit;")
 
-  setMinSize(Region.USE_PREF_SIZE,Region.USE_PREF_SIZE)
-  setMaxSize(Region.USE_PREF_SIZE,Region.USE_PREF_SIZE)
-  setPrefSize(30,30)
+  this.getStyleClass.add(style)
+  this.getChildren.add(t)
+
+  this.setMinSize(USE_PREF_SIZE,USE_PREF_SIZE)
+  this.setMaxSize(USE_PREF_SIZE,USE_PREF_SIZE)
+  this.setPrefSize(30,30)
+
+  this.onMouseClicked = (e: MouseEvent) => {println("click!")}
 }
 
 //****************************************************************************

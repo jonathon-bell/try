@@ -58,18 +58,18 @@
       </Pane>
       <Pane fx:id="markers" cache="true">
          <children>
-            <Circle layoutX="196.0" layoutY="150.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="308.0" layoutY="150.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="420.0" layoutY="150.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="532.0" layoutY="150.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="700.0" layoutY="102.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="700.0" layoutY="200.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="869.0" layoutY="150.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="980.0" layoutY="150.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="1092.0" layoutY="150.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="1204.0" layoutY="150.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="1371.0" layoutY="102.0" radius="8.0" styleClass="marker" />
-            <Circle layoutX="1371.0" layoutY="200.0" radius="8.0" styleClass="marker" />
+            <Circle layoutX="196.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="308.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="420.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="532.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="700.0" layoutY="102.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="700.0" layoutY="200.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="869.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="980.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="1092.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="1204.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="1371.0" layoutY="102.0" radius="8.0" styleClass="inlay" />
+            <Circle layoutX="1371.0" layoutY="200.0" radius="8.0" styleClass="inlay" />
          </children>
       </Pane>
       <GridPane fx:id="grid">

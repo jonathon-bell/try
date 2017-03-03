@@ -10,60 +10,60 @@
 //*  Comments: This file uses a tab size of 3 spaces.
 //*
 //*
+//*  See Also: http://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html
+//*
+//*
 //****************************************************************************
 
 .binding 
 {
-   -fx-background-color:          rgb(250,250,235);
+   -fx-background-color:            beige;
 }
 
 .fingerboard 
 {
-  -fx-background-image:          url("ebony-2.jpg");
-  -fx-background-size:           cover;
+   -fx-background-image:            url("ebony-2.jpg");
+   -fx-background-size:             cover;
+}
+                                    
+.inlay
+{
+   -fx-fill:                        #e1dddd;
+   -fx-stroke:                      black;
+   -fx-stroke-type:                 inside;
+   -fx-stroke-width:                1;
 }
 
 .fret
 {
-   -fx-stroke:                   #f2ebbc;
-   -fx-stroke-width:             6;
-   -fx-stroke-line-cap:          round;
-   -fx-stroke-line-join:         round;
+   -fx-stroke:                      #f2ebbc;
+   -fx-stroke-width:                6;
+   -fx-stroke-line-cap:             round;
+   -fx-stroke-line-join:            round;
 }
 
 .string
 {
-   -fx-stroke:                   #c6c4c4;
-   -fx-stroke-width:             2;
-}
-
-.marker
-{
-  -fx-fill:                      #e1dddd;
-  -fx-stroke:                    black;
-  -fx-stroke-type:               inside;
-  -fx-stroke-width:              1;
+   -fx-stroke:                      #c6c4c4;
+   -fx-stroke-width:                2;
 }
 
 //****************************************************************************
 
 .bead
 {
-   -fx-border-width:             1;
-   -fx-border-color:             red;
-   -fx-background-color:         orange;
-   -fx-shape:                   "M-1   0   
-                                 a 1 1 0 1 1  2.0 0  
-                                 a 1 1 0 1 1 -2.0 0 Z";
-   -fx-pref-width:               30;
-   -fx-pref-height:              30;
-}
+   -fx-border-width:                1;
+   -fx-border-color:                red;
+   -fx-background-color:            orange;
+   -fx-shape:                      "M-1   0   
+                                    a 1 1 0 1 1  2.0 0  
+                                    a 1 1 0 1 1 -2.0 0 Z";
+   -fx-pref-width:                  30;
+   -fx-pref-height:                 30;
 
-.bead-text
-{
-   -fx-fill:                     blue;
-   -fx-text-alignment:           center;
-   -fx-font-size:                12;
+   -fx-fill:                        red;
+// -fx-font-size:                   8;
+// -fx-text-alignment:              center;
 }
 
 //****************************************************************************
