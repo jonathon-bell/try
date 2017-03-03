@@ -18,7 +18,7 @@ package com.wolery.owl
 
 object Application extends scalafx.application.JFXApp
 {
-  stage = new gui.MainWindow()
+  stage = new gui.MainView()
 }
 
 //****************************************************************************

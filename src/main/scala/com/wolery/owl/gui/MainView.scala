@@ -26,7 +26,7 @@ import scalafx.scene.Scene
 
 //****************************************************************************
 
-class MainWindowController extends Logging
+class MainController extends Logging
 {
   @FXML var menubar: MenuBar = _
 
@@ -44,9 +44,9 @@ class MainWindowController extends Logging
 
 //****************************************************************************
 
-class MainWindow extends PrimaryStage
+class MainView extends PrimaryStage
 {
-  val p = Load[BorderPane]("MainWindow")
+  val p = Load[BorderPane]("MainView")
   val f = Load[Pane]      ("Fretboard-1")
 
   p.setCenter(f)
