@@ -22,52 +22,62 @@ import javafx.scene.Node
 import javafx.scene.layout.{Pane,GridPane}
 import javafx.geometry.HPos
 import scalafx.Includes._
+import Math.{max,min}
 
 //****************************************************************************
 
-package fretted
+case class Fretted(frets: ℕ,strings: Pitch*)
 {
-  case class Fretted(frets: ℕ,strings: Pitch*)
+  case class Point(fret: ℕ,string: ℕ)
   {
-    case class Point(fret: ℕ,string: ℕ)
-    {
-      def pitch: Pitch     = Fretted.this.pitch(fret,string)
+    def pitch: Pitch                   = strings(string) + fret
 
-      override
-      def toString: String = s"$pitch ${string+1}:$fret"
+    def place(node: Node): Node        =
+    {
+      GridPane.setConstraints(node,fret,strings.size - 1 - string)
+      node
     }
 
-    def points: Seq[Point] =
-    {
-      for {f ← 0 to frets; s ← 0 until strings.size} yield
-          Point(f,s)
-    }
-
-//  def points(pitch:Pitch): Seq[Point]
-    def pitch (point: Point): Pitch      = pitch(point.string,point.fret)
-    def pitch (fret: ℕ,string: ℕ): Pitch = strings(string) + fret
+    override
+    def toString: String               = s"$pitch ${string+1}:$fret"
   }
-}
 
-package object fretted
-{
-  type Fret      = ℕ
-  type Strng     = ℕ
-  type Position  = ℕ
+  def points: Seq[Point]               =
+  {
+    for {f ← 0 to frets; s ← 0 until strings.size} yield
+      Point(f,s)
+  }
 
-  val instrument = Fretted(24,E(2),A(2),D(3),G(3),B(3),E(4))
+  def points(pitch: Pitch): Seq[Point] =
+  {
+    for (s ← 0 until strings.size if strings(s) <= pitch && pitch<= strings(s)+frets) yield
+      Point(pitch-strings(s),s)
+  }
+
+  def position(fret: ℕ): Seq[Point]     =
+  {
+    for {f ← max(fret-2,0) to min(fret+3,frets);
+         s ← 0 until strings.size} yield
+      Point(f,s)
+  }
+
+  def strings(pitch: Pitch): Seq[ℕ] =
+  {
+    for {s ← 0 until strings.size if strings(s)<=pitch && pitch<=strings(s)} yield
+      s
+  }
 }
 
 //****************************************************************************
 
 class FretboardController extends Logging
 {
-  import fretted._
-
   @fx var frets:   Pane = _
   @fx var strings: Pane = _
   @fx var markers: Pane = _
   @fx var grid:    GridPane = _
+
+  val instrument = Fretted(24,E(2),A(2),D(3),G(3),B(3),E(4))
 
   def initialize =
   {
@@ -76,20 +86,26 @@ class FretboardController extends Logging
   //grid.rowConstraints.   foreach(c ⇒ c.setFillHeight(false))
     grid.columnConstraints.foreach(c ⇒ c.setHalignment(HPos.CENTER))
 
-    val scale = Scale(C,"altered").get
+    val scale = Scale(F,"whole tone").get
+    val fifth = instrument.position(5)
 
-    for (p ← instrument.points if scale.contains(p.pitch.note))
+    for (p ← instrument.position(5))
     {
-      add(new Bead(p.pitch.toString,"bead"),p)
+      if  (scale.contains(p.pitch.note) && fifth.contains(p))
+        add(new Bead(p.pitch.note.toString,"bead"),p)
+      else
+        add(new Bead(p.pitch.toString,"bead-white-text"),p)
     }
   }
 
-  def add(n: Node,p: instrument.Point) =
+  def add(node: Node,point: instrument.Point) =
   {
-    GridPane.setConstraints(n,p.fret,instrument.strings.size - p.string - 1)
+    GridPane.setConstraints(node,point.fret,instrument.strings.size - 1 - point.string)
 
-    grid.getChildren.add(n)
+    grid.getChildren.add(node)
   }
 }
+
+//****************************************************************************
 
 //****************************************************************************

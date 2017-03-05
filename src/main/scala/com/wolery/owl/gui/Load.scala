@@ -16,14 +16,15 @@ package com.wolery.owl.gui
 
 //****************************************************************************
 
-object Load
+object load
 {
-  def apply[Node](fxml: String): Node =
+  def apply[Node,Controller](fxml: String): (Node,Controller) =
   {
     val f = getClass.getResource(s"/gui/$fxml.fxml")
     val l = new javafx.fxml.FXMLLoader(f)
+    val c = l.getController[Controller]
 
-    l.load[Node]()
+    (l.load[Node],c)
   }
 }
 

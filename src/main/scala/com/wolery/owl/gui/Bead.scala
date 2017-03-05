@@ -28,7 +28,7 @@ class Bead(text: String,style: String = "bead") extends StackPane
 {
   val t = new Text(text)
 
-  t.setStyle("-fx-fill:inherit;")
+  t.setStyle("-fx-fill:inherit;-fx-stroke:inherit;-fx-stroke-width:inherit;")
 
   this.getStyleClass.add(style)
   this.getChildren.add(t)

@@ -72,7 +72,7 @@
             <Circle layoutX="1371.0" layoutY="200.0" radius="8.0" styleClass="inlay" />
          </children>
       </Pane>
-      <GridPane fx:id="grid">
+      <GridPane fx:id="grid" styleClass="grid">
          <columnConstraints>
             <ColumnConstraints prefWidth="100.0" />
             <ColumnConstraints prefWidth="100.0" />

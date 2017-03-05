@@ -42,6 +42,11 @@
    -fx-stroke-line-join:            round;
 }
 
+.grid
+{
+   -fx-font-size:                   12;
+}
+
 .string
 {
    -fx-stroke:                      #c6c4c4;
@@ -61,9 +66,17 @@
    -fx-pref-width:                  30;
    -fx-pref-height:                 30;
 
-   -fx-fill:                        red;
-// -fx-font-size:                   8;
+   -fx-fill:                        brown;
+// -fx-font-size:                   16;
 // -fx-text-alignment:              center;
+}
+
+.bead-white-text
+{
+// -fx-font-size:                   16;
+   -fx-stroke-width:                1;
+   -fx-fill:                        white;
+   -fx-stroke:                      snow;
 }
 
 //****************************************************************************

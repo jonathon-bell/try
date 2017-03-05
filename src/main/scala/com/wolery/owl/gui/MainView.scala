@@ -23,6 +23,8 @@ import javafx.scene.layout.{BorderPane,Pane}
 import scalafx.Includes.jfxBorderPane2sfx
 import scalafx.application.JFXApp.PrimaryStage
 import scalafx.scene.Scene
+import scalafx.scene.Node
+import com.wolery.owl.core._
 
 //****************************************************************************
 
@@ -46,14 +48,14 @@ class MainController extends Logging
 
 class MainView extends PrimaryStage
 {
-  val p = Load[BorderPane]("MainView")
-  val f = Load[Pane]      ("Fretboard-1")
+  val (m,_) = load[BorderPane,MainController]      ("MainView")
+  val (f,c) = load[Pane,      FretboardController] ("Fretboard-1")
 
-  p.setCenter(f)
+  m.setCenter(f)
 
   resizable = false
   title     = "Owl"
-  scene     = new Scene(p)
+  scene     = new Scene(m)
 }
 
 //****************************************************************************
