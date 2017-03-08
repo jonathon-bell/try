@@ -1,7 +1,7 @@
 //**************************** Copyright © Jonathon Bell. All rights reserved.
 //*
 //*
-//*  Version : $Header:$
+//*  Version : $$Header:$$
 //*
 //*
 //*  Purpose :
@@ -16,9 +16,9 @@ package com.wolery.owl
 
 //****************************************************************************
 
-object Application extends scalafx.application.JFXApp
+trait Controller
 {
-  stage = new MainView()
+  def update(track: ℕ,chords: Seq[Chord]): Unit
 }
 
 //****************************************************************************

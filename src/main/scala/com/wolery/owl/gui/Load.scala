@@ -22,9 +22,19 @@ object load
   {
     val f = getClass.getResource(s"/gui/$fxml.fxml")
     val l = new javafx.fxml.FXMLLoader(f)
+    val n = l.load[Node]
     val c = l.getController[Controller]
 
-    (l.load[Node],c)
+    (n,c)
+  }
+
+  def apply[Node,Controller](fxml: String,controller: Controller): (Node,Controller) =
+  {
+    val f = getClass.getResource(s"/gui/$fxml.fxml")
+    val l = new javafx.fxml.FXMLLoader(f)
+    l.setController(controller)
+
+    (l.load[Node],controller)
   }
 }
 

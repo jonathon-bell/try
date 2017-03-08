@@ -1,7 +1,7 @@
 //**************************** Copyright © Jonathon Bell. All rights reserved.
 //*
 //*
-//*  Version : $Header:$
+//*  Version : $$Header:$$
 //*
 //*
 //*  Purpose :
@@ -12,13 +12,17 @@
 //*
 //****************************************************************************
 
-package com.wolery.owl
+package com.wolery
 
 //****************************************************************************
 
-object Application extends scalafx.application.JFXApp
+package object owl
 {
-  stage = new MainView()
+  import core._
+
+  type ℕ                              = Int
+  type ℤ                              = Int
+  type Chord = Seq[Pitch]
 }
 
 //****************************************************************************

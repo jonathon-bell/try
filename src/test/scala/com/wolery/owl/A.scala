@@ -16,7 +16,7 @@ package com.wolery.owl
 
 import  com.wolery.owl.core._
 
-object A
+object thing
 {
   def dump_pitches: Unit =
   {
