@@ -52,7 +52,7 @@ class MainView extends PrimaryStage
   val instrument:Instrument = StringedInstrument(24,E(2),A(2),D(3),G(3),B(3),E(4))
 
   val (m,_) = load[BorderPane,MainController]("MainView")
-  val (n,c) = instrument.view                ("Fretboard-1")
+  val (n,c) = instrument.view                ("Guitar")
 
   m.setCenter(n)
 

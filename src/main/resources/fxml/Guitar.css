@@ -22,7 +22,7 @@
 
 .fingerboard 
 {
-   -fx-background-image:            url("ebony-2.jpg");
+   -fx-background-image:            url("/img/ebony-2.jpg");
    -fx-background-size:             cover;
 }
                                     

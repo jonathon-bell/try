@@ -68,7 +68,7 @@ case class StringedInstrument(frets: ℕ,strings: Pitch*) extends Instrument
 
   def view(fxml: String): (Node,StringedController) =
   {
-    load("Fretboard-1",new StringedController(this))
+    load(fxml,new StringedController(this))
   }
 }
 
