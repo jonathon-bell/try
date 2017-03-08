@@ -17,7 +17,6 @@ package com.wolery.owl
 import com.wolery.owl.core._
 import com.wolery.owl.gui.load
 import com.wolery.owl.stringed.StringedInstrument
-import com.wolery.owl.keyboard.KeyboardInstrument
 import com.wolery.owl.utils.Logging
 
 import javafx.fxml.{ FXML ⇒ fx }
