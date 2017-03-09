@@ -17,7 +17,7 @@ package com.wolery.owl.stringed
 import com.wolery.owl.core._
 import javafx.fxml.{FXML ⇒ fx}
 import javafx.scene.Node
-import javafx.scene.layout.{Pane,GridPane}
+import javafx.scene.layout.GridPane
 import javafx.geometry.HPos
 import scalafx.Includes._
 
@@ -28,10 +28,7 @@ import com.wolery.owl.gui.Bead
 
 class StringedController(instrument: StringedInstrument) extends Controller
 {
-  @fx var strings: Pane     = _
-  @fx var frets:   Pane     = _
-  @fx var markers: Pane     = _
-  @fx var grid:    GridPane = _
+  @fx var grid:  GridPane = _
 
   def initialize =
   {
@@ -39,23 +36,23 @@ class StringedController(instrument: StringedInstrument) extends Controller
     grid.columnConstraints.foreach(c ⇒ c.setHalignment(HPos.CENTER))
   }
 
-  def update(track: ℕ,chords: Seq[Chord]) =
+  def update(layer: Layer,chords: Seq[Chord]) =
   {
     for {chord ← chords;
          pitch ← chord;
          stop@(s,f)  ← instrument.stops(pitch)}
     {
-      val node = bead(track,pitch)
+      val node = bead(layer,pitch)
 
       GridPane.setConstraints(node,f,instrument.strings.size - 1 - s)
       grid.getChildren.add(node)
     }
   }
 
-  def bead(track: ℕ,p: Pitch): Bead = track match
+  def bead(layer: Layer,p: Pitch): Bead = layer match
   {
-    case 0 => new Bead(p.note.toString,"bead-white-text")
-    case 1 => new Bead(p.toString,     "bead")
+    case 'harmony ⇒ new Bead(p.note.toString,"bead-white-text")
+    case 'melody  ⇒ new Bead(p.toString,     "bead")
   }
 }
 

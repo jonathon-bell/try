@@ -18,7 +18,7 @@ package com.wolery.owl
 
 trait Controller
 {
-  def update(track: ℕ,chords: Seq[Chord]): Unit
+  def update(layer: Layer,chords: Seq[Chord]): Unit
 }
 
 //****************************************************************************

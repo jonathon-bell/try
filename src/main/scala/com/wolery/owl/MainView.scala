@@ -60,10 +60,10 @@ class MainView extends PrimaryStage
   scene     = new Scene(m)
 
   val scale = Scale(F,"whole tone").get
-  val all   = instrument.pitches
+  val all   = instrument.playable
 
-  c.update(0,Seq(all))
-  c.update(1,Seq(all.filter(p => scale.contains(p.note))))
+  c.update('harmony,Seq(all))
+  c.update('melody, Seq(all.filter(p => scale.contains(p.note))))
  }
 
 //****************************************************************************

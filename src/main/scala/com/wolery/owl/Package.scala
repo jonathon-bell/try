@@ -20,9 +20,13 @@ package object owl
 {
   import core._
 
-  type ℕ                              = Int
-  type ℤ                              = Int
-  type Chord = Seq[Pitch]
+  type ℕ         = core.ℕ
+  type ℤ         = core.ℤ
+  type ℝ         = core.ℝ
+  type Chord     = Seq[Pitch]
+  type Pitches   = Seq[Pitch]
+  
+  type Layer     = Symbol
 }
 
 //****************************************************************************

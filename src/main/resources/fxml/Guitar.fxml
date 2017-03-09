@@ -17,7 +17,7 @@
          <StackPane.margin>
             <Insets bottom="6.0" left="6.0" right="6.0" top="6.0" />
          </StackPane.margin></Pane>
-      <Pane fx:id="frets" cache="true">
+      <Pane cache="true">
          <children>
             <Line endY="300.0" layoutX="56.0" styleClass="fret" />
             <Line endY="300.0" layoutX="112.0" styleClass="fret" />
@@ -46,7 +46,7 @@
             <Line endY="300.0" layoutX="1395.0" styleClass="fret" />
          </children>
       </Pane>
-      <Pane fx:id="strings" cache="true">
+      <Pane cache="true">
          <children>
             <Line endX="1400.0" layoutY="25.0" styleClass="string" />
             <Line endX="1400.0" layoutY="76.0" styleClass="string" />
@@ -56,7 +56,7 @@
             <Line endX="1400.0" layoutY="275.0" styleClass="string" />
          </children>
       </Pane>
-      <Pane fx:id="markers" cache="true">
+      <Pane cache="true">
          <children>
             <Circle layoutX="196.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
             <Circle layoutX="308.0" layoutY="150.0" radius="8.0" styleClass="inlay" />
@@ -108,12 +108,6 @@
             <RowConstraints percentHeight="16.7" prefHeight="50.0" />
             <RowConstraints percentHeight="16.7" prefHeight="50.0" />
          </rowConstraints>
-         <cursor>
-            <Cursor fx:constant="CROSSHAIR" />
-         </cursor>
-         <StackPane.margin>
-            <Insets />
-         </StackPane.margin>
       </GridPane>
    </children>
 </StackPane>

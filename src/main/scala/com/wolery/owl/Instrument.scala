@@ -23,17 +23,11 @@ import javafx.scene.Node
 
 trait Instrument
 {
-  def range                    : (Pitch,Pitch)
-  def pitches                  : Seq[Pitch] = range match {case (lo,hi)=> lo to hi}
-/*
-  def pitch(stop: Stop)        : Pitch
+  def lowest              : Pitch
+  def highest             : Pitch
+  def playable            : Seq[Pitch] = lowest to highest
 
-  def stops                    : Seq[Stop]
-  def stops(pitch: Pitch)      : Seq[Stop]
-//def stops(chord: Seq[Pitch]) : Seq[Seq[Stop]]
-  def position(position: ℕ)    : Seq[Stop]
-*/
-  def view(fxml: String)       : (Node,Controller)
+  def view(fxml: String)  : (Node,Controller)
 }
 
 //****************************************************************************

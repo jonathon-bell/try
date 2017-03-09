@@ -28,13 +28,10 @@ import javafx.scene.Node
 
 case class StringedInstrument(frets: ℕ,strings: Pitch*) extends Instrument
 {
-  type Stop       = (ℕ,ℕ)
-  type Controller = StringedController
+  type Stop = (ℕ,ℕ)
 
-  def range: (Pitch,Pitch) =
-  {
-    (strings(0),strings.last + frets)
-  }
+  def lowest:  Pitch = strings(0)
+  def highest: Pitch = strings.last + frets
 
   def pitch(stop: Stop): Pitch = stop match
   {
