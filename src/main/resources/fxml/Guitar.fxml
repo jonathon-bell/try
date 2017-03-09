@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
@@ -72,7 +71,7 @@
             <Circle layoutX="1371.0" layoutY="200.0" radius="8.0" styleClass="inlay" />
          </children>
       </Pane>
-      <GridPane fx:id="grid" styleClass="grid">
+      <GridPane fx:id="grid" onMouseClicked="#onMouseClicked" styleClass="grid">
          <columnConstraints>
             <ColumnConstraints prefWidth="100.0" />
             <ColumnConstraints prefWidth="100.0" />

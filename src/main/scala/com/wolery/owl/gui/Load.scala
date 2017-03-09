@@ -30,7 +30,7 @@ object load
 
     (n,c)
   }
-
+/*
   def apply[Node,Controller](fxml: String,controller: Controller): (Node,Controller) =
   {
     val l = loader(fxml)
@@ -39,6 +39,21 @@ object load
 
     (l.load[Node],controller)
   }
+  */
+//http://tpolecat.github.io/2015/07/30/infer.html
+  final class helper[Node]
+  {
+    def apply[Controller](fxml: String,controller: Controller): (Node,Controller) =
+    {
+      val l = loader(fxml)
+
+      l.setController(controller)
+
+      (l.load[Node],controller)
+    }
+  }
+
+  def apply[Node] = new helper[Node]
 
   private
   def loader(fxml: String): FXMLLoader =

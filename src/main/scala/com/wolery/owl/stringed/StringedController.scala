@@ -23,10 +23,11 @@ import scalafx.Includes._
 
 import com.wolery.owl._
 import com.wolery.owl.gui.Bead
+import javafx.scene.input.MouseEvent
 
 //****************************************************************************
 
-class StringedController(instrument: StringedInstrument) extends Controller
+class StringedController(val instrument: StringedInstrument) extends Controller
 {
   @fx var grid:  GridPane = _
 
@@ -44,8 +45,7 @@ class StringedController(instrument: StringedInstrument) extends Controller
     {
       val node = bead(layer,pitch)
 
-      GridPane.setConstraints(node,f,instrument.strings.size - 1 - s)
-      grid.getChildren.add(node)
+      grid.add(node,f,instrument.strings.size - 1 - s)
     }
   }
 
@@ -53,6 +53,11 @@ class StringedController(instrument: StringedInstrument) extends Controller
   {
     case 'harmony ⇒ new Bead(p.note.toString,"bead-white-text")
     case 'melody  ⇒ new Bead(p.toString,     "bead")
+  }
+
+  def onMouseClicked(e: MouseEvent) =
+  {
+    println("clicked")
   }
 }
 
