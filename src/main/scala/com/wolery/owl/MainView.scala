@@ -32,7 +32,10 @@ import javafx.event.ActionEvent
 
 class MainController(controller: Controller) extends Logging
 {
-  @fx var menubar: MenuBar = _
+  @fx
+  var menubar   : MenuBar    = _
+  val instrument: Instrument = controller.instrument
+  val playable  : Pitches    = instrument.playable
 
   def initialize() =
   {
@@ -43,16 +46,22 @@ class MainController(controller: Controller) extends Logging
     val tk = de.codecentric.centerdevice.MenuToolkit.toolkit()
 
     tk.setApplicationMenu(tk.createDefaultApplicationMenu("Owl"))
+
+    controller.update('background,Seq(playable))
   }
 
-  def onDelete(ae: ActionEvent) =
+  def onCIonian(ae: ActionEvent) =
   {
-    println("menu delete")
-    val scale = Scale(F,"whole tone").get
-    val all   = controller.instrument.playable
+    val s = Scale(C,"ionian").get
 
-    controller.update('harmony,Seq(all))
-    controller.update('melody, Seq(all.filter(p => scale.contains(p.note))))
+    controller.update('harmony, Seq(playable.filter(p ⇒ s.contains(p.note))))
+  }
+
+  def onCWholeTone(ae: ActionEvent) =
+  {
+    val s = Scale(C,"whole tone").get
+
+    controller.update('harmony, Seq(playable.filter(p ⇒ s.contains(p.note))))
   }
 }
 

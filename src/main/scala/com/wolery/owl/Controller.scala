@@ -1,7 +1,7 @@
 //**************************** Copyright © Jonathon Bell. All rights reserved.
 //*
 //*
-//*  Version : $$Header:$$
+//*  Version : $Header:$
 //*
 //*
 //*  Purpose :
@@ -19,7 +19,8 @@ package com.wolery.owl
 trait Controller
 {
   def instrument: Instrument
-  def update(layer: Layer,chords: Seq[Chord]): Unit
+
+  def update(layer: Symbol,chords: Seq[Chord]): Unit
 }
 
 //****************************************************************************

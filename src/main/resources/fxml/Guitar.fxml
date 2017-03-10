@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 
-<StackPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="1400.0" stylesheets="@Guitar.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<StackPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="1400.0" stylesheets="@Guitar.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane cache="true" styleClass="binding" />
       <Pane cache="true" styleClass="fingerboard">
@@ -18,7 +15,7 @@
          </StackPane.margin></Pane>
       <Pane cache="true">
          <children>
-            <Line endY="300.0" layoutX="56.0" styleClass="fret" />
+            <Line endY="300.0" layoutX="56.0" styleClass="nut" />
             <Line endY="300.0" layoutX="112.0" styleClass="fret" />
             <Line endY="300.0" layoutX="168.0" styleClass="fret" />
             <Line endY="300.0" layoutX="224.0" styleClass="fret" />
@@ -71,42 +68,5 @@
             <Circle layoutX="1371.0" layoutY="200.0" radius="8.0" styleClass="inlay" />
          </children>
       </Pane>
-      <GridPane fx:id="grid" onMouseClicked="#onMouseClicked" styleClass="grid">
-         <columnConstraints>
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-            <ColumnConstraints prefWidth="100.0" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints percentHeight="16.7" prefHeight="50.0" />
-            <RowConstraints percentHeight="16.7" prefHeight="50.0" />
-            <RowConstraints percentHeight="16.7" prefHeight="50.0" />
-            <RowConstraints percentHeight="16.7" prefHeight="50.0" />
-            <RowConstraints percentHeight="16.7" prefHeight="50.0" />
-            <RowConstraints percentHeight="16.7" prefHeight="50.0" />
-         </rowConstraints>
-      </GridPane>
    </children>
 </StackPane>

@@ -16,7 +16,7 @@ package com.wolery.owl.stringed
 
 //****************************************************************************
 
-import Math.{ max, min }
+import Math.{max,min}
 
 import com.wolery.owl.core._
 import com.wolery.owl.Instrument
@@ -28,33 +28,38 @@ import javafx.scene.Node
 
 case class StringedInstrument(frets: ℕ,strings: Pitch*) extends Instrument
 {
-  type Stop = (ℕ,ℕ)
-
-  def lowest:  Pitch = strings(0)
-  def highest: Pitch = strings.last + frets
-
-  def pitch(stop: Stop): Pitch = stop match
+  case class Cell(string: ℕ,fret: ℕ)
   {
-    case (string,fret) => strings(string) + fret
+    def pitch = strings(string) + fret
   }
 
-  def stops: Seq[Stop] =
+  def lowest: Pitch =
+  {
+    strings(0)
+  }
+
+  def highest: Pitch =
+  {
+    strings.last + frets
+  }
+
+  def cells: Seq[Cell] =
   {
     for {s ← 0 until strings.size; f ← 0 to frets} yield
-      (s,f)
+      Cell(s,f)
   }
 
-  def stops(pitch: Pitch): Seq[Stop] =
+  def cells(pitch: Pitch): Seq[Cell] =
   {
     for (s ← 0 until strings.size if strings(s) <= pitch && pitch<= strings(s)+frets) yield
-      (s,pitch-strings(s))
+      Cell(s,pitch-strings(s))
   }
 
-  def position(fret: ℕ): Seq[Stop] =
+  def position(fret: ℕ): Seq[Cell] =
   {
     for {f ← max(fret-2,0) to min(fret+3,frets);
          s ← 0 until strings.size} yield
-      (s,f)
+      Cell(s,f)
   }
 
   def strings(pitch: Pitch): Seq[ℕ] =

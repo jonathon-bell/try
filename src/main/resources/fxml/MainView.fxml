@@ -16,7 +16,8 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" onAction="#onDelete" text="Delete" />
+              <MenuItem mnemonicParsing="false" onAction="#onCIonian" text="C Ionian" />
+              <MenuItem mnemonicParsing="false" onAction="#onCWholeTone" text="C Whole Tone" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">

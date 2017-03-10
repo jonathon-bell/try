@@ -23,10 +23,11 @@ package object owl
   type ℕ         = core.ℕ
   type ℤ         = core.ℤ
   type ℝ         = core.ℝ
+  type Name      = core.Name
   type Chord     = Seq[Pitch]
   type Pitches   = Seq[Pitch]
   
-  type Layer     = Symbol
+//  type Layer     = Symbol
 }
 
 //****************************************************************************
