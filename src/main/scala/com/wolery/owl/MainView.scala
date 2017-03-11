@@ -71,10 +71,10 @@ class MainView extends PrimaryStage
 {
   val instrument = StringedInstrument(24,E(2),A(2),D(3),G(3),B(3),E(4))
 
-  val (n,c) = instrument.view ("Guitar")
+  val (_,c) = instrument.view ("Guitar")
   val (m,_) = load[BorderPane]("MainView",new MainController(c))
 
-  m.setCenter(n)
+  m.setCenter(c.view)
 
   resizable = false
   title     = "Owl"

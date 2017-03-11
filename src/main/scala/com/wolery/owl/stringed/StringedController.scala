@@ -38,6 +38,8 @@ class StringedController(val instrument: StringedInstrument) extends Controller
 //val harm: LayerBuilder = null
 //val melo: LayerBuilder = null
 
+  def view = root
+
   def update(layer: Symbol,chords: Seq[Chord]) =
   {
     val gp = newGrid()
