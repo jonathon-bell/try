@@ -1,7 +1,7 @@
 //**************************** Copyright © Jonathon Bell. All rights reserved.
 //*
 //*
-//*  Version : $$Header:$$
+//*  Version : $Header:$
 //*
 //*
 //*  Purpose :
@@ -26,7 +26,7 @@ package object owl
   type Name      = core.Name
   type Chord     = Seq[Pitch]
   type Pitches   = Seq[Pitch]
-  
+
 //  type Layer     = Symbol
 }
 
