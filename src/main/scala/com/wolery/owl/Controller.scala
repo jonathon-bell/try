@@ -20,9 +20,9 @@ trait Controller
 {
   def instrument: Instrument
 
-  def view:       Node
+  def view: Node
 
-  def update(layer: Symbol,chords: Seq[Chord]): Unit
+  def update(layer: ℤ,chords: Seq[Chord]): Unit
 }
 
 //****************************************************************************

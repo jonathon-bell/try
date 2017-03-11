@@ -47,21 +47,21 @@ class MainController(controller: Controller) extends Logging
 
     tk.setApplicationMenu(tk.createDefaultApplicationMenu("Owl"))
 
-    controller.update('background,Seq(playable))
+    controller.update(0,Seq(playable))
   }
 
   def onCIonian(ae: ActionEvent) =
   {
     val s = Scale(C,"ionian").get
 
-    controller.update('harmony, Seq(playable.filter(p ⇒ s.contains(p.note))))
+    controller.update(1,Seq(playable.filter(p ⇒ s.contains(p.note))))
   }
 
   def onCWholeTone(ae: ActionEvent) =
   {
     val s = Scale(C,"whole tone").get
 
-    controller.update('harmony, Seq(playable.filter(p ⇒ s.contains(p.note))))
+    controller.update(1,Seq(playable.filter(p ⇒ s.contains(p.note))))
   }
 }
 

@@ -40,7 +40,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
 
   def view = root
 
-  def update(layer: Symbol,chords: Seq[Chord]) =
+  def update(layer: ℤ,chords: Seq[Chord]) =
   {
     val gp = newGrid()
 
@@ -76,11 +76,10 @@ class StringedController(val instrument: StringedInstrument) extends Controller
     g
   }
 
-  def newBead(layer: Symbol,p: Pitch): Bead = layer match
+  def newBead(layer: ℤ,p: Pitch): Bead = layer match
   {
-    case 'background ⇒ new Bead(p.note.toString,"bead-white-text")
-    case 'harmony    ⇒ new Bead(p.note.toString,"bead")
-    case 'melody     ⇒ new Bead(p.toString,     "bead")
+    case 0 ⇒ new Bead(p.note.toString,"bead-white-text")
+    case 1 ⇒ new Bead(p.note.toString,"bead")
   }
 
   def makeRows: Seq[RowConstraints] =
