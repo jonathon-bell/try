@@ -9,7 +9,7 @@
 //*
 //*  Comments: This file uses a tab size of 2 spaces.
 //*
-//*
+//*https://www.midi.org/specifications/item/table-1-summary-of-midi-message
 //****************************************************************************
 
 package com.wolery.owl.utils
@@ -23,304 +23,190 @@ import javax.sound.midi.SysexMessage._
 
 //****************************************************************************
 
-final class DumpReceiver(m_out: PrintStream = System.out, m_ticks: Boolean = false) extends Receiver
+final class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
 {
-  val notes = Seq(
-    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B")
+  def close(): Unit =
+  {}
 
-  val keys = Seq(
-    "Cb", "Gb", "Db", "Ab", "Eb", "Bb", "F", "C", "G", "D", "A", "E", "B", "F#", "C#")
-
-  val SYSTEM_MESSAGE_TEXT = Seq(
-    "System Exclusive (should not be in ShortMessage!)",
-    "MTC Quarter Frame: ",
-    "Song Position: ",
-    "Song Select: ",
-    "Undefined",
-    "Undefined",
-    "Tune Request",
-    "End of SysEx (should not be in ShortMessage!)",
-    "Timing clock",
-    "Undefined",
-    "Start",
-    "Continue",
-    "Stop",
-    "Undefined",
-    "Active Sensing",
-    "System Reset")
-
-  val QUARTER_FRAME_MESSAGE_TEXT = Seq(
-    "frame count LS: ",
-    "frame count MS: ",
-    "seconds count LS: ",
-    "seconds count MS: ",
-    "minutes count LS: ",
-    "minutes count MS: ",
-    "hours count LS: ",
-    "hours count MS: ")
-
-  val FRAME_TYPE_TEXT = Seq(
-    "24 frames/second",
-    "25 frames/second",
-    "30 frames/second (drop)",
-    "30 frames/second (non-drop)")
-
-  def close() = {}
-
-  def send(mm: MidiMessage,ts: Long) =
+  def send(mm: MidiMessage,ts: Long): Unit =
   {
-    onTime(ts)
+    if (ts != -1)
+    {
+      m_out.print(s"$ts ")
+    }
 
     mm match
     {
-      case sm: ShortMessage ⇒ onShortMessage(sm)
-      case sx: SysexMessage ⇒ onSysExMessage(sx)
-      case mm: MetaMessage  ⇒ m_out.print(onMetaMessage(mm))
-      case _                ⇒ m_out.print("unknown message type")
+      case m: MetaMessage                       ⇒ onMetaMessage(m)
+      case m: SysexMessage                      ⇒ onSysexMessage(m)
+      case m: ShortMessage if isSystemMessage(m)⇒ onSystemMessage(m)
+      case m: ShortMessage                      ⇒ onChannelMessage(m)
+      case _                                    ⇒ m_out.print("unknown message type")
     }
 
     m_out.println()
   }
 
-  def onShortMessage(mm: ShortMessage): Unit =
+  private
+  def isSystemMessage (mm: ShortMessage): Boolean =
   {
-    onHex(mm)
+    mm.getCommand == 0xF0
+  }
 
-    if (mm.getCommand != 0xF0)
+  private
+  def isChannelMessage(mm: ShortMessage): Boolean =
+  {
+    mm.getCommand != 0xF0
+  }
+
+  def onMetaMessage(mm: MetaMessage): Unit =
+  {
+    def i(i: ℕ): ℤ   = mm.getData.apply(i) & 0xFF
+    def text: String = new String(mm.getData)
+
+    def key : String =
     {
-      m_out.print(f"channel ${mm.getChannel + 1}%2d: ")
+      val keys = Seq("C♭","G♭","D♭","A♭","E♭","B♭","F","C","G","D","A","E","B","F♯","C♯")
+      val mode = Seq(" maj"," min")
+
+      keys(7 + i(0)) + mode(i(1))
     }
+
+    def tempo: Float =
+    {
+      // tempo in microseconds per beat
+      val mspb = (i(0) << 16) | (i(1) <<  8) | i(2)
+      val mspq = if (mspb <= 0) 60e6f / 0.1f
+                 else           60e6f / mspb
+      // truncate it to 2 digits after dot
+      Math.round(mspq * 100.0F) / 100.0F
+    }
+
+    def offset: String        = s"${i(0)}:${i(1)}:${i(2)}:${i(3)}:${i(4)}"
+
+    def timesig: String = s"${i(0)}/${1<<i(1)}, MIDI clocks per metronome tick: ${i(2)}, 1/32 per 24 MIDI clocks: ${i(3)}"
+
+    def sequence: ℤ   = (i(0) << 8) | i(1)
+
+    mm.getType match
+    {
+      case 0x00 ⇒ m_out.print(s"sequence number: $sequence")
+      case 0x01 ⇒ m_out.print(s"text event: $text")
+      case 0x02 ⇒ m_out.print(s"copyright: $text")
+      case 0x03 ⇒ m_out.print(s"sequence/track name: $text")
+      case 0x04 ⇒ m_out.print(s"instrument $text: ")
+      case 0x05 ⇒ m_out.print(s"lyric: $text")
+      case 0x06 ⇒ m_out.print(s"marker: $text")
+      case 0x07 ⇒ m_out.print(s"cue point: $text")
+      case 0x20 ⇒ m_out.print(s"channel prefix: ${i(0)}")
+      case 0x2F ⇒ m_out.print(s"end of track")
+      case 0x51 ⇒ m_out.print(s"tet tempo: $tempo bpm")
+      case 0x54 ⇒ m_out.print(s"SMTPE offset: $offset")
+      case 0x58 ⇒ m_out.print(s"Time Signature: $timesig")
+      case 0x59 ⇒ m_out.print(s"key signature: $key")
+      case 0x7F ⇒ m_out.print("sequencer-specific meta event: "+hex(mm))
+      case _    ⇒ m_out.print("unknown meta event: "           +hex(mm))
+    }
+  }
+
+  private
+  def onSysexMessage(mm: SysexMessage): Unit = mm.getStatus match
+  {
+    case 0xF0 ⇒ m_out.print(s"sysex message[ ${hex(mm)}")
+    case 0xF7 ⇒ m_out.print(s"sysex message] ${hex(mm)}")
+  }
+
+  private
+  def onSystemMessage(mm: ShortMessage): Unit =
+  {
+    require(isSystemMessage(mm))
+
+    def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
+    def song = f"${mm.getData1}%03d"
+
+    def mtcQuarterFrame =
+    {
+      mm.getData1 & 0x70 match
+      {
+        case 0x00 ⇒ m_out.print("frame count LS:   ")
+        case 0x10 ⇒ m_out.print("frame count MS:   ")
+        case 0x20 ⇒ m_out.print("seconds count LS: ")
+        case 0x30 ⇒ m_out.print("seconds count MS: ")
+        case 0x40 ⇒ m_out.print("minutes count LS: ")
+        case 0x50 ⇒ m_out.print("minutes count MS: ")
+        case 0x60 ⇒ m_out.print("hours count LS:   ")
+        case 0x70 ⇒ m_out.print("hours count MS:   ")
+      }
+
+      m_out.print(mm.getData1 & 0x0F)
+    }
+
+    mm.getStatus & 0x0F match
+    {
+      case 0x0 ⇒ m_out.print(s"sysex[           ")
+      case 0x1 ⇒ m_out.print(s"mtc quarter frame mtcQuarterFrame")
+      case 0x2 ⇒ m_out.print(s"song position $long")
+      case 0x3 ⇒ m_out.print(s"song select $song")
+      case 0x6 ⇒ m_out.print(s"tune request     ")
+      case 0x7 ⇒ m_out.print(s"sysex]           ")
+      case 0x8 ⇒ m_out.print(s"timing clock     ")
+      case 0xA ⇒ m_out.print(s"start            ")
+      case 0xB ⇒ m_out.print(s"continue         ")
+      case 0xC ⇒ m_out.print(s"stop             ")
+      case 0xE ⇒ m_out.print(s"active sensing   ")
+      case 0xF ⇒ m_out.print(s"system reset     ")
+      case  _  ⇒ m_out.print(s"?")
+    }
+  }
+
+  private
+  def onChannelMessage(mm: ShortMessage): Unit =
+  {
+    require(isChannelMessage(mm))
+
+    def chan = f"ch ${mm.getChannel + 1}%02d"
+    def note = f"${Pitch(mm.getData1).toString}%-3s"
+    def val1 = f"${mm.getData1}%03d"
+    def val2 = f"${mm.getData2}%03d"
+    def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
+
+    m_out.print('[')
+    m_out.print(hex(mm))
+    m_out.print(']')
+    m_out.print(" " * (10 - 3 * mm.getLength))
 
     mm.getCommand match
     {
-      case 0x80 ⇒ m_out.print("note Off "          +noteName(mm.getData1)+" velocity: "+mm.getData2)
-      case 0x90 ⇒ m_out.print("note On "           +noteName(mm.getData1)+" velocity: "+mm.getData2)
-      case 0xa0 ⇒ m_out.print("poly key pressure " +noteName(mm.getData1)+" pressure: "+mm.getData2)
-      case 0xb0 ⇒ m_out.print("control change "    +mm.getData1+             " value: "+mm.getData2)
-      case 0xc0 ⇒ m_out.print("program change "    +mm.getData1)
-      case 0xd0 ⇒ m_out.print("key pressure "      +noteName(mm.getData1)+" pressure: "+mm.getData2)
-      case 0xe0 ⇒ m_out.print("pitch wheel change "+get14bitValue(mm.getData1, mm.getData2))
-      case 0xF0 ⇒ m_out.print(SYSTEM_MESSAGE_TEXT(mm.getChannel))
-
-        mm.getChannel match
-        {
-          case 0x1 ⇒
-            val nQType = (mm.getData1 & 0x70) >> 4
-            var nQData =  mm.getData1 & 0x0F
-
-            if (nQType == 7)
-            {
-              nQData = nQData & 0x1
-            }
-
-            m_out.print(QUARTER_FRAME_MESSAGE_TEXT(nQType))
-            m_out.print(nQData.toString)
-
-            if (nQType == 7)
-            {
-              val nFrameType = (mm.getData1 & 0x06) >> 1
-
-              m_out.print(", frame type: "+FRAME_TYPE_TEXT(nFrameType))
-            }
-
-          case 0x2 ⇒ m_out.print(get14bitValue(mm.getData1, mm.getData2))
-          case 0x3 ⇒ m_out.print(mm.getData1)
-        }
-
-      case _ ⇒ m_out.print("unknown message: status = "+mm.getStatus+", byte1 = "+mm.getData1+", byte2 = "+mm.getData2)
+      case 0x80 ⇒ m_out.print(s"$chan: note-off   $note ($val2)")
+      case 0x90 ⇒ m_out.print(s"$chan: note-on    $note ($val2)")
+      case 0xA0 ⇒ m_out.print(s"$chan: p-pressure $note ($val2)")
+      case 0xB0 ⇒ m_out.print(s"$chan: controller $val1 ($val2)")
+      case 0xC0 ⇒ m_out.print(s"$chan: program    $val1")
+      case 0xD0 ⇒ m_out.print(s"$chan: c-pressure $note")
+      case 0xE0 ⇒ m_out.print(s"$chan: pitch-bend $long")
+      case _    ⇒ m_out.print("unknown message")
     }
   }
 
-  def onSysExMessage(mm: SysexMessage): Unit =
+  private
+  def hex(mm: MidiMessage): String =
   {
-    mm.getStatus match
+    val n = mm.getLength
+    val b = mm.getMessage
+    val s = new StringBuffer(n * 3)
+
+    for (i ← 0 until 1)
     {
-      case SYSTEM_EXCLUSIVE         ⇒ m_out.print("Sysex message: F0"         +getHexString(mm.getData))
-      case SPECIAL_SYSTEM_EXCLUSIVE ⇒ m_out.print("Continued Sysex message F7"+getHexString(mm.getData))
-      case _                        ⇒
-    }
-  }
-
-  def onMetaMessage(mm: MetaMessage): String =
-    {
-      val abMessage: Array[Byte] = mm.getMessage();
-      val abData: Array[Byte] = mm.getData();
-      val nDataLength: Int = mm.getLength();
-      var strMessage: String = null;
-      // System.out.println("data array length: " + abData.length);
-      (mm.getType()) match {
-        case 0 ⇒
-          val nSequenceNumber: Int = ((abData(0) & 0xFF) << 8) | (abData(1) & 0xFF)
-          strMessage = "Sequence Number: "+nSequenceNumber
-
-        case 1 ⇒
-          val strText: String = new String(abData)
-          strMessage = "Text Event: "+strText
-
-        case 2 ⇒
-          val strCopyrightText: String = new String(abData)
-          strMessage = "Copyright Notice: "+strCopyrightText
-
-        case 3 ⇒
-          val strTrackName: String = new String(abData)
-          strMessage = "Sequence/Track Name: "+strTrackName
-
-        case 4 ⇒
-          val strInstrumentName: String = new String(abData)
-          strMessage = "Instrument Name: "+strInstrumentName
-
-        case 5 ⇒
-          val strLyrics: String = new String(abData)
-          strMessage = "Lyric: "+strLyrics
-
-        case 6 ⇒
-          val strMarkerText: String = new String(abData)
-          strMessage = "Marker: "+strMarkerText
-
-        case 7 ⇒
-          val strCuePointText: String = new String(abData)
-          strMessage = "Cue Point: "+strCuePointText
-
-        case 0x20 ⇒
-          val nChannelPrefix: Int = abData(0) & 0xFF
-          strMessage = "MIDI Channel Prefix: "+nChannelPrefix.toString
-
-        case 0x2F ⇒
-          strMessage = "End of Track";
-
-        case 0x51 ⇒
-          val nTempo: Int = ((abData(0) & 0xFF) << 16) |
-            ((abData(1) & 0xFF) << 8) |
-            (abData(2) & 0xFF) // tempo in microseconds per beat
-          var bpm: Float = convertTempo(nTempo)
-          // truncate it to 2 digits after dot
-          bpm = (Math.round(bpm * 100.0f) / 100.0f)
-          strMessage = "Set Tempo: "+bpm+" bpm"
-
-        case 0x54 ⇒
-          // System.out.println("data array length: " + abData.length);
-          strMessage = "SMTPE Offset: "+(abData(0) & 0xFF).toString+":"+
-            (abData(1) & 0xFF).toString+":"+
-            (abData(2) & 0xFF).toString+"."+
-            (abData(3) & 0xFF).toString+"."+
-            (abData(4) & 0xFF)
-
-        case 0x58 ⇒
-          strMessage = "Time Signature: "
-          +(abData(0) & 0xFF)+"/"+
-            (1 << (abData(1) & 0xFF))+
-            ", MIDI clocks per metronome tick: "+(abData(2) & 0xFF)+", 1/32 per 24 MIDI clocks: "+(abData(3) & 0xFF);
-
-        case 0x59 ⇒
-          val strGender: String = if (abData(1) == 1) "minor" else "major"
-          strMessage = "Key Signature: "+keys(abData(0) + 7)+" "+strGender;
-
-        case 0x7F ⇒
-          // TODO: decode vendor code, dump data in rows
-          val strDataDump: String = getHexString(abData)
-          strMessage = "Sequencer-Specific Meta event: "+strDataDump;
-
-        case _ ⇒
-          val strUnknownDump: String = getHexString(abData);
-          strMessage = "unknown Meta event: "+strUnknownDump;
-      }
-      strMessage
+      s.append(f"${b(i)}%02X")
     }
 
-  def noteName(midi: Midi): String =
-  {
-    if (midi > 127)
-    {
-      "illegal value"
-    }
-    else
-    {
-      notes(midi % 12) + (midi / 12 - 1).toString
-    }
-  }
-
-  def get14bitValue(lo: Int,hi: Int): Int =
-  {
-    (lo  & 0x7F) | ((hi & 0x7F) << 7)
-  }
-
-  // convert from microseconds per quarter note to beats per minute and vice versa
-
-  def convertTempo(value: Float): Float =
-  {
-    if (value <= 0)
-      60e6f / 0.1f
-    else
-      60e6f / value
-  }
-
-  val hexDigits: Array[Char] = Array(
-    '0', '1', '2', '3',
-    '4', '5', '6', '7',
-    '8', '9', 'A', 'B',
-    'C', 'D', 'E', 'F')
-
-  def getHexString(bytes: Array[Byte]): String =
-  {
-    val s = new StringBuffer(bytes.length * 3 + 2)
-
-    for (i ← 0 until bytes.length)
+    for (i ← 1 until n)
     {
       s.append(' ');
-      s.append(hexDigits((bytes(i) & 0xF0) >> 4))
-      s.append(hexDigits( bytes(i) & 0x0F))
+      s.append(f"${b(i)}%02X")
     }
 
     s.toString
-  }
-
-  def onTime(ts: Long): Unit =
-  {
-    if (ts == -1L)
-    {
-      m_out.print("time: [?] ")
-    }
-    else
-    if (m_ticks)
-    {
-      m_out.print(s"tick: $ts ")
-    }
-    else
-    {
-      m_out.print(s"time: $ts us ")
-    }
-  }
-
-  def hex(i: Int): String = f"$i%02X"
-
-  def onHex(mm: ShortMessage) =
-  {
-    m_out.print('[')
-    m_out.print(hex(mm.getStatus))
-
-    if (mm.getLength > 1)
-    {
-      m_out.print(' ')
-      m_out.print(hex(mm.getData1))
-    }
-
-    if (mm.getLength > 2)
-    {
-      m_out.print(' ')
-      m_out.print(hex(mm.getData2))
-    }
-
-    m_out.print(" " * (9 - 3 * mm.getLength))
-    m_out.print("] ")
-  }
-
-  def onHex(bytes: Array[Byte]): Unit =
-  {
-    for (i ← 0 until bytes.length)
-    {
-      m_out.print(' ');
-      m_out.print(hex(bytes(i)))
-    }
   }
 }
 
