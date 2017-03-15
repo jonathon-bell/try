@@ -114,7 +114,7 @@ with MetaEventListener
       case 0x51 ⇒ m_out.print(s"tempo             $tempo bpm")
       case 0x54 ⇒ m_out.print(s"SMTPE-offset      $offset")
       case 0x58 ⇒ m_out.print(s"time-signature    $timesig")
-      `1case 0x59 ⇒ m_out.print(s"key-signature     $key")
+      case 0x59 ⇒ m_out.print(s"key-signature     $key")
       case 0x7F ⇒ m_out.print("sequencer-specific"+hex(mm))
       case _    ⇒ m_out.print("unknown meta event"+hex(mm))
     }
