@@ -7,10 +7,12 @@
 //*  Purpose : Displays the file format information of a MIDI file.
 //*
 //*
+//*  See Also: https://www.midi.org/specifications/item/table-1-summary-of-midi-message
+//*            http://www.somascape.org/midi/tech/mfile.html
+//*
 //*  Comments: This file uses a tab size of 2 spaces.
 //*
-//*https://www.midi.org/specifications/item/table-1-summary-of-midi-message
-//*http://www.somascape.org/midi/tech/mfile.html#meta
+//*
 //****************************************************************************
 
 package com.wolery.owl.utils
@@ -19,54 +21,122 @@ package com.wolery.owl.utils
 
 import java.io.PrintStream
 import javax.sound.midi._
+
 import com.wolery.owl.core._
-import javax.sound.midi.SysexMessage._
 
 //****************************************************************************
 
-final class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
-with MetaEventListener
+class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
 {
   def close(): Unit =
   {}
 
-  def meta(mm: MetaMessage) =
-  {
-    onMetaMessage(mm)
-    m_out.println()
-  }
-
-  def send(mm: MidiMessage,ts: Long): Unit =
+  def send(mm: MidiMessage,ts: Long): Unit = synchronized
   {
     if (ts != -1)
     {
       m_out.print(s"$ts ")
     }
 
+    if (false)
+    {
+      m_out.print(hex(mm))
+      m_out.print(' ')
+    }
+
     mm match
     {
-      case m: MetaMessage                       ⇒ onMetaMessage(m)
-      case m: SysexMessage                      ⇒ onSysexMessage(m)
-      case m: ShortMessage if isSystemMessage(m)⇒ onSystemMessage(m)
-      case m: ShortMessage                      ⇒ onChannelMessage(m)
-      case _                                    ⇒ m_out.print("unknown message type")
+      case m: ShortMessage if isChannelMessage(m)⇒ onChannelMessage(m)
+      case m: ShortMessage                       ⇒ onSystemMessage(m)
+      case m: MetaMessage                        ⇒ onMetaMessage(m)
+      case m: SysexMessage                       ⇒ onSysexMessage(m)
+      case _                                     ⇒ m_out.print("unknown message type")
     }
 
     m_out.println()
   }
 
-  private
-  def isSystemMessage (mm: ShortMessage): Boolean =
-  {
-    mm.getCommand == 0xF0
-  }
-
-  private
   def isChannelMessage(mm: ShortMessage): Boolean =
   {
     mm.getCommand != 0xF0
   }
 
+  def isSystemMessage (mm: ShortMessage): Boolean =
+  {
+    mm.getCommand == 0xF0
+  }
+
+  protected
+  def onChannelMessage(mm: ShortMessage): Unit =
+  {
+    require(isChannelMessage(mm))
+
+    def chan = f"ch ${mm.getChannel + 1}%02d"
+    def note = f"${Pitch(mm.getData1).toString}%-3s"
+    def val1 = f"${mm.getData1}%03d"
+    def val2 = f"${mm.getData2}%03d"
+    def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
+
+    m_out.print(chan)
+    m_out.print(' ')
+
+    mm.getCommand match
+    {
+      case 0x80 ⇒ m_out.print(s"note-off   $note ($val2)")
+      case 0x90 ⇒ m_out.print(s"note-on    $note ($val2)")
+      case 0xA0 ⇒ m_out.print(s"p-pressure $note ($val2)")
+      case 0xB0 ⇒ m_out.print(s"controller $val1 ($val2)")
+      case 0xC0 ⇒ m_out.print(s"program    $val1")
+      case 0xD0 ⇒ m_out.print(s"c-pressure $note")
+      case 0xE0 ⇒ m_out.print(s"pitch-bend $long")
+      case _    ⇒ m_out.print("unknown message")
+    }
+  }
+
+  protected
+  def onSystemMessage(mm: ShortMessage): Unit =
+  {
+    require(isSystemMessage(mm))
+
+    def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
+    def song = f"${mm.getData1}%03d"
+
+    def mtcQuarterFrame =
+    {
+      mm.getData1 & 0x70 match
+      {
+        case 0x00 ⇒ m_out.print("frame count LS:   ")
+        case 0x10 ⇒ m_out.print("frame count MS:   ")
+        case 0x20 ⇒ m_out.print("seconds count LS: ")
+        case 0x30 ⇒ m_out.print("seconds count MS: ")
+        case 0x40 ⇒ m_out.print("minutes count LS: ")
+        case 0x50 ⇒ m_out.print("minutes count MS: ")
+        case 0x60 ⇒ m_out.print("hours count LS:   ")
+        case 0x70 ⇒ m_out.print("hours count MS:   ")
+      }
+
+      m_out.print(mm.getData1 & 0x0F)
+    }
+
+    mm.getStatus & 0x0F match
+    {
+      case 0x0 ⇒ m_out.print(s"sysex[           ")
+      case 0x1 ⇒ m_out.print(s"mtc quarter frame mtcQuarterFrame")
+      case 0x2 ⇒ m_out.print(s"song position $long")
+      case 0x3 ⇒ m_out.print(s"song select $song")
+      case 0x6 ⇒ m_out.print(s"tune request     ")
+      case 0x7 ⇒ m_out.print(s"sysex]           ")
+      case 0x8 ⇒ m_out.print(s"timing clock     ")
+      case 0xA ⇒ m_out.print(s"start            ")
+      case 0xB ⇒ m_out.print(s"continue         ")
+      case 0xC ⇒ m_out.print(s"stop             ")
+      case 0xE ⇒ m_out.print(s"active sensing   ")
+      case 0xF ⇒ m_out.print(s"system reset     ")
+      case  _  ⇒ m_out.print(s"?")
+    }
+  }
+
+  protected
   def onMetaMessage(mm: MetaMessage): Unit =
   {
     def i(i: ℕ): ℤ   = mm.getData.apply(i) & 0xFF
@@ -120,101 +190,45 @@ with MetaEventListener
     }
   }
 
-  private
-  def onSysexMessage(mm: SysexMessage): Unit = mm.getStatus match
+  protected
+  def onSysexMessage(mm: SysexMessage): Unit =
   {
-    case 0xF0 ⇒ m_out.print("sysex₀ " + hex(mm))
-    case 0xF7 ⇒ m_out.print("sysex₇ " + hex(mm))
+    m_out.print("sysex " + hex(mm,1,10))
   }
 
-  private
-  def onSystemMessage(mm: ShortMessage): Unit =
+  protected
+  def hex(mm: MidiMessage,min: ℕ = 3,max: ℕ = 3): String =
   {
-    require(isSystemMessage(mm))
+    require(0<min && min <= max)
 
-    def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
-    def song = f"${mm.getData1}%03d"
-
-    def mtcQuarterFrame =
-    {
-      mm.getData1 & 0x70 match
-      {
-        case 0x00 ⇒ m_out.print("frame count LS:   ")
-        case 0x10 ⇒ m_out.print("frame count MS:   ")
-        case 0x20 ⇒ m_out.print("seconds count LS: ")
-        case 0x30 ⇒ m_out.print("seconds count MS: ")
-        case 0x40 ⇒ m_out.print("minutes count LS: ")
-        case 0x50 ⇒ m_out.print("minutes count MS: ")
-        case 0x60 ⇒ m_out.print("hours count LS:   ")
-        case 0x70 ⇒ m_out.print("hours count MS:   ")
-      }
-
-      m_out.print(mm.getData1 & 0x0F)
-    }
-
-    mm.getStatus & 0x0F match
-    {
-      case 0x0 ⇒ m_out.print(s"sysex[           ")
-      case 0x1 ⇒ m_out.print(s"mtc quarter frame mtcQuarterFrame")
-      case 0x2 ⇒ m_out.print(s"song position $long")
-      case 0x3 ⇒ m_out.print(s"song select $song")
-      case 0x6 ⇒ m_out.print(s"tune request     ")
-      case 0x7 ⇒ m_out.print(s"sysex]           ")
-      case 0x8 ⇒ m_out.print(s"timing clock     ")
-      case 0xA ⇒ m_out.print(s"start            ")
-      case 0xB ⇒ m_out.print(s"continue         ")
-      case 0xC ⇒ m_out.print(s"stop             ")
-      case 0xE ⇒ m_out.print(s"active sensing   ")
-      case 0xF ⇒ m_out.print(s"system reset     ")
-      case  _  ⇒ m_out.print(s"?")
-    }
-  }
-
-  private
-  def onChannelMessage(mm: ShortMessage): Unit =
-  {
-    require(isChannelMessage(mm))
-
-    def chan = f"ch ${mm.getChannel + 1}%02d"
-    def note = f"${Pitch(mm.getData1).toString}%-3s"
-    def val1 = f"${mm.getData1}%03d"
-    def val2 = f"${mm.getData2}%03d"
-    def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
-
-    m_out.print('[')
-    m_out.print(hex(mm))
-    m_out.print(']')
-    m_out.print(" " * (10 - 3 * mm.getLength))
-
-    mm.getCommand match
-    {
-      case 0x80 ⇒ m_out.print(s"$chan: note-off   $note ($val2)")
-      case 0x90 ⇒ m_out.print(s"$chan: note-on    $note ($val2)")
-      case 0xA0 ⇒ m_out.print(s"$chan: p-pressure $note ($val2)")
-      case 0xB0 ⇒ m_out.print(s"$chan: controller $val1 ($val2)")
-      case 0xC0 ⇒ m_out.print(s"$chan: program    $val1")
-      case 0xD0 ⇒ m_out.print(s"$chan: c-pressure $note")
-      case 0xE0 ⇒ m_out.print(s"$chan: pitch-bend $long")
-      case _    ⇒ m_out.print("unknown message")
-    }
-  }
-
-  private
-  def hex(mm: MidiMessage): String =
-  {
+    val b = mm.getMessage.take(max)
     val n = mm.getLength
-    val b = mm.getMessage
-    val s = new StringBuffer(n * 3)
+    val s = new StringBuffer(3 * (max+1) + 2)
+
+    s.append('[')
 
     for (i ← 0 until 1)
     {
       s.append(f"${b(i)}%02X")
     }
 
-    for (i ← 1 until n)
+    for (i ← 1 until b.size)
     {
-      s.append(' ');
-      s.append(f"${b(i)}%02X")
+      s.append(f" ${b(i)}%02X")
+    }
+
+    for (i ← b.size until min)
+    {
+      s.append("   ")
+    }
+
+    if (max < n)
+    {
+      s.append('…')
+    }
+    else
+    {
+      s.append(']')
     }
 
     s.toString

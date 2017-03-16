@@ -25,6 +25,7 @@ import javafx.scene.layout.{ ColumnConstraints, GridPane, Pane, RowConstraints }
 import javafx.util.Duration
 import scalafx.Includes.{ jfxDuration2sfx, jfxGridPane2sfx, jfxNode2sfx }
 import scalafx.animation._
+import javax.sound.midi.MidiMessage
 
 //****************************************************************************
 
@@ -35,10 +36,11 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   val rows: Seq[RowConstraints]    = makeRows
   val cols: Seq[ColumnConstraints] = makeCols
 
-//val harm: LayerBuilder = null
-//val melo: LayerBuilder = null
-
   def view = root
+
+  def send(mm: MidiMessage,ts: Long) = {}
+
+  def close(): Unit = {}
 
   def update(layer: ℤ,chords: Seq[Chord]) =
   {

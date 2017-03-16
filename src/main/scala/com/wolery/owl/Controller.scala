@@ -16,7 +16,7 @@ package com.wolery.owl
 
 //****************************************************************************
 
-trait Controller
+trait Controller extends javax.sound.midi.Receiver
 {
   def instrument: Instrument
 
