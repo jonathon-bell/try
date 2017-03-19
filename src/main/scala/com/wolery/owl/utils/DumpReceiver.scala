@@ -38,7 +38,7 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
       m_out.print(s"$ts ")
     }
 
-    if (false)
+    if (true)
     {
       m_out.print(hex(mm))
       m_out.print(' ')
@@ -205,7 +205,7 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
     val n = mm.getLength
     val s = new StringBuffer(3 * (max+1) + 2)
 
-    s.append('[')
+    s.append(s"${Console.CYAN}[")
 
     for (i ← 0 until 1)
     {
@@ -231,6 +231,7 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
       s.append(']')
     }
 
+    s.append(s"${Console.RESET}")
     s.toString
   }
 }

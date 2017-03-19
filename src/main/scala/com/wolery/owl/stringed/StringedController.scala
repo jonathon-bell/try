@@ -23,8 +23,6 @@ import javafx.scene.Node
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.{ ColumnConstraints, GridPane, Pane, RowConstraints }
 import javafx.util.Duration
-import scalafx.Includes.{ jfxDuration2sfx, jfxGridPane2sfx, jfxNode2sfx }
-import scalafx.animation._
 import javax.sound.midi.MidiMessage
 
 //****************************************************************************
@@ -36,7 +34,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   val rows: Seq[RowConstraints]    = makeRows
   val cols: Seq[ColumnConstraints] = makeCols
 
-  def view = root
+  def view: Pane= root
 
   def send(mm: MidiMessage,ts: Long) = {}
 
@@ -55,17 +53,15 @@ class StringedController(val instrument: StringedInstrument) extends Controller
       gp.add(bead,cell.fret,instrument.strings.size-1 - cell.string)
     }
 
-    fade(0,1,1000)(gp)
+    fade(0,1,1000)(gp).play()
   }
 
-  def fade(from:Double,to: Double,ms:Int = 2000)(node: Node): Transition =
+  def fade(from:Double,to: Double,ms:Int = 2000)(node: Node):javafx.animation. Transition =
   {
-    new FadeTransition(Duration.millis(ms),node)
-    {
-      fromValue = 0
-      toValue   = 1
-      play()
-    }
+    val t = new javafx.animation.FadeTransition(Duration.millis(ms),node)
+    t.setFromValue(0)
+    t.setToValue  (1)
+    t
   }
 
   def newGrid(): GridPane =
@@ -105,13 +101,6 @@ class StringedController(val instrument: StringedInstrument) extends Controller
       new ColumnConstraints(){setPercentWidth(w);setHalignment(javafx.geometry.HPos.CENTER)}
     }
   }
-}
-
-//****************************************************************************
-
-trait LayerBuilder
-{
-  def create: GridPane
 }
 
 //****************************************************************************

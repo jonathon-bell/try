@@ -12,13 +12,21 @@
 //*
 //****************************************************************************
 
-package com.wolery.owl
+package com.wolery.owl.utils
 
 //****************************************************************************
 
-object Application extends scalafx.application.JFXApp
+import javafx.event.EventHandler
+
+//****************************************************************************
+
+object event
 {
-  stage = new MainView()
+  implicit
+  def foo[E <: javafx.event.Event](lambda: E ⇒ Unit): EventHandler[E] =
+  {
+    new EventHandler[E] {def handle(e: E) = lambda(e)}
+  }
 }
 
 //****************************************************************************

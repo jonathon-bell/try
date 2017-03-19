@@ -18,11 +18,12 @@ package com.wolery.owl.stringed
 
 import Math.{max,min}
 
+import com.wolery.owl._
 import com.wolery.owl.core._
 import com.wolery.owl.Instrument
-import com.wolery.owl.gui.load
+import com.wolery.owl.utils.load
 
-import javafx.scene.Node
+import javafx.scene.Parent
 
 //****************************************************************************
 
@@ -68,9 +69,9 @@ case class StringedInstrument(frets: ℕ,strings: Pitch*) extends Instrument
       s
   }
 
-  def view(fxml: String): (Node,StringedController) =
+  def view(fxml: String): (Pane,StringedController) =
   {
-    load(fxml,new StringedController(this))
+    load.view(fxml,new StringedController(this))
   }
 }
 

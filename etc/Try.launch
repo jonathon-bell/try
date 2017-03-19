@@ -13,6 +13,6 @@
 <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
 </listAttribute>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.wolery.owl.Application"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="com.wolery.owl.owl"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="try"/>
 </launchConfiguration>

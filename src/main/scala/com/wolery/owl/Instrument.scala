@@ -26,7 +26,7 @@ trait Instrument
   def highest             : Pitch
   def playable            : Seq[Pitch] = lowest to highest
 
-  def view(fxml: String)  : (Node,Controller)
+  def view(fxml: String)  : (Pane,Controller)
 }
 
 //****************************************************************************

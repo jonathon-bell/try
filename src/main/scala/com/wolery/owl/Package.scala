@@ -27,7 +27,7 @@ package object owl
   type Chord     = Seq[Pitch]
   type Pitches   = Seq[Pitch]
         
-  type Node      = javafx.scene.Node
+  type Pane      = javafx.scene.layout.Pane
 }
 
 //****************************************************************************

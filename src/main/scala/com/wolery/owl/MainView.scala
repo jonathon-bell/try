@@ -15,18 +15,17 @@
 package com.wolery.owl
 
 import com.wolery.owl.core._
-import com.wolery.owl.gui.load
+import com.wolery.owl.utils.load
 import com.wolery.owl.stringed.StringedInstrument
 import com.wolery.owl.utils.Logging
 
+import javafx.event.ActionEvent
 import javafx.fxml.{ FXML ⇒ fx }
 import javafx.scene.control.MenuBar
 import javafx.scene.layout.BorderPane
-import scalafx.Includes._
-import scalafx.application.JFXApp.PrimaryStage
-import scalafx.scene.Scene
-import javax.swing.event.MenuEvent
-import javafx.event.ActionEvent
+import javax.sound.midi.MetaEventListener
+import javax.sound.midi.MetaMessage
+import javax.sound.midi.MidiSystem
 
 //****************************************************************************
 
@@ -63,22 +62,17 @@ class MainController(controller: Controller) extends Logging
 
     controller.update(1,Seq(playable.filter(p ⇒ s.contains(p.note))))
   }
-}
 
-//****************************************************************************
+  def onPlay() =
+  {
+    owl.sequencer.setSequence(load.sequence("sample"))
+    owl.sequencer.start()
+  }
 
-class MainView extends PrimaryStage
-{
-  val instrument = StringedInstrument(24,E(2),A(2),D(3),G(3),B(3),E(4))
-
-  val (_,c) = instrument.view ("Guitar")
-  val (m,_) = load[BorderPane]("MainView",new MainController(c))
-
-  m.setCenter(c.view)
-
-  resizable = false
-  title     = "Owl"
-  scene     = new Scene(m)
+  def onClose() =
+  {
+    owl.sequencer.stop()
+  }
 }
 
 //****************************************************************************

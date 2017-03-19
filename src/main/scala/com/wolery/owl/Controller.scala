@@ -20,7 +20,7 @@ trait Controller extends javax.sound.midi.Receiver
 {
   def instrument: Instrument
 
-  def view: Node
+  def view: Pane
 
   def update(layer: ℤ,chords: Seq[Chord]): Unit
 }
