@@ -16,7 +16,7 @@ package com.wolery.owl.gui
 
 //****************************************************************************
 
-import com.wolery.owl.utils.event.foo
+import com.wolery.owl.utils.implicits._
 
 import javafx.scene.input.MouseEvent
 import javafx.scene.layout.Region.USE_PREF_SIZE

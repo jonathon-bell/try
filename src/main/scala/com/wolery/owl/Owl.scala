@@ -43,10 +43,11 @@ object owl extends utils.Application
     //synthesizer.loadAllInstruments(load.soundbank("fluid-soundbank"))
       sequencer.open()
 
-      val console = new utils.DumpReceiver()
       sequencer.getTransmitter.setReceiver(synthesizer.getReceiver)
-      sequencer.getTransmitter.setReceiver(console)
-      sequencer.addMetaEventListener(new MetaEventListener() {def meta(m:MetaMessage) = console.send(m,-1)})
+
+    //val console = new utils.DumpReceiver()
+    //sequencer.getTransmitter.setReceiver(console)
+    //sequencer.addMetaEventListener(new MetaEventListener() {def meta(m:MetaMessage) = console.send(m,-1)})
     }
   }
 

@@ -15,17 +15,15 @@
 package com.wolery.owl
 
 import com.wolery.owl.core._
-import com.wolery.owl.utils.load
-import com.wolery.owl.stringed.StringedInstrument
+import com.wolery.owl.core.Scale
 import com.wolery.owl.utils.Logging
+import com.wolery.owl.utils.load
 
 import javafx.event.ActionEvent
 import javafx.fxml.{ FXML ⇒ fx }
 import javafx.scene.control.MenuBar
-import javafx.scene.layout.BorderPane
 import javax.sound.midi.MetaEventListener
 import javax.sound.midi.MetaMessage
-import javax.sound.midi.MidiSystem
 
 //****************************************************************************
 
@@ -45,27 +43,19 @@ class MainController(controller: Controller) extends Logging
     val tk = de.codecentric.centerdevice.MenuToolkit.toolkit()
 
     tk.setApplicationMenu(tk.createDefaultApplicationMenu("Owl"))
-
-    controller.update(0,Seq(playable))
   }
 
-  def onCIonian(ae: ActionEvent) =
-  {
-    val s = Scale(C,"ionian").get
-
-    controller.update(1,Seq(playable.filter(p ⇒ s.contains(p.note))))
-  }
-
-  def onCWholeTone(ae: ActionEvent) =
-  {
-    val s = Scale(C,"whole tone").get
-
-    controller.update(1,Seq(playable.filter(p ⇒ s.contains(p.note))))
-  }
+  def onCIonian(ae: ActionEvent) = {}
+  def onCWholeTone(ae: ActionEvent) = {}
 
   def onPlay() =
   {
+    owl.sequencer.getTransmitter.setReceiver(controller)
+    owl.sequencer.addMetaEventListener(new MetaEventListener{def meta(m:MetaMessage):Unit = controller.send(m,-1)})
+
     owl.sequencer.setSequence(load.sequence("sample"))
+    controller.send(message.harmony(Scale(C,"whole tone").get),-1)
+    owl.sequencer.setTempoInBPM(10)
     owl.sequencer.start()
   }
 

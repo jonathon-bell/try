@@ -20,6 +20,7 @@ import Math.{max,min}
 
 import com.wolery.owl._
 import com.wolery.owl.core._
+import com.wolery.owl.core.utilities._
 import com.wolery.owl.Instrument
 import com.wolery.owl.utils.load
 
@@ -27,51 +28,65 @@ import javafx.scene.Parent
 
 //****************************************************************************
 
-case class StringedInstrument(frets: ℕ,strings: Pitch*) extends Instrument
+case class StringedInstrument(strings: Seq[Pitch],frets: ℕ) extends Instrument
 {
-  case class Cell(string: ℕ,fret: ℕ)
+  case class Stop(index: ℕ)
   {
-    def pitch = strings(string) + fret
+    assert(index < strings.size* frets,index)
+
+    def this(string: ℕ,fret: ℕ) =
+    {
+      this(string * frets + fret)
+    }
+
+    def pitch : Pitch = strings(string) + fret
+    def string: ℕ     = index / frets
+    def fret  : ℕ     = index % frets
+    def row   : ℕ     = string
+    def col   : ℕ     = fret
+    def coords: (ℕ,ℕ) = (row,col)
+
+    override
+    def toString: String = s"${string}${subscript(fret.toString)} $index"
   }
 
   def lowest: Pitch =
   {
-    strings(0)
+    strings.last
   }
 
   def highest: Pitch =
   {
-    strings.last + frets
+    strings(0) + frets
   }
 
-  def cells: Seq[Cell] =
+  def stops: Seq[Stop] =
   {
-    for {s ← 0 until strings.size; f ← 0 to frets} yield
-      Cell(s,f)
+    for {i ← 0 until strings.size *frets} yield
+      new Stop(i)
   }
 
-  def cells(pitch: Pitch): Seq[Cell] =
+  def stops(pitch: Pitch): Seq[Stop] =
   {
-    for (s ← 0 until strings.size if strings(s) <= pitch && pitch<= strings(s)+frets) yield
-      Cell(s,pitch-strings(s))
-  }
-
-  def position(fret: ℕ): Seq[Cell] =
-  {
-    for {f ← max(fret-2,0) to min(fret+3,frets);
-         s ← 0 until strings.size} yield
-      Cell(s,f)
-  }
-
-  def strings(pitch: Pitch): Seq[ℕ] =
-  {
-    for {s ← 0 until strings.size if strings(s)<=pitch && pitch<=strings(s)} yield
-      s
+    for (s ← 0 until strings.size if between(pitch,strings(s),strings(s)+frets-1)) yield
+      new Stop(s,pitch-strings(s))
   }
 
   def view(fxml: String): (Pane,StringedController) =
   {
     load.view(fxml,new StringedController(this))
+  }
+}
+
+//****************************************************************************
+
+object StringedInstrument
+{
+  def apply(frets: ℕ,strings: Pitch*): StringedInstrument =
+  {
+    assert(!strings.isEmpty)
+
+    new StringedInstrument(strings.reverse,1 + frets)
   }
 }
 

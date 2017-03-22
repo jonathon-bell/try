@@ -19,10 +19,9 @@ package com.wolery.owl
 trait Controller extends javax.sound.midi.Receiver
 {
   def instrument: Instrument
+  def view      : Pane
 
-  def view: Pane
-
-  def update(layer: ℤ,chords: Seq[Chord]): Unit
+  def close()  : Unit = {}
 }
 
 //****************************************************************************

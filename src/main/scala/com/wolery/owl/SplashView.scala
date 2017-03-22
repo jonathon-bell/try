@@ -16,7 +16,7 @@ package com.wolery.owl
 
 //****************************************************************************
 
-import com.wolery.owl.utils.event._
+import com.wolery.owl.utils.implicits._
 import com.wolery.owl.utils.load
 
 import javafx.animation.FadeTransition

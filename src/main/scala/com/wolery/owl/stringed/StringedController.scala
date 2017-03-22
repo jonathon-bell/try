@@ -14,16 +14,28 @@
 
 package com.wolery.owl.stringed
 
-import com.wolery.owl._
+import com.wolery.owl.Controller
 import com.wolery.owl.core.Pitch
+import com.wolery.owl.core.Scale
 import com.wolery.owl.gui.Bead
+import com.wolery.owl.message
+import com.wolery.owl.message.HARMONY
+import com.wolery.owl.utils.implicits.asRunnable
+import com.wolery.owl.ℤ
 
+import javafx.application.Platform.{ runLater ⇒ defer }
 import javafx.fxml.{ FXML ⇒ fx }
 import javafx.scene.Node
-import javafx.scene.input.MouseEvent
-import javafx.scene.layout.{ ColumnConstraints, GridPane, Pane, RowConstraints }
+import javafx.scene.layout.ColumnConstraints
+import javafx.scene.layout.GridPane
+import javafx.scene.layout.Pane
+import javafx.scene.layout.RowConstraints
 import javafx.util.Duration
+import javax.sound.midi.MetaMessage
 import javax.sound.midi.MidiMessage
+import javax.sound.midi.ShortMessage
+import javax.sound.midi.ShortMessage.NOTE_OFF
+import javax.sound.midi.ShortMessage.NOTE_ON
 
 //****************************************************************************
 
@@ -34,33 +46,67 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   val rows: Seq[RowConstraints]    = makeRows
   val cols: Seq[ColumnConstraints] = makeCols
 
-  def view: Pane= root
-
-  def send(mm: MidiMessage,ts: Long) = {}
-
-  def close(): Unit = {}
-
-  def update(layer: ℤ,chords: Seq[Chord]) =
-  {
-    val gp = newGrid()
-
-    for {chord ← chords;
-         pitch ← chord;
-         cell  ← instrument.cells(pitch)}
+  val grid: GridPane = newGrid()
+  val beads: Seq[Bead] = for (s<-instrument.stops) yield
     {
-      val bead = newBead(layer,pitch)
-
-      gp.add(bead,cell.fret,instrument.strings.size-1 - cell.string)
+      val b = newBead(1,s.pitch)
+      b.setVisible(false)
+      grid.add(b,s.col,s.row)
+      b
     }
 
-    fade(0,1,1000)(gp).play()
+  def initialize(): Unit =
+  {
+    root.getChildren.add(grid)
+  }
+
+  def view: Pane= root
+
+  def send(mm: MidiMessage,ts: Long): Unit =
+  {
+    mm match
+    {
+      case m: ShortMessage if m.getChannel==0 ⇒ m.getCommand match
+      {
+        case NOTE_OFF ⇒ defer(onNoteOff(Pitch(m.getData1)))
+        case NOTE_ON  ⇒ defer(onNoteOn (Pitch(m.getData1)))
+        case _        ⇒
+      }
+      case m: MetaMessage ⇒ m.getType match
+      {
+        case HARMONY  ⇒ defer(onHarmony(message.harmony(m)))
+        case _        ⇒
+      }
+      case   _        ⇒
+    }
+  }
+
+  def onNoteOn(pitch: Pitch) =
+  {
+    for (stop ← instrument.stops(pitch))
+    {
+      beads(stop.index).setVisible(true)
+    }
+  }
+
+  def onNoteOff(pitch: Pitch) =
+  {
+    for (stop ← instrument.stops(pitch))
+    {
+      beads(stop.index).setVisible(false)
+    }
+  }
+
+  def onHarmony(scale: Scale) =
+  {
+    println(scale)
   }
 
   def fade(from:Double,to: Double,ms:Int = 2000)(node: Node):javafx.animation. Transition =
   {
     val t = new javafx.animation.FadeTransition(Duration.millis(ms),node)
-    t.setFromValue(0)
-    t.setToValue  (1)
+    t.setFromValue(from)
+    t.setToValue  (to)
     t
   }
 
@@ -70,7 +116,6 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   //g.gridLinesVisible = true
     g.getRowConstraints.addAll   (rows:_*)
     g.getColumnConstraints.addAll(cols:_*)
-    root.getChildren.add(g)
     g
   }
 
@@ -93,7 +138,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
 
   def makeCols: Seq[ColumnConstraints] =
   {
-    val n = instrument.frets + 1
+    val n = instrument.frets
     val w = 100.0 / n
 
     for (c ← 0 until n) yield
