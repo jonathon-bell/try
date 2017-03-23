@@ -66,7 +66,7 @@
 .harmonic
 {
    -fx-border-width:                1;
-   -fx-border-color:                red;
+   -fx-border-color:                grey;
 // -fx-background-color:            ;
    -fx-shape:                      "M-1   0   
                                     a 1 1 0 1 1  2.0 0  
@@ -74,21 +74,21 @@
    -fx-pref-width:                  30;
    -fx-pref-height:                 30;
 
-   -fx-stroke:                      snow;
+   -fx-stroke:                      silver;
 }
 
 .melodic
 {
-   -fx-border-width:                2;
+   -fx-border-width:                1;
    -fx-border-color:                red;
-   -fx-background-color:            yellow;
+   -fx-background-color:            cornsilk;
    -fx-shape:                      "M-1   0   
                                     a 1 1 0 1 1  2.0 0  
                                     a 1 1 0 1 1 -2.0 0 Z";
    -fx-pref-width:                  30;
    -fx-pref-height:                 30;
 
-   -fx-stroke:                      black;
+   -fx-stroke:                      navy;
 }
 
 //****************************************************************************
