@@ -20,7 +20,7 @@ import com.wolery.owl.core.Scale
 import com.wolery.owl.gui.Bead
 import com.wolery.owl.message._
 import com.wolery.owl.utils.implicits._
-import com.wolery.owl.ℤ
+import com.wolery.owl._
 
 import javafx.application.Platform.{ runLater ⇒ defer }
 import javafx.fxml.{ FXML ⇒ fx }
@@ -44,8 +44,8 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   var root: Pane                   = _
   val rows: Seq[RowConstraints]    = makeRows
   val cols: Seq[ColumnConstraints] = makeCols
-  val chan = 0
-  val grid: GridPane = newGrid()
+  val chan: ℕ                      = 0
+  val grid: GridPane               = newGrid()
   val beads: Seq[Bead] = for (s<-instrument.stops) yield
     {
       val b = newBead(1,s.pitch)
@@ -53,6 +53,21 @@ class StringedController(val instrument: StringedInstrument) extends Controller
       grid.add(b,s.col,s.row)
       b
     }
+
+/*
+  class Plane
+  {
+    val beads: Seq[Bead] = for (s<-instrument.stops) yield
+    {
+      val b = newBead(1,s.pitch)
+      b.setVisible(false)
+      grid.add(b,s.col,s.row)
+      b
+    }
+
+    def bead(stop: instrument.Stop): Bead = beads(stop.index)
+  }
+*/
 
   def initialize(): Unit =
   {
@@ -84,7 +99,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   {
     for (stop ← instrument.stops(pitch))
     {
-      beads(stop.index).setVisible(true)
+      beads(stop.index).setOpacity(1)
     }
   }
 
@@ -92,7 +107,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   {
     for (stop ← instrument.stops(pitch))
     {
-      beads(stop.index).setVisible(false)
+      beads(stop.index).setOpacity(0.5)
     }
   }
 
@@ -102,6 +117,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
 
     for (stop ← instrument.stops if scale.contains(stop.pitch.note))
     {
+      beads(stop.index).setOpacity(0.5)
       beads(stop.index).setVisible(true)
     }
   }

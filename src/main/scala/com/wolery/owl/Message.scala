@@ -28,34 +28,38 @@ import javax.sound.midi.MetaMessage
 object message
 {
   private
-  def encode(byte: Byte,serializable: Serializable): MetaMessage =
+  def encode[α](byte: Byte,any: α): MetaMessage =
   {
     val b = new ByteArrayOutputStream()
     val o = new ObjectOutputStream(b)
 
-    o.writeObject(serializable)
+    o.writeObject(any)
     o.close
 
     new MetaMessage(byte,b.toByteArray,b.size)
   }
 
   private
-  def decode[Type](byte: Byte,meta: MetaMessage): Type =
+  def decode[α](byte: Byte,meta: MetaMessage): α =
   {
     assert(meta.getType == byte)
 
     val b = new ByteArrayInputStream(meta.getData)
     val i = new ObjectInputStream(b)
 
-    val t = i.readObject.asInstanceOf[Type]
+    val t = i.readObject.asInstanceOf[α]
     i.close
     t
   }
 
-  val HARMONY: Byte = 0x60
+  val HARMONY:  Byte = 0x60
+  val POSITION: Byte = 0x61
 
-  def harmony(scale: Scale): MetaMessage = encode(HARMONY,scale)
+  def harmony(scale: Scale): MetaMessage = encode[Scale](HARMONY,scale)
   def harmony(meta: MetaMessage): Scale  = decode[Scale](HARMONY,meta)
+
+  def position(position: ℕ): MetaMessage = encode[ℕ]    (POSITION,position)
+  def position(meta: MetaMessage): ℕ     = decode[ℕ]    (POSITION,meta)
 }
 
 //****************************************************************************
