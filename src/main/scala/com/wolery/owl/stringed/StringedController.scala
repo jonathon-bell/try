@@ -29,7 +29,7 @@ import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Pane
 import javafx.scene.layout.RowConstraints
-import javafx.util.Duration
+import javafx.util.Duration.millis
 import javax.sound.midi.MetaMessage
 import javax.sound.midi.MidiMessage
 import javax.sound.midi.ShortMessage
@@ -41,40 +41,47 @@ import javax.sound.midi.ShortMessage.NOTE_ON
 class StringedController(val instrument: StringedInstrument) extends Controller
 {
   @fx
-  var root: Pane                   = _
-  val rows: Seq[RowConstraints]    = makeRows
-  val cols: Seq[ColumnConstraints] = makeCols
-  val chan: ℕ                      = 0
-  val grid: GridPane               = newGrid()
-  val beads: Seq[Bead] = for (s<-instrument.stops) yield
-    {
-      val b = newBead(1,s.pitch)
-      b.setVisible(false)
-      grid.add(b,s.col,s.row)
-      b
-    }
+  var root: Pane     = _
+  val chan: ℕ        = 0
+  val grid: GridPane = newGrid()
+  val harm: Beads    = new Beads(0)
+  val mldy: Beads    = new Beads(1)
 
-/*
-  class Plane
+  class Beads(id: ℕ)
   {
-    val beads: Seq[Bead] = for (s<-instrument.stops) yield
+    val beads: Seq[Bead] =
     {
-      val b = newBead(1,s.pitch)
-      b.setVisible(false)
-      grid.add(b,s.col,s.row)
-      b
+      instrument.stops.map(bead(_))
     }
 
-    def bead(stop: instrument.Stop): Bead = beads(stop.index)
+    def apply(stop: instrument.Stop): Bead =
+    {
+      beads(stop.index)
+    }
+
+    private
+    def bead(stop: instrument.Stop): Bead =
+    {
+      val b = id match
+      {
+        case 0 ⇒ new Bead(stop.pitch.note.toString,"harmonic")
+        case 1 ⇒ new Bead(stop.pitch.note.toString,"melodic")
+      }
+
+      grid.add(b,stop.col,stop.row)
+      b
+    }
   }
-*/
 
   def initialize(): Unit =
   {
     root.getChildren.add(grid)
   }
 
-  def view: Pane= root
+  def view: Pane =
+  {
+    root
+  }
 
   def send(message: MidiMessage,timestamp: Long): Unit =
   {
@@ -82,13 +89,13 @@ class StringedController(val instrument: StringedInstrument) extends Controller
     {
       case m: ShortMessage if m.getChannel==chan ⇒ m.getCommand match
       {
-        case NOTE_OFF ⇒ defer(onNoteOff(Pitch(m.getData1)))
-        case NOTE_ON  ⇒ defer(onNoteOn (Pitch(m.getData1)))
+        case NOTE_OFF ⇒ onNoteOff(Pitch(m.getData1))
+        case NOTE_ON  ⇒ onNoteOn (Pitch(m.getData1))
         case _        ⇒
       }
       case m: MetaMessage ⇒ m.getType match
       {
-        case HARMONY  ⇒ defer(onHarmony(harmony(m)))
+        case HARMONY  ⇒ onHarmony(harmony(m))
         case _        ⇒
       }
       case   _        ⇒
@@ -99,7 +106,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   {
     for (stop ← instrument.stops(pitch))
     {
-      beads(stop.index).setOpacity(1)
+      fade(1.0)(mldy(stop))
     }
   }
 
@@ -107,64 +114,53 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   {
     for (stop ← instrument.stops(pitch))
     {
-      beads(stop.index).setOpacity(0.5)
+      fade(0.0)(mldy(stop))
     }
   }
 
   def onHarmony(scale: Scale) =
   {
-    println(scale)
-
     for (stop ← instrument.stops if scale.contains(stop.pitch.note))
     {
-      beads(stop.index).setOpacity(0.5)
-      beads(stop.index).setVisible(true)
+      fade(1.0)(harm(stop))
     }
   }
 
-  def fade(from:Double,to: Double,ms:Int = 2000)(node: Node):javafx.animation. Transition =
+  def fade(to: Double,ms: ℕ = 500)(node: Node): Unit =
   {
-    val t = new javafx.animation.FadeTransition(Duration.millis(ms),node)
-    t.setFromValue(from)
+    val t = new javafx.animation.FadeTransition(millis(ms),node)
     t.setToValue  (to)
-    t
+    t.play()
   }
 
   def newGrid(): GridPane =
   {
+    def rows: Seq[RowConstraints] =
+    {
+      val n = instrument.strings.size
+      val h = 100.0 / n
+
+      for (r ← 0 until n) yield
+      {
+        new RowConstraints(){setPercentHeight(h)}
+      }
+    }
+
+    def cols: Seq[ColumnConstraints] =
+    {
+      val n = instrument.frets
+      val w = 100.0 / n
+
+      for (c ← 0 until n) yield
+      {
+        new ColumnConstraints(){setPercentWidth(w);setHalignment(javafx.geometry.HPos.CENTER)}
+      }
+    }
     val g = new GridPane
   //g.gridLinesVisible = true
     g.getRowConstraints.addAll   (rows:_*)
     g.getColumnConstraints.addAll(cols:_*)
     g
-  }
-
-  def newBead(layer: ℤ,p: Pitch): Bead = layer match
-  {
-    case 0 ⇒ new Bead(p.note.toString,"bead-white-text")
-    case 1 ⇒ new Bead(p.note.toString,"bead")
-  }
-
-  def makeRows: Seq[RowConstraints] =
-  {
-    val n = instrument.strings.size
-    val h = 100.0 / n
-
-    for (r ← 0 until n) yield
-    {
-      new RowConstraints(){setPercentHeight(h)}
-    }
-  }
-
-  def makeCols: Seq[ColumnConstraints] =
-  {
-    val n = instrument.frets
-    val w = 100.0 / n
-
-    for (c ← 0 until n) yield
-    {
-      new ColumnConstraints(){setPercentWidth(w);setHalignment(javafx.geometry.HPos.CENTER)}
-    }
   }
 }
 

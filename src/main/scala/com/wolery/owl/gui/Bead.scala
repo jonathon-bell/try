@@ -25,7 +25,7 @@ import javafx.scene.text.Text
 
 //****************************************************************************
 
-class Bead(text: String,style: String = "bead") extends StackPane
+class Bead(text: String,style: String) extends StackPane
 {
   val t = new Text(text)
 
@@ -37,6 +37,7 @@ class Bead(text: String,style: String = "bead") extends StackPane
   setMinSize(USE_PREF_SIZE,USE_PREF_SIZE)
   setMaxSize(USE_PREF_SIZE,USE_PREF_SIZE)
   setPrefSize(30,30)
+  setOpacity(0.0)
 
   setOnMouseClicked((e: MouseEvent) ⇒ println("clicked!"))
 }

@@ -63,28 +63,32 @@
 
 //****************************************************************************
 
-.bead
+.harmonic
 {
    -fx-border-width:                1;
    -fx-border-color:                red;
-   -fx-background-color:            orange;
+// -fx-background-color:            ;
    -fx-shape:                      "M-1   0   
                                     a 1 1 0 1 1  2.0 0  
                                     a 1 1 0 1 1 -2.0 0 Z";
    -fx-pref-width:                  30;
    -fx-pref-height:                 30;
 
-   -fx-fill:                        brown;
-// -fx-font-size:                   16;
-// -fx-text-alignment:              center;
+   -fx-stroke:                      snow;
 }
 
-.bead-white-text
+.melodic
 {
-// -fx-font-size:                   16;
-   -fx-stroke-width:                1;
-   -fx-fill:                        white;
-   -fx-stroke:                      snow;
+   -fx-border-width:                2;
+   -fx-border-color:                red;
+   -fx-background-color:            yellow;
+   -fx-shape:                      "M-1   0   
+                                    a 1 1 0 1 1  2.0 0  
+                                    a 1 1 0 1 1 -2.0 0 Z";
+   -fx-pref-width:                  30;
+   -fx-pref-height:                 30;
+
+   -fx-stroke:                      black;
 }
 
 //****************************************************************************
