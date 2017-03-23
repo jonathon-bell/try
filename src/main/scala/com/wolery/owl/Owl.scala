@@ -17,14 +17,17 @@ package com.wolery.owl
 //****************************************************************************
 
 import com.wolery.owl.core._
+import com.wolery.owl.utils.implicits._
 import com.wolery.owl.utils.load
 
 import javafx.concurrent.Task
-import javafx.scene.layout.BorderPane
 import javafx.scene.Scene
+import javafx.scene.layout.BorderPane
 import javafx.stage.Stage
 import javafx.stage.StageStyle
-import javax.sound.midi._
+import javax.sound.midi.MidiSystem
+import javax.sound.midi.Sequencer
+import javax.sound.midi.Synthesizer
 
 //****************************************************************************
 
@@ -33,22 +36,15 @@ object owl extends utils.Application
   val sequencer:   Sequencer   = MidiSystem.getSequencer()
   val synthesizer: Synthesizer = MidiSystem.getSynthesizer()
 
-  val initialize = new Task[Unit]
+  val initialize:Task[Unit] =
   {
-    def call(): Unit =
-    {
-      updateMessage("Loading...")
+    //updateMessage("Loading...")
 
       synthesizer.open()
     //synthesizer.loadAllInstruments(load.soundbank("fluid-soundbank"))
       sequencer.open()
 
-      sequencer.getTransmitter.setReceiver(synthesizer.getReceiver)
-
-    //val console = new utils.DumpReceiver()
-    //sequencer.getTransmitter.setReceiver(console)
-    //sequencer.addMetaEventListener(new MetaEventListener() {def meta(m:MetaMessage) = console.send(m,-1)})
-    }
+    sequencer.getTransmitter.setReceiver(synthesizer.getReceiver)
   }
 
   def start(stage: Stage): Unit =

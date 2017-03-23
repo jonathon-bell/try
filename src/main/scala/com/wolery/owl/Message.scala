@@ -57,4 +57,5 @@ object message
   def harmony(scale: Scale): MetaMessage = encode(HARMONY,scale)
   def harmony(meta: MetaMessage): Scale  = decode[Scale](HARMONY,meta)
 }
+
 //****************************************************************************

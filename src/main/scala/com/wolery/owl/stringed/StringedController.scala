@@ -18,9 +18,8 @@ import com.wolery.owl.Controller
 import com.wolery.owl.core.Pitch
 import com.wolery.owl.core.Scale
 import com.wolery.owl.gui.Bead
-import com.wolery.owl.message
-import com.wolery.owl.message.HARMONY
-import com.wolery.owl.utils.implicits.asRunnable
+import com.wolery.owl.message._
+import com.wolery.owl.utils.implicits._
 import com.wolery.owl.ℤ
 
 import javafx.application.Platform.{ runLater ⇒ defer }
@@ -45,7 +44,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   var root: Pane                   = _
   val rows: Seq[RowConstraints]    = makeRows
   val cols: Seq[ColumnConstraints] = makeCols
-
+  val chan = 0
   val grid: GridPane = newGrid()
   val beads: Seq[Bead] = for (s<-instrument.stops) yield
     {
@@ -62,11 +61,11 @@ class StringedController(val instrument: StringedInstrument) extends Controller
 
   def view: Pane= root
 
-  def send(mm: MidiMessage,ts: Long): Unit =
+  def send(message: MidiMessage,timestamp: Long): Unit =
   {
-    mm match
+    message match
     {
-      case m: ShortMessage if m.getChannel==0 ⇒ m.getCommand match
+      case m: ShortMessage if m.getChannel==chan ⇒ m.getCommand match
       {
         case NOTE_OFF ⇒ defer(onNoteOff(Pitch(m.getData1)))
         case NOTE_ON  ⇒ defer(onNoteOn (Pitch(m.getData1)))
@@ -74,7 +73,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
       }
       case m: MetaMessage ⇒ m.getType match
       {
-        case HARMONY  ⇒ defer(onHarmony(message.harmony(m)))
+        case HARMONY  ⇒ defer(onHarmony(harmony(m)))
         case _        ⇒
       }
       case   _        ⇒
@@ -100,6 +99,11 @@ class StringedController(val instrument: StringedInstrument) extends Controller
   def onHarmony(scale: Scale) =
   {
     println(scale)
+
+    for (stop ← instrument.stops if scale.contains(stop.pitch.note))
+    {
+      beads(stop.index).setVisible(true)
+    }
   }
 
   def fade(from:Double,to: Double,ms:Int = 2000)(node: Node):javafx.animation. Transition =

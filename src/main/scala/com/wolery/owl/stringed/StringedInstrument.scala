@@ -30,9 +30,11 @@ import javafx.scene.Parent
 
 case class StringedInstrument(strings: Seq[Pitch],frets: ℕ) extends Instrument
 {
+  val indices = strings.size * frets
+
   case class Stop(index: ℕ)
   {
-    assert(index < strings.size* frets,index)
+    assert(index < indices)
 
     def this(string: ℕ,fret: ℕ) =
     {
@@ -44,7 +46,6 @@ case class StringedInstrument(strings: Seq[Pitch],frets: ℕ) extends Instrument
     def fret  : ℕ     = index % frets
     def row   : ℕ     = string
     def col   : ℕ     = fret
-    def coords: (ℕ,ℕ) = (row,col)
 
     override
     def toString: String = s"${string}${subscript(fret.toString)} $index"
@@ -62,14 +63,18 @@ case class StringedInstrument(strings: Seq[Pitch],frets: ℕ) extends Instrument
 
   def stops: Seq[Stop] =
   {
-    for {i ← 0 until strings.size *frets} yield
+    for (i ← 0 until indices) yield
+    {
       new Stop(i)
+    }
   }
 
   def stops(pitch: Pitch): Seq[Stop] =
   {
     for (s ← 0 until strings.size if between(pitch,strings(s),strings(s)+frets-1)) yield
+    {
       new Stop(s,pitch-strings(s))
+    }
   }
 
   def view(fxml: String): (Pane,StringedController) =

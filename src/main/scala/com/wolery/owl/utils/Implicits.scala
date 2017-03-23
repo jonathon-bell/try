@@ -16,23 +16,32 @@ package com.wolery.owl.utils
 
 //****************************************************************************
 
-import javafx.event.EventHandler
 import scala.language.implicitConversions
+
+import javafx.concurrent.Task
+import javafx.event.Event
+import javafx.event.EventHandler
 
 //****************************************************************************
 
 object implicits
 {
   implicit
-  def asEventHandler[E <: javafx.event.Event](lambda: E ⇒ Unit): EventHandler[E] =
+  def asEventHandler[E <: Event](lambda: E ⇒ Unit): EventHandler[E] = new EventHandler[E]
   {
-    new EventHandler[E] {def handle(e: E) = lambda(e)}
+    def handle(e: E) = lambda(e)
   }
 
   implicit
-  def asRunnable(lambda: ⇒ Unit): Runnable =
+  def asTask[R](lambda: ⇒ R): Task[R] = new Task[R]
   {
-    new Runnable {def run() = lambda}
+    def call(): R = lambda
+  }
+
+  implicit
+  def asRunnable(lambda: ⇒ Unit): Runnable =  new Runnable
+  {
+    def run(): Unit = lambda
   }
 }
 

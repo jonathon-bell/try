@@ -16,12 +16,23 @@ package com.wolery.owl
 
 //****************************************************************************
 
-trait Controller extends javax.sound.midi.Receiver
+import javax.sound.midi.Receiver
+import javax.sound.midi.MidiMessage
+
+//****************************************************************************
+
+trait Controller extends Receiver
 {
   def instrument: Instrument
   def view      : Pane
 
-  def close()  : Unit = {}
+  def send(message: MidiMessage): Unit =
+  {
+    send(message,-1)
+  }
+
+  def close()   : Unit =
+  {}
 }
 
 //****************************************************************************
