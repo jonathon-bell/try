@@ -47,9 +47,9 @@ object load
     (l.load[Pane],controller)
   }
 
-  def soundbank(name: String = "fluid-soundbank"): Soundbank =
+  def soundbank(name: String): Soundbank =
   {
-    MidiSystem.getSoundbank(getClass.getResource(s"/midi/$name.sf2"))
+    MidiSystem.getSoundbank(getClass.getResource(s"/sf2/$name.sf2"))
   }
 
   def sequence(name: String): Sequence =

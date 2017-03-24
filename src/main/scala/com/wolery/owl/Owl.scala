@@ -38,18 +38,16 @@ object owl extends utils.Application
 
   val initialize:Task[Unit] =
   {
-    //updateMessage("Loading...")
-
-      synthesizer.open()
-    //synthesizer.loadAllInstruments(load.soundbank("fluid-soundbank"))
-      sequencer.open()
-
+  //updateMessage("Loading...")
+    synthesizer.open()
+    synthesizer.loadAllInstruments(load.soundbank("FluidR3 GM2-2"))
+    sequencer.open()
     sequencer.getTransmitter.setReceiver(synthesizer.getReceiver)
   }
 
   def start(stage: Stage): Unit =
   {
-     splash(stage,initialize,() ⇒ mainView())
+    splash(stage,initialize,() ⇒ mainView())
   }
 
   override
