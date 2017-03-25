@@ -43,6 +43,15 @@ class MainController(controller: Controller) extends Logging
     val tk = de.codecentric.centerdevice.MenuToolkit.toolkit()
 
     tk.setApplicationMenu(tk.createDefaultApplicationMenu("Owl"))
+
+
+    owl.sequencer.getTransmitter.setReceiver(controller)
+    owl.sequencer.addMetaEventListener(new MetaEventListener{def meta(m:MetaMessage):Unit = controller.send(m,-1)})
+
+    controller.send(message.harmony(Scale(F,"whole tone").get))
+
+    owl.sequencer.setSequence(load.sequence("sample"))
+    owl.sequencer.setTempoInBPM(10)
   }
 
   def onCIonian(ae: ActionEvent) = {}
@@ -57,12 +66,12 @@ class MainController(controller: Controller) extends Logging
 
     owl.sequencer.setSequence(load.sequence("sample"))
     owl.sequencer.setTempoInBPM(10)
-    owl.sequencer.start()
+   // owl.sequencer.start()
   }
 
   def onClose() =
   {
-    owl.sequencer.stop()
+   // owl.sequencer.stop()
   }
 }
 

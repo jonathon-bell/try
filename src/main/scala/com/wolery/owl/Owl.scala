@@ -17,7 +17,7 @@ package com.wolery.owl
 //****************************************************************************
 
 import com.wolery.owl.core._
-import com.wolery.owl.utils.implicits._
+import com.wolery.owl.utils.implicits.asTask
 import com.wolery.owl.utils.load
 
 import javafx.concurrent.Task
@@ -28,6 +28,10 @@ import javafx.stage.StageStyle
 import javax.sound.midi.MidiSystem
 import javax.sound.midi.Sequencer
 import javax.sound.midi.Synthesizer
+import javafx.fxml.{ FXML ⇒ fx }
+
+import javafx.scene.control.Label
+import java.util.ResourceBundle
 
 //****************************************************************************
 
@@ -39,14 +43,26 @@ object owl extends utils.Application
   val initialize:Task[Unit] =
   {
   //updateMessage("Loading...")
+    load.font("fontawesome-webfont")
     synthesizer.open()
-    synthesizer.loadAllInstruments(load.soundbank("FluidR3 GM2-2"))
+  //synthesizer.loadAllInstruments(load.soundbank("FluidR3 GM2-2"))
     sequencer.open()
     sequencer.getTransmitter.setReceiver(synthesizer.getReceiver)
   }
 
   def start(stage: Stage): Unit =
   {
+    /*
+    val (m,_) = load.view("TransportView",new TransportController)
+
+    new Stage(StageStyle.DECORATED)
+    {
+      setResizable(false)
+      setTitle     ("Owl")
+      setScene     (new Scene(m))
+      show()
+    }
+*/
     splash(stage,initialize,() ⇒ mainView())
   }
 
@@ -63,8 +79,10 @@ object owl extends utils.Application
 
     val (_,c) = instrument.view ("Guitar")
     val (m,_) = load.view("MainView",new MainController(c))
+    val (t,_) = load.view("TransportView",new TransportController)
 
     m.asInstanceOf[BorderPane].setCenter(c.view)
+    m.asInstanceOf[BorderPane].setBottom(t)
 
     new Stage(StageStyle.DECORATED)
     {

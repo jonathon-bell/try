@@ -19,11 +19,14 @@ package com.wolery.owl.utils
 
 //****************************************************************************
 
+import com.wolery.owl.ℕ
+
 import javafx.fxml.FXMLLoader
+import javafx.scene.layout.Pane
+import javafx.scene.text.Font
 import javax.sound.midi.MidiSystem
 import javax.sound.midi.Sequence
 import javax.sound.midi.Soundbank
-import javafx.scene.layout.Pane
 
 //****************************************************************************
 
@@ -45,6 +48,11 @@ object load
     l.setController(controller)
 
     (l.load[Pane],controller)
+  }
+
+  def font(name: String,size: ℕ = 12): Font =
+  {
+    Font.loadFont(getClass.getResource(s"/font/$name.ttf").toExternalForm,size);
   }
 
   def soundbank(name: String): Soundbank =

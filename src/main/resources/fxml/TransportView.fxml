@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane prefHeight="53.0" prefWidth="709.0" styleClass="transport" stylesheets="@TransportView.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label layoutX="45.0" layoutY="30.0" styleClass="static" text="Seconds" />
+      <Label layoutX="162.0" layoutY="30.0" styleClass="static" text="Bars" />
+      <Label layoutX="14.0" layoutY="9.0" styleClass="counter" text="00:01:16.248" />
+      <Label layoutX="121.0" layoutY="9.0" styleClass="counter" text="00031.01.03.90" />
+      <Label layoutX="510.0" layoutY="9.0" styleClass="marker" text="L" />
+      <Label layoutX="510.0" layoutY="30.0" styleClass="marker" text="R" />
+      <Label layoutX="528.0" layoutY="9.0" styleClass="counter" text="00:01:16.01:00" />
+      <Label layoutX="528.0" layoutY="30.0" styleClass="counter" text="00031.01.01.01" />
+      <Label layoutX="644.0" layoutY="30.0" prefHeight="14.0" prefWidth="45.0" styleClass="static" text="Tempo" />
+      <Label layoutX="644.0" layoutY="9.0" prefHeight="16.0" prefWidth="45.0" styleClass="counter" text="95.0" />
+      <ButtonBar buttonMinWidth="16.0" layoutX="226.0" layoutY="12.0" prefHeight="30.0" prefWidth="258.0">
+        <buttons>
+            <Label id="play" fx:id="prev" onMouseClicked="#onPrevious" prefHeight="25.0" prefWidth="21.0" styleClass="move" />
+            <Label id="play" fx:id="rew" onMouseClicked="#onRewind" prefHeight="25.0" prefWidth="21.0" styleClass="move" />
+            <Label id="play" fx:id="fwrd" onMouseClicked="#onForward" prefHeight="25.0" prefWidth="21.0" styleClass="move" />
+            <Label id="play" fx:id="next" onMouseClicked="#onNext" prefHeight="25.0" prefWidth="21.0" styleClass="move" />
+            <Label id="play" fx:id="begn" onMouseClicked="#onBegin" prefHeight="25.0" prefWidth="21.0" styleClass="move" />
+            <Label id="play" fx:id="stop" onMouseClicked="#onStop" prefHeight="25.0" prefWidth="21.0" styleClass="play" />
+            <Label id="play" fx:id="play" onMouseClicked="#onPlay" prefHeight="25.0" prefWidth="21.0" styleClass="play" />
+            <Label id="play" fx:id="loop" onMouseClicked="#onLoop" prefHeight="25.0" prefWidth="21.0" styleClass="play" />
+        </buttons>
+      </ButtonBar>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+</Pane>
