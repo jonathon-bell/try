@@ -52,17 +52,6 @@ object owl extends utils.Application
 
   def start(stage: Stage): Unit =
   {
-    /*
-    val (m,_) = load.view("TransportView",new TransportController)
-
-    new Stage(StageStyle.DECORATED)
-    {
-      setResizable(false)
-      setTitle     ("Owl")
-      setScene     (new Scene(m))
-      show()
-    }
-*/
     splash(stage,initialize,() ⇒ mainView())
   }
 
