@@ -16,16 +16,22 @@ package com.wolery.owl
 
 //****************************************************************************
 
+import com.wolery.owl.core.Bool
+
+import javafx.css.PseudoClass.getPseudoClass
 import javafx.fxml.{ FXML ⇒ fx }
 import javafx.scene.control.Label
 import javafx.scene.input.MouseEvent
-import javax.sound.midi.Receiver
 import javax.sound.midi.MidiMessage
-import javafx.css.PseudoClass.getPseudoClass
+import javax.sound.midi.Receiver
+import javax.sound.midi.MetaEventListener
+import javax.sound.midi.MetaMessage
+import javafx.application.Platform.{ runLater ⇒ defer }
+import com.wolery.owl.utils.implicits._
 
 //****************************************************************************
 
-class TransportController extends Receiver
+class TransportController extends MetaEventListener
 {
   @fx var prev: Label = _
   @fx var next: Label = _
@@ -36,8 +42,11 @@ class TransportController extends Receiver
   @fx var stop: Label = _
   @fx var play: Label = _
 
-  val STOPPED = getPseudoClass("stopped")
-  val PLAYING = getPseudoClass("playing")
+  @fx var secs:  Label = _
+  @fx var bars:  Label = _
+  @fx var left:  Label = _
+  @fx var right: Label = _
+  @fx var tempo: Label = _
 
   def initialize(): Unit =
   {
@@ -49,17 +58,33 @@ class TransportController extends Receiver
     advn.setText("\uf04e")
     stop.setText("\uf04d")
     play.setText("\uf04b")
+
+    tempo.setText("1.00")
+
     onStateChange()
   }
 
-  def send(mm: MidiMessage,ts: Long): Unit = {println(".")}
-  def close() = {}
+  def meta(mm: MetaMessage): Unit = mm.getType match
+  {
+    case 0x51 =>
+    {
+    def i(i: ℕ): ℤ   = mm.getData.apply(i) & 0xFF
+    def text: String = "'" + new String(mm.getData) + "'"
 
-  def onPrevious (e: MouseEvent): Unit = println("previous")
-  def onNext     (e: MouseEvent): Unit = println("next")
-  def onLoop     (e: MouseEvent): Unit = println("loop")
-  def onRewind   (e: MouseEvent): Unit = println("rewind")
-  def onAdvance  (e: MouseEvent): Unit = println("advance")
+
+    def bpm: Float =
+    {
+      // tempo in microseconds per beat
+      val mspb = (i(0) << 16) | (i(1) <<  8) | i(2)
+      val mspq = if (mspb <= 0) 60e6f / 0.1f
+                 else           60e6f / mspb
+      // truncate it to 2 digits after dot
+      Math.round(mspq * 100.0F) / 100.0F
+    }
+
+      defer (tempo.setText(s"$bpm"))
+    }
+  }
 
   def onReset(e: MouseEvent): Unit =
   {
@@ -68,9 +93,9 @@ class TransportController extends Receiver
 
   def onStateChange(): Unit =
   {
-    val  running = owl.sequencer.isRunning
-    stop.pseudoClassStateChanged(STOPPED,!running)
-    play.pseudoClassStateChanged(PLAYING, running)
+    stop.pseudoClassStateChanged(STOPPED,!isPlaying)
+    play.pseudoClassStateChanged(PLAYING, isPlaying)
+    loop.pseudoClassStateChanged(LOOPING, isLooping)
   }
 
   def onStop(e: MouseEvent): Unit =
@@ -84,6 +109,24 @@ class TransportController extends Receiver
     owl.sequencer.start()
     onStateChange()
   }
+
+  def onLoop(e: MouseEvent): Unit =
+  {
+    owl.sequencer.setLoopCount(if (isLooping) 0 else -1)
+    onStateChange()
+  }
+
+  def onPrevious (e: MouseEvent): Unit = println("previous")
+  def onNext     (e: MouseEvent): Unit = println("next")
+  def onRewind   (e: MouseEvent): Unit = println("rewind")
+  def onAdvance  (e: MouseEvent): Unit = println("advance")
+
+  def isLooping: Bool = owl.sequencer.getLoopCount != 0
+  def isPlaying: Bool = owl.sequencer.isRunning
+
+  val STOPPED = getPseudoClass("stopped")
+  val PLAYING = getPseudoClass("playing")
+  val LOOPING = getPseudoClass("looping")
 }
 
 //****************************************************************************

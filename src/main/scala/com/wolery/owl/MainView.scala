@@ -24,10 +24,11 @@ import javafx.scene.control.MenuBar
 import javafx.scene.layout.BorderPane
 import javafx.stage.{ Stage, StageStyle }
 import javax.sound.midi.{ MetaEventListener, MetaMessage }
+import javax.sound.midi.Receiver
 
 //****************************************************************************
 
-class MainController(controller: Controller) extends Logging
+class MainController(controller: Controller,transport: MetaEventListener) extends Logging
 {
   @fx
   var menubar   : MenuBar    = _
@@ -50,12 +51,18 @@ class MainController(controller: Controller) extends Logging
   def onCIonian(ae: ActionEvent)    = {}
   def onCWholeTone(ae: ActionEvent) = {}
   def onClose()                     = {}
-  def onPlay()                      = {}
+  def onPlay()                      =
+  {
+    owl.sequencer.setLoopStartPoint(0)
+    owl.sequencer.setLoopStartPoint(1000)
+  }
 
   def setup(): Unit =
   {
     owl.sequencer.getTransmitter.setReceiver(controller)
+    owl.sequencer.addMetaEventListener(transport)
     owl.sequencer.addMetaEventListener(new MetaEventListener{def meta(m:MetaMessage):Unit = controller.send(m,-1)})
+
     controller.send(message.harmony(Scale(F,"whole tone").get))
     owl.sequencer.setSequence(load.sequence("sample"))
   }
@@ -70,8 +77,8 @@ object MainView
     val instrument = stringed.StringedInstrument(24,E(2),A(2),D(3),G(3),B(3),E(4))
 
     val (_,c) = instrument.view("Guitar")
-    val (m,_) = load.view("MainView"     ,new MainController(c))
-    val (t,_) = load.view("TransportView",new TransportController)
+    val (t,x) = load.view("TransportView",new TransportController)
+    val (m,_) = load.view("MainView"     ,new MainController(c,x))
 
    // m.asInstanceOf[javafx.scene.layout.VBox].setSpacing(20)
     m.getChildren.addAll(c.view,t)

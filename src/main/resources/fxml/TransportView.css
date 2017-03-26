@@ -23,8 +23,9 @@
   -button-color:           #bbbbbb;
   -marker-color:           #2d659a;
   -hover-color :           white;
-  -playing-color:          green;
-  -stopped-color:          blue;
+  -playing-color:          lawngreen;
+  -stopped-color:          deepskyblue;
+  -looping-color:          deepskyblue;
 }
 
 .static-text
@@ -37,7 +38,7 @@
 {
   -fx-text-fill:           -active-color;
   -fx-font-size:           14;
-  -fx-font-weight:         bolder;
+  -fx-font-weight:         bold;
 }
 
 .transport-button
@@ -60,6 +61,11 @@
 .transport-button:stopped
 {
   -fx-text-fill:           -stopped-color;
+}
+
+.transport-button:looping
+{
+  -fx-text-fill:           -looping-color;
 }
 
 //****************************************************************************

@@ -1,41 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
 <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="53.0" prefWidth="1400.0" styleClass="transport-pane" stylesheets="@TransportView.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="53.0" prefWidth="709.0">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="684.0">
          <children>
-            <Label layoutX="45.0" layoutY="30.0" styleClass="static-text" text="Seconds" />
-            <Label layoutX="162.0" layoutY="30.0" styleClass="static-text" text="Bars" />
-            <Label layoutX="14.0" layoutY="9.0" styleClass="active-text" text="00:01:16.248" />
-            <Label layoutX="121.0" layoutY="9.0" styleClass="active-text" text="00031.01.03.90" />
-            <Label layoutX="510.0" layoutY="9.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="L" />
-            <Label layoutX="510.0" layoutY="30.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="R" />
-            <Label layoutX="528.0" layoutY="9.0" styleClass="active-text" text="00:01:16.01:00" />
-            <Label layoutX="528.0" layoutY="30.0" styleClass="active-text" text="00031.01.01.01" />
-            <Label layoutX="644.0" layoutY="30.0" prefHeight="14.0" prefWidth="45.0" styleClass="static-text" text="Tempo" />
-            <Label layoutX="644.0" layoutY="9.0" prefHeight="16.0" prefWidth="45.0" styleClass="active-text" text="95.0" />
-            <ButtonBar buttonMinWidth="16.0" layoutX="226.0" layoutY="12.0" prefHeight="30.0" prefWidth="258.0" >
-               <buttons>
-                  <Label fx:id="prev" onMouseClicked="#onPrevious" prefHeight="25.0" prefWidth="21.0" styleClass="transport-button" />
-                  <Label fx:id="rwnd" onMouseClicked="#onRewind" prefHeight="25.0" prefWidth="21.0" styleClass="transport-button" />
-                  <Label fx:id="advn" onMouseClicked="#onAdvance" prefHeight="25.0" prefWidth="21.0" styleClass="transport-button" />
-                  <Label fx:id="next" onMouseClicked="#onNext" prefHeight="25.0" prefWidth="21.0" styleClass="transport-button" />
-                  <Label fx:id="rset" onMouseClicked="#onReset" prefHeight="25.0" prefWidth="21.0" styleClass="transport-button" />
-                  <Label fx:id="stop" onMouseClicked="#onStop" prefHeight="25.0" prefWidth="21.0" style="-fx-font-size: 22;" styleClass="transport-button" />
-                  <Label fx:id="play" onMouseClicked="#onPlay" prefHeight="25.0" prefWidth="21.0" style="-fx-font-size: 22;" styleClass="transport-button" />
-                  <Label fx:id="loop" onMouseClicked="#onLoop" prefHeight="25.0" prefWidth="21.0" style="-fx-font-size: 22;" styleClass="transport-button" />
-               </buttons>
-            </ButtonBar>
+            <Label fx:id="prev" alignment="CENTER" contentDisplay="CENTER" layoutX="245.0" layoutY="13.0" onMouseClicked="#onPrevious" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="rwnd" alignment="CENTER" contentDisplay="CENTER" layoutX="273.0" layoutY="13.0" onMouseClicked="#onRewind" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="advn" alignment="CENTER" contentDisplay="CENTER" layoutX="301.0" layoutY="13.0" onMouseClicked="#onAdvance" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="next" alignment="CENTER" contentDisplay="CENTER" layoutX="329.0" layoutY="13.0" onMouseClicked="#onNext" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="rset" alignment="CENTER" contentDisplay="CENTER" layoutX="356.0" layoutY="13.0" onMouseClicked="#onReset" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="stop" alignment="CENTER" contentDisplay="CENTER" layoutX="383.0" layoutY="10.0" onMouseClicked="#onStop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
+            <Label fx:id="play" alignment="CENTER" contentDisplay="CENTER" layoutX="414.0" layoutY="10.0" onMouseClicked="#onPlay" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
+            <Label fx:id="loop" alignment="CENTER" contentDisplay="CENTER" layoutX="445.0" layoutY="10.0" onMouseClicked="#onLoop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
+            <Label alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="28.0" prefHeight="14.0" prefWidth="83.0" styleClass="static-text" text="Seconds" />
+            <Label alignment="BOTTOM_CENTER" layoutX="122.0" layoutY="28.0" prefHeight="14.0" prefWidth="96.0" styleClass="static-text" text="Bars" />
+            <Label fx:id="secs" alignment="BOTTOM_CENTER" layoutX="14.0" layoutY="11.0" styleClass="active-text" text="00:01:16.248" />
+            <Label fx:id="bars" alignment="BOTTOM_CENTER" layoutX="121.0" layoutY="11.0" styleClass="active-text" text="00031.01.03.90" />
+            <Label alignment="BOTTOM_CENTER" layoutX="496.0" layoutY="11.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="L" />
+            <Label alignment="BOTTOM_CENTER" layoutX="495.0" layoutY="28.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="R" />
+            <Label fx:id="left" alignment="BOTTOM_CENTER" layoutX="514.0" layoutY="11.0" styleClass="active-text" text="00:01:16.01:00" />
+            <Label fx:id="right" alignment="BOTTOM_CENTER" layoutX="514.0" layoutY="28.0" styleClass="active-text" text="00031.01.01.01" />
+            <Label alignment="BOTTOM_CENTER" layoutX="628.0" layoutY="28.0" prefHeight="14.0" prefWidth="45.0" styleClass="static-text" text="Tempo" />
+            <Label fx:id="tempo" alignment="BOTTOM_CENTER" layoutX="628.0" layoutY="11.0" prefHeight="16.0" prefWidth="45.0" styleClass="active-text" text="95.00" />
          </children>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
       </Pane>
    </children>
 </HBox>
