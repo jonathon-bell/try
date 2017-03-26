@@ -12,7 +12,7 @@
 //*
 //****************************************************************************
 
-.transport
+.transport-pane
 {
   -fx-background-color:    #101010;
   -marker-color:           #2d659a;
@@ -21,19 +21,19 @@
   -hover-color :           white;
 }
 
+.static
+{
+  -fx-text-fill:           -static-color;
+  -fx-font-size:           11;
+  -fx-alignment:           center;
+}
+
 .counter
 {
   -fx-text-fill:           -active-color;
   -fx-font-size:           14;
   -fx-font-family:         Arial;
   -fx-font-weight:         bolder;
-  -fx-alignment:           center;
-}
-
-.static
-{
-  -fx-text-fill:           -static-color;
-  -fx-font-size:           11;
   -fx-alignment:           center;
 }
 
