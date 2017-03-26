@@ -21,6 +21,7 @@ import javafx.scene.control.Label
 import javafx.scene.input.MouseEvent
 import javax.sound.midi.Receiver
 import javax.sound.midi.MidiMessage
+import javafx.css.PseudoClass.getPseudoClass
 
 //****************************************************************************
 
@@ -35,6 +36,9 @@ class TransportController extends Receiver
   @fx var stop: Label = _
   @fx var play: Label = _
 
+  val STOPPED = getPseudoClass("stopped")
+  val PLAYING = getPseudoClass("playing")
+
   def initialize(): Unit =
   {
     prev.setText("\uf048")
@@ -45,6 +49,7 @@ class TransportController extends Receiver
     advn.setText("\uf04e")
     stop.setText("\uf04d")
     play.setText("\uf04b")
+    onStateChange()
   }
 
   def send(mm: MidiMessage,ts: Long): Unit = {println(".")}
@@ -61,20 +66,24 @@ class TransportController extends Receiver
     owl.sequencer.setTickPosition(0)
   }
 
+  def onStateChange(): Unit =
+  {
+    val  running = owl.sequencer.isRunning
+    stop.pseudoClassStateChanged(STOPPED,!running)
+    play.pseudoClassStateChanged(PLAYING, running)
+  }
+
   def onStop(e: MouseEvent): Unit =
   {
-    stop.setStyle("-fx-text-fill:blue;")
-    play.setStyle("-fx-text-fill:grey;")
     owl.sequencer.stop()
+    onStateChange()
   }
 
   def onPlay(e: MouseEvent): Unit =
   {
-    stop.setStyle("-fx-text-fill:grey;")
-    play.setStyle("-fx-text-fill:green;")
     owl.sequencer.start()
+    onStateChange()
   }
-
 }
 
 //****************************************************************************

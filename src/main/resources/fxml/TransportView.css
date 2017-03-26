@@ -14,62 +14,52 @@
 
 .transport-pane
 {
+  -fx-font-family:         Arial;
   -fx-background-color:    #101010;
-  -marker-color:           #2d659a;
+  -fx-alignment:           center;
+
   -static-color:           grey;
   -active-color:           lightgrey;
+  -button-color:           #bbbbbb;
+  -marker-color:           #2d659a;
   -hover-color :           white;
+  -playing-color:          green;
+  -stopped-color:          blue;
 }
 
-.static
+.static-text
 {
   -fx-text-fill:           -static-color;
   -fx-font-size:           11;
-  -fx-alignment:           center;
 }
 
-.counter
+.active-text
 {
   -fx-text-fill:           -active-color;
   -fx-font-size:           14;
-  -fx-font-family:         Arial;
   -fx-font-weight:         bolder;
-  -fx-alignment:           center;
 }
 
-.marker
-{
-  -fx-text-fill:           -marker-color;
-  -fx-font-size:           14;
-  -fx-font-family:         Arial;
-  -fx-font-weight:         bolder;
-  -fx-alignment:           center;
-}
-
-.move
+.transport-button
 {
   -fx-font-family:         "FontAwesome";
   -fx-font-size:           14;
-  -fx-alignment:           center;
-  -fx-text-fill:           #bbbbbb;
+  -fx-text-fill:           -button-color;
 }
 
-.move:hover
+.transport-button:hover
 {
   -fx-text-fill:           -hover-color;
 }
 
-.play
+.transport-button:playing
 {
-  -fx-font-family:         "FontAwesome";
-  -fx-font-size:           22;
-  -fx-alignment:           center;
-  -fx-text-fill:           -active-color;
+  -fx-text-fill:           -playing-color;
 }
 
-.play:hover
+.transport-button:stopped
 {
-  -fx-text-fill:           -hover-color;
+  -fx-text-fill:           -stopped-color;
 }
 
 //****************************************************************************
