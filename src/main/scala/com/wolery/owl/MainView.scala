@@ -25,6 +25,7 @@ import javafx.scene.layout.BorderPane
 import javafx.stage.{ Stage, StageStyle }
 import javax.sound.midi.{ MetaEventListener, MetaMessage }
 import javax.sound.midi.Receiver
+import com.wolery.owl.midi.message
 
 //****************************************************************************
 

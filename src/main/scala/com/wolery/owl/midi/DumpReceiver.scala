@@ -15,14 +15,14 @@
 //*
 //****************************************************************************
 
-package com.wolery.owl.utils
+package com.wolery.owl.midi
 
 //****************************************************************************
 
 import java.io.PrintStream
 import javax.sound.midi._
-
 import com.wolery.owl.core._
+import message._
 
 //****************************************************************************
 
@@ -46,7 +46,7 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
 
     mm match
     {
-      case m: ShortMessage if isChannelMessage(m)⇒ onChannelMessage(m)
+      case m: ShortMessage if m.isChannelMessage ⇒ onChannelMessage(m)
       case m: ShortMessage                       ⇒ onSystemMessage(m)
       case m: MetaMessage                        ⇒ onMetaMessage(m)
       case m: SysexMessage                       ⇒ onSysexMessage(m)
@@ -56,20 +56,10 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
     m_out.println()
   }
 
-  def isChannelMessage(mm: ShortMessage): Boolean =
-  {
-    mm.getCommand != 0xF0
-  }
-
-  def isSystemMessage (mm: ShortMessage): Boolean =
-  {
-    mm.getCommand == 0xF0
-  }
-
   protected
   def onChannelMessage(mm: ShortMessage): Unit =
   {
-    require(isChannelMessage(mm))
+    assert(mm.isChannelMessage)
 
     def chan = f"ch ${mm.getChannel + 1}%02d"
     def note = f"${Pitch(mm.getData1).toString}%-3s"
@@ -96,7 +86,7 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
   protected
   def onSystemMessage(mm: ShortMessage): Unit =
   {
-    require(isSystemMessage(mm))
+    assert(mm.isSystemMessage)
 
     def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
     def song = f"${mm.getData1}%03d"
@@ -139,54 +129,29 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
   protected
   def onMetaMessage(mm: MetaMessage): Unit =
   {
-    def i(i: ℕ): ℤ   = mm.getData.apply(i) & 0xFF
-    def text: String = "'" + new String(mm.getData) + "'"
-
-    def key : String =
-    {
-      val keys = Seq("C♭","G♭","D♭","A♭","E♭","B♭","F","C","G","D","A","E","B","F♯","C♯")
-      val mode = Seq(" maj"," min")
-
-      keys(7 + i(0)) + mode(i(1))
-    }
-
-    def tempo: Float =
-    {
-      // tempo in microseconds per beat
-      val mspb = (i(0) << 16) | (i(1) <<  8) | i(2)
-      val mspq = if (mspb <= 0) 60e6f / 0.1f
-                 else           60e6f / mspb
-      // truncate it to 2 digits after dot
-      Math.round(mspq * 100.0F) / 100.0F
-    }
-
-    def offset: String        = s"${i(0)}:${i(1)}:${i(2)}:${i(3)}:${i(4)}"
-
-    def timesig: String       = s"${i(0)}/${1<<i(1)}; clocks per pulse: ${i(2)}; 1/32 per 24 clocks: ${i(3)}"
-
-    def sequence: ℤ           = (i(0) << 8) | i(1)
+    def print(s:String,v: Any = "") = m_out.print(s + " " + v)
 
     mm.getType match
     {
-      case 0x00 ⇒ m_out.print(s"sequence-number   $sequence")
-      case 0x01 ⇒ m_out.print(s"text              $text")
-      case 0x02 ⇒ m_out.print(s"copyright         $text")
-      case 0x03 ⇒ m_out.print(s"title             $text")
-      case 0x04 ⇒ m_out.print(s"instrument        $text")
-      case 0x05 ⇒ m_out.print(s"lyric             $text")
-      case 0x06 ⇒ m_out.print(s"marker            $text")
-      case 0x07 ⇒ m_out.print(s"cue               $text")
-      case 0x08 ⇒ m_out.print(s"program           $text")
-      case 0x09 ⇒ m_out.print(s"device            $text")
-      case 0x20 ⇒ m_out.print(s"channel           ${i(0)}")
-      case 0x21 ⇒ m_out.print(s"port              ${i(0)}")
-      case 0x2F ⇒ m_out.print(s"end-of-track")
-      case 0x51 ⇒ m_out.print(s"tempo             $tempo bpm")
-      case 0x54 ⇒ m_out.print(s"smpte-offset      $offset")
-      case 0x58 ⇒ m_out.print(s"time-signature    $timesig")
-      case 0x59 ⇒ m_out.print(s"key-signature     $key")
-      case 0x7F ⇒ m_out.print("sequencer-specific"+hex(mm))
-      case _    ⇒ m_out.print("unknown meta event"+hex(mm))
+      case SEQUENCE  ⇒ print("sequence-number   ",mm.sequence)
+      case TEXT      ⇒ print("text              ",mm.text)
+      case COPYRIGHT ⇒ print("copyright         ",mm.copyright)
+      case TITLE     ⇒ print("title             ",mm.title)
+      case INSTRUMENT⇒ print("instrument        ",mm.instrument)
+      case LYRIC     ⇒ print("lyric             ",mm.lyric)
+      case MARKER    ⇒ print("marker            ",mm.marker)
+      case CUE       ⇒ print("cue               ",mm.cue)
+      case PROGRAM   ⇒ print("program           ",mm.program)
+      case DEVICE    ⇒ print("device            ",mm.device)
+      case CHANNEL   ⇒ print("channel           ",mm.channel)
+      case PORT      ⇒ print("port              ",mm.port)
+      case END       ⇒ print("end-of-track      ")
+      case TEMPO     ⇒ print("tempo             ",mm.tempo)
+      case SMPTE     ⇒ print("smpte-offset      ",mm.smpte)
+      case TIME      ⇒ print("time-signature    ",mm.time)
+      case KEY       ⇒ print("key-signature     ",mm.key)
+      case 0x7F      ⇒ print("sequencer-specific",hex(mm))
+      case _         ⇒ print("unknown meta event",hex(mm))
     }
   }
 
