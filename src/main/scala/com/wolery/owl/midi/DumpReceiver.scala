@@ -22,11 +22,12 @@ package com.wolery.owl.midi
 import java.io.PrintStream
 import javax.sound.midi._
 import com.wolery.owl.core._
-import message._
+import messages._
+import javax.sound.midi.ShortMessage._
 
 //****************************************************************************
 
-class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
+final class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
 {
   def close(): Unit =
   {}
@@ -56,39 +57,33 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
     m_out.println()
   }
 
-  protected
   def onChannelMessage(mm: ShortMessage): Unit =
   {
     assert(mm.isChannelMessage)
 
-    def chan = f"ch ${mm.getChannel + 1}%02d"
-    def note = f"${Pitch(mm.getData1).toString}%-3s"
+    def note = f"${mm.pitch.toString}%-3s"
     def val1 = f"${mm.getData1}%03d"
     def val2 = f"${mm.getData2}%03d"
-    def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
 
-    m_out.print(chan)
-    m_out.print(' ')
+    m_out.print(f"ch ${mm.getChannel + 1}%02d ")
 
     mm.getCommand match
     {
-      case 0x80 ⇒ m_out.print(s"note-off   $note ($val2)")
-      case 0x90 ⇒ m_out.print(s"note-on    $note ($val2)")
-      case 0xA0 ⇒ m_out.print(s"p-pressure $note ($val2)")
-      case 0xB0 ⇒ m_out.print(s"controller $val1 ($val2)")
-      case 0xC0 ⇒ m_out.print(s"program    $val1")
-      case 0xD0 ⇒ m_out.print(s"c-pressure $note")
-      case 0xE0 ⇒ m_out.print(s"pitch-bend $long")
-      case _    ⇒ m_out.print("unknown message")
+      case NOTE_OFF         ⇒ m_out.print(s"note-off   $note ($val2)")
+      case NOTE_ON          ⇒ m_out.print(s"note-on    $note ($val2)")
+      case POLY_PRESSURE    ⇒ m_out.print(s"p-pressure $note ($val2)")
+      case CONTROL_CHANGE   ⇒ m_out.print(s"controller $val1 ($val2)")
+      case PROGRAM_CHANGE   ⇒ m_out.print(s"program    $val1")
+      case CHANNEL_PRESSURE ⇒ m_out.print(s"c-pressure $note")
+      case PITCH_BEND       ⇒ m_out.print(s"pitch-bend ${mm.integer}")
+      case _                ⇒ m_out.print("unknown message")
     }
   }
 
-  protected
   def onSystemMessage(mm: ShortMessage): Unit =
   {
     assert(mm.isSystemMessage)
 
-    def long = (mm.getData1 & 0x7F) | ((mm.getData2 & 0x7F) << 7)
     def song = f"${mm.getData1}%03d"
 
     def mtcQuarterFrame =
@@ -112,7 +107,7 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
     {
       case 0x0 ⇒ m_out.print(s"sysex[           ")
       case 0x1 ⇒ m_out.print(s"mtc 1/4 frame $mtcQuarterFrame")
-      case 0x2 ⇒ m_out.print(s"song position $long")
+      case 0x2 ⇒ m_out.print(s"song position ${mm.integer}")
       case 0x3 ⇒ m_out.print(s"song select $song")
       case 0x6 ⇒ m_out.print(s"tune request     ")
       case 0x7 ⇒ m_out.print(s"sysex]           ")
@@ -126,7 +121,6 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
     }
   }
 
-  protected
   def onMetaMessage(mm: MetaMessage): Unit =
   {
     def print(s:String,v: Any = "") = m_out.print(s + " " + v)
@@ -155,13 +149,11 @@ class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
     }
   }
 
-  protected
   def onSysexMessage(mm: SysexMessage): Unit =
   {
     m_out.print("sysex " + hex(mm,1,10))
   }
 
-  protected
   def hex(mm: MidiMessage,min: ℕ = 3,max: ℕ = 3): String =
   {
     require(0<min && min <= max)

@@ -28,6 +28,7 @@ import javax.sound.midi.MetaEventListener
 import javax.sound.midi.MetaMessage
 import javafx.application.Platform.{ runLater ⇒ defer }
 import com.wolery.owl.utils.implicits._
+import com.wolery.owl.midi.messages._
 
 //****************************************************************************
 
@@ -64,26 +65,14 @@ class TransportController extends MetaEventListener
     onStateChange()
   }
 
-  def meta(mm: MetaMessage): Unit = mm.getType match
+  def meta(message: MetaMessage): Unit = message.getType match
   {
-    case 0x51 =>
-    {
-    def i(i: ℕ): ℤ   = mm.getData.apply(i) & 0xFF
-    def text: String = "'" + new String(mm.getData) + "'"
+    case TEMPO ⇒ defer(onTempoChange(message.tempo))
+  }
 
-
-    def bpm: Float =
-    {
-      // tempo in microseconds per beat
-      val mspb = (i(0) << 16) | (i(1) <<  8) | i(2)
-      val mspq = if (mspb <= 0) 60e6f / 0.1f
-                 else           60e6f / mspb
-      // truncate it to 2 digits after dot
-      Math.round(mspq * 100.0F) / 100.0F
-    }
-
-      defer (tempo.setText(s"$bpm"))
-    }
+  def onTempoChange(bpm: ℝ) =
+  {
+    tempo.setText(f"$bpm%2.2f")
   }
 
   def onReset(e: MouseEvent): Unit =

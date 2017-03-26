@@ -14,6 +14,8 @@
 
 package com.wolery.owl.midi
 
+//****************************************************************************
+
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -28,7 +30,7 @@ import javax.sound.midi.MidiMessage
 
 //****************************************************************************
 
-object message
+object messages
 {
 //Meta Events
 
@@ -56,18 +58,12 @@ object message
   val STRING:        Byte = 0x61
   val POSITION:      Byte = 0x62
 
-
   implicit final class ShortMessageEx(val m: ShortMessage) extends AnyVal
   {
-    def isChannelMessage: Bool =
-    {
-      m.getCommand != 0xF0
-    }
-
-    def isSystemMessage: Bool =
-    {
-      m.getCommand == 0xF0
-    }
+    def isChannelMessage: Bool  = m.getCommand != 0xF0
+    def isSystemMessage:  Bool  = m.getCommand == 0xF0
+    def pitch          :  Pitch = Pitch(m.getData1)
+    def integer        :  ℕ     = (m.getData1 & 0x7F) | ((m.getData2 & 0x7F) << 7)
   }
 
   implicit final class MetaMessageEx(val m: MetaMessage) extends AnyVal
@@ -123,7 +119,7 @@ object message
     {
       assert(m.getType == SMPTE)
 
-      (int(0) , int(1) , int(2) , int(3) , int(4))
+      (int(0),int(1),int(2),int(3),int(4))
     }
 
     def time: (ℕ,ℕ) =

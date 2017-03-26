@@ -25,7 +25,7 @@ import javafx.scene.layout.BorderPane
 import javafx.stage.{ Stage, StageStyle }
 import javax.sound.midi.{ MetaEventListener, MetaMessage }
 import javax.sound.midi.Receiver
-import com.wolery.owl.midi.message
+import com.wolery.owl.midi.messages
 
 //****************************************************************************
 
@@ -64,7 +64,7 @@ class MainController(controller: Controller,transport: MetaEventListener) extend
     owl.sequencer.addMetaEventListener(transport)
     owl.sequencer.addMetaEventListener(new MetaEventListener{def meta(m:MetaMessage):Unit = controller.send(m,-1)})
 
-    controller.send(message.harmony(Scale(F,"whole tone").get))
+    controller.send(messages.harmony(Scale(F,"whole tone").get))
     owl.sequencer.setSequence(load.sequence("sample"))
   }
 }

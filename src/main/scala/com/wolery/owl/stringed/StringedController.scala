@@ -18,7 +18,7 @@ import com.wolery.owl.Controller
 import com.wolery.owl.core.Pitch
 import com.wolery.owl.core.Scale
 import com.wolery.owl.gui.Bead
-import com.wolery.owl.midi.message._
+import com.wolery.owl.midi.messages._
 import com.wolery.owl.utils.implicits._
 import com.wolery.owl._
 
