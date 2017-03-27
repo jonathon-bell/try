@@ -122,6 +122,19 @@ object messages
       (int(0),int(1),int(2),int(3),int(4))
     }
 
+    def numerator: ℕ =
+    {
+      assert(m.getType == TIME)
+
+      int(0)
+    }
+
+    def denominator: ℕ =
+    {
+      assert(m.getType == TIME)
+
+      1 << int(1)
+    }
     def time: (ℕ,ℕ) =
     {
       assert(m.getType == TIME)
