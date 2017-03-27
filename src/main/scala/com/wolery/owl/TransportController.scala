@@ -17,31 +17,29 @@ package com.wolery.owl
 //****************************************************************************
 
 import com.wolery.owl.core.Bool
+import com.wolery.owl.midi.messages._
+import com.wolery.owl.utils.implicits.asRunnable
 
+import javafx.application.Platform.{ runLater ⇒ defer }
 import javafx.css.PseudoClass.getPseudoClass
 import javafx.fxml.{ FXML ⇒ fx }
 import javafx.scene.control.Label
 import javafx.scene.input.MouseEvent
-import javax.sound.midi.MidiMessage
-import javax.sound.midi.Receiver
 import javax.sound.midi.MetaEventListener
 import javax.sound.midi.MetaMessage
-import javafx.application.Platform.{ runLater ⇒ defer }
-import com.wolery.owl.utils.implicits._
-import com.wolery.owl.midi.messages._
 
 //****************************************************************************
 
 class TransportController extends MetaEventListener
 {
-  @fx var prev: Label = _
-  @fx var next: Label = _
-  @fx var loop: Label = _
-  @fx var rset: Label = _
-  @fx var rwnd: Label = _
-  @fx var advn: Label = _
-  @fx var stop: Label = _
-  @fx var play: Label = _
+  @fx var prev:  Label = _
+  @fx var next:  Label = _
+  @fx var loop:  Label = _
+  @fx var rset:  Label = _
+  @fx var rwnd:  Label = _
+  @fx var advn:  Label = _
+  @fx var stop:  Label = _
+  @fx var play:  Label = _
 
   @fx var secs:  Label = _
   @fx var bars:  Label = _
@@ -68,6 +66,7 @@ class TransportController extends MetaEventListener
   def meta(message: MetaMessage): Unit = message.getType match
   {
     case TEMPO ⇒ defer(onTempoChange(message.tempo))
+    case _     ⇒
   }
 
   def onTempoChange(bpm: ℝ) =
