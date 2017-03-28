@@ -8,24 +8,24 @@
    <children>
       <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="684.0">
          <children>
-            <Label fx:id="prev" alignment="CENTER" contentDisplay="CENTER" layoutX="245.0" layoutY="13.0" onMouseClicked="#onPrevious" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
-            <Label fx:id="rwnd" alignment="CENTER" contentDisplay="CENTER" layoutX="273.0" layoutY="13.0" onMouseClicked="#onRewind" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
-            <Label fx:id="advn" alignment="CENTER" contentDisplay="CENTER" layoutX="301.0" layoutY="13.0" onMouseClicked="#onAdvance" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
-            <Label fx:id="next" alignment="CENTER" contentDisplay="CENTER" layoutX="329.0" layoutY="13.0" onMouseClicked="#onNext" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
-            <Label fx:id="rset" alignment="CENTER" contentDisplay="CENTER" layoutX="356.0" layoutY="13.0" onMouseClicked="#onReset" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
-            <Label fx:id="stop" alignment="CENTER" contentDisplay="CENTER" layoutX="383.0" layoutY="10.0" onMouseClicked="#onStop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
-            <Label fx:id="play" alignment="CENTER" contentDisplay="CENTER" layoutX="414.0" layoutY="10.0" onMouseClicked="#onPlay" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
-            <Label fx:id="loop" alignment="CENTER" contentDisplay="CENTER" layoutX="445.0" layoutY="10.0" onMouseClicked="#onLoop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
-            <Label alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="28.0" prefHeight="14.0" prefWidth="83.0" styleClass="static-text" text="Seconds" />
+            <Label fx:id="m_prev" alignment="CENTER" contentDisplay="CENTER" layoutX="245.0" layoutY="13.0" onMouseClicked="#onPrevious" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="m_rwnd" alignment="CENTER" contentDisplay="CENTER" layoutX="273.0" layoutY="13.0" onMouseClicked="#onRewind" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="m_advn" alignment="CENTER" contentDisplay="CENTER" layoutX="301.0" layoutY="13.0" onMouseClicked="#onAdvance" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="m_next" alignment="CENTER" contentDisplay="CENTER" layoutX="329.0" layoutY="13.0" onMouseClicked="#onNext" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="m_rset" alignment="CENTER" contentDisplay="CENTER" layoutX="356.0" layoutY="13.0" onMouseClicked="#onReset" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
+            <Label fx:id="m_stop" alignment="CENTER" contentDisplay="CENTER" layoutX="383.0" layoutY="10.0" onMouseClicked="#onStop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
+            <Label fx:id="m_play" alignment="CENTER" contentDisplay="CENTER" layoutX="414.0" layoutY="10.0" onMouseClicked="#onPlay" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
+            <Label fx:id="m_loop" alignment="CENTER" contentDisplay="CENTER" layoutX="445.0" layoutY="10.0" onMouseClicked="#onLoop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
+            <Label fx:id="m_harm" alignment="BOTTOM_CENTER" layoutX="14.0" layoutY="11.0" styleClass="active-text" text="" />
+            <Label fx:id="m_bars" alignment="BOTTOM_CENTER" layoutX="122.0" layoutY="11.0" styleClass="active-text" text="0000.00.00" />
+            <Label fx:id="m_left" alignment="BOTTOM_CENTER" layoutX="514.0" layoutY="11.0" styleClass="active-text" text="0000.00.00" />
+            <Label fx:id="m_right" alignment="BOTTOM_CENTER" layoutX="514.0" layoutY="28.0" styleClass="active-text" text="0000.00.00" />
+            <Label fx:id="m_tempo" alignment="BOTTOM_CENTER" layoutX="628.0" layoutY="11.0" prefHeight="16.0" prefWidth="45.0" styleClass="active-text" text="95.00" />
+            <Label alignment="BOTTOM_CENTER" layoutX="10.0" layoutY="28.0" prefHeight="14.0" prefWidth="83.0" styleClass="static-text" text="Harmony" />
             <Label alignment="BOTTOM_CENTER" layoutX="122.0" layoutY="28.0" prefHeight="14.0" prefWidth="96.0" styleClass="static-text" text="Bars" />
-            <Label fx:id="secs" alignment="BOTTOM_CENTER" layoutX="14.0" layoutY="11.0" styleClass="active-text" text="00:01:16.248" />
-            <Label fx:id="bars" alignment="BOTTOM_CENTER" layoutX="121.0" layoutY="11.0" styleClass="active-text" text="00031.01.03.90" />
             <Label alignment="BOTTOM_CENTER" layoutX="496.0" layoutY="11.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="L" />
             <Label alignment="BOTTOM_CENTER" layoutX="495.0" layoutY="28.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="R" />
-            <Label fx:id="left" alignment="BOTTOM_CENTER" layoutX="514.0" layoutY="11.0" styleClass="active-text" text="00:01:16.01:00" />
-            <Label fx:id="right" alignment="BOTTOM_CENTER" layoutX="514.0" layoutY="28.0" styleClass="active-text" text="00031.01.01.01" />
             <Label alignment="BOTTOM_CENTER" layoutX="628.0" layoutY="28.0" prefHeight="14.0" prefWidth="45.0" styleClass="static-text" text="Tempo" />
-            <Label fx:id="tempo" alignment="BOTTOM_CENTER" layoutX="628.0" layoutY="11.0" prefHeight="16.0" prefWidth="45.0" styleClass="active-text" text="95.00" />
          </children>
       </Pane>
    </children>
