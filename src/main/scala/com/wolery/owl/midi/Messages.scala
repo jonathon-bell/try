@@ -1,3 +1,4 @@
+
 //**************************** Copyright © Jonathon Bell. All rights reserved.
 //*
 //*
@@ -49,11 +50,12 @@ object messages
   val END:           Byte = 0x2F
   val TEMPO:         Byte = 0x51
   val SMPTE:         Byte = 0x54
-  val TIME:          Byte = 0x58
+  val METER:         Byte = 0x58
   val KEY:           Byte = 0x59
 
 //Owl Events
 
+  val SCALE:         Byte = 0x60
   val HARMONY:       Byte = 0x60
   val STRING:        Byte = 0x61
   val POSITION:      Byte = 0x62
@@ -122,9 +124,16 @@ object messages
       (int(0),int(1),int(2),int(3),int(4))
     }
 
+    def meter: Meter =
+    {
+      assert(m.getType == METER)
+
+      Meter(int(0),1 << int(1))
+    }
+
     def time: (ℕ,ℕ) =
     {
-      assert(m.getType == TIME)
+      assert(m.getType == METER)
 
       (int(0) , 1 << int(1))
     }
@@ -182,7 +191,9 @@ object messages
     new MetaMessage(byte,b.toByteArray,b.size)
   }
 
+  def scale(scale: Scale):   MetaMessage = create[Scale](SCALE,scale)
   def harmony(scale: Scale): MetaMessage = create[Scale](HARMONY,scale)
+  def string(string: ℕ):     MetaMessage = create[ℕ]    (STRING,string)
   def position(position: ℕ): MetaMessage = create[ℕ]    (POSITION,position)
 }
 //****************************************************************************

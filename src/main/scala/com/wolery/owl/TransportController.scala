@@ -17,10 +17,7 @@ package com.wolery.owl
 //****************************************************************************
 
 import com.wolery.owl.core._
-import com.wolery.owl.midi.messages.HARMONY
-import com.wolery.owl.midi.messages.MetaMessageEx
-import com.wolery.owl.midi.messages.TEMPO
-import com.wolery.owl.midi.messages.TIME
+import com.wolery.owl.midi.messages._
 import com.wolery.owl.utils.implicits.asEventHandler
 import com.wolery.owl.utils.implicits.asRunnable
 
@@ -58,7 +55,7 @@ class TransportController extends MetaEventListener
 
       val m_seq: Sequencer = owl.sequencer
       val m_tmr: Timeline = newTimer()
-      var m_meter: (ℕ,ℕ) = (1,1)
+      var m_meter: Meter  = Meter(1,1)
 
   def initialize(): Unit =
   {
@@ -78,10 +75,10 @@ class TransportController extends MetaEventListener
 
   def meta(message: MetaMessage): Unit = message.getType match
   {
-    case TEMPO   ⇒ defer(onTempoChange(message.tempo))
-    case TIME    ⇒ defer(onMeterChange(message.time))
-    case HARMONY ⇒ defer(onScaleChange(message.scale))
-    case _       ⇒
+    case TEMPO ⇒ defer(onTempoChange(message.tempo))
+    case METER ⇒ defer(onMeterChange(message.meter))
+    case SCALE ⇒ defer(onScaleChange(message.scale))
+    case _     ⇒
   }
 
   def onTempoChange(bpm: ℝ) =
@@ -89,7 +86,7 @@ class TransportController extends MetaEventListener
     m_tempo.setText(f"$bpm%2.2f")
   }
 
-  def onMeterChange(meter: (ℕ,ℕ)): Unit =
+  def onMeterChange(meter: Meter): Unit =
   {
     m_meter = meter
   }
@@ -143,8 +140,8 @@ class TransportController extends MetaEventListener
     assert(m_seq.getSequence.getDivisionType == 0) // PPQ
 
     val tick = m_seq.getTickPosition
-    val bars = tick / m_meter._1
-    val beat = tick % m_meter._1
+    val bars = tick / m_meter.count
+    val beat = tick % m_meter.count
 
     m_bars.setText(f"$bars%04d.$beat%02d.00")
   }

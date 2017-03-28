@@ -142,7 +142,7 @@ final class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
       case END       ⇒ print("end-of-track      ")
       case TEMPO     ⇒ print("tempo             ",mm.tempo)
       case SMPTE     ⇒ print("smpte-offset      ",mm.smpte)
-      case TIME      ⇒ print("time-signature    ",mm.time)
+      case METER     ⇒ print("time-signature    ",mm.meter)
       case KEY       ⇒ print("key-signature     ",mm.key)
       case 0x7F      ⇒ print("sequencer-specific",hex(mm))
       case _         ⇒ print("unknown meta event",hex(mm))
