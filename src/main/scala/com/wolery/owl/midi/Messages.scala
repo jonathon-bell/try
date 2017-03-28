@@ -16,17 +16,14 @@ package com.wolery.owl.midi
 
 //****************************************************************************
 
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import java.io.ObjectInputStream
-import java.io.ObjectOutputStream
+import java.io._
 
-import com.wolery.owl.core.Scale
+import scala.language.postfixOps
+
 import com.wolery.owl.core._
+import com.wolery.owl.core.utilities._
 
-import javax.sound.midi.MetaMessage
-import javax.sound.midi.ShortMessage
-import javax.sound.midi.MidiMessage
+import javax.sound.midi.{ MetaMessage, ShortMessage }
 
 //****************************************************************************
 
@@ -37,7 +34,7 @@ object messages
   val SEQUENCE:      Byte = 0x00
   val TEXT:          Byte = 0x01
   val COPYRIGHT:     Byte = 0x02
-  val TITLE:         Byte = 0x03
+  val TRACK:         Byte = 0x03
   val INSTRUMENT:    Byte = 0x04
   val LYRIC:         Byte = 0x05
   val MARKER:        Byte = 0x06
@@ -51,6 +48,7 @@ object messages
   val SMPTE:         Byte = 0x54
   val METER:         Byte = 0x58
   val KEY:           Byte = 0x59
+  val CUSTOM:        Byte = 0x7F
 
 //Owl Events
 
@@ -62,47 +60,25 @@ object messages
   {
     def isChannelMessage: Bool  = m.getCommand != 0xF0
     def isSystemMessage : Bool  = m.getCommand == 0xF0
-    def pitch           : Pitch = Pitch(m.getData1)
+    def pitch           : Pitch = Pitch(m.getData1 & 0xFF)
     def integer         : ℕ     = (m.getData1 & 0x7F) | ((m.getData2 & 0x7F) << 7)
   }
 
   implicit final class MetaMessageEx(val m: MetaMessage) extends AnyVal
   {
-    def sequence: ℤ =
-    {
-      assert(m.getType == SEQUENCE)
-      (int(0) << 8) | int(1)
-    }
+    def uint4 : ℕ =  byte(0) & 0x0F
+    def uint7 : ℕ =  byte(0) & 0x7F
+    def uint8 : ℕ =  byte(0) & 0xFF
+    def uint16: ℕ =                   (byte(0) <<  8) | byte(1)
+    def uint24: ℕ = (byte(0) << 16) | (byte(1) <<  8) | byte(2)
 
-    def text:      String = asString(TEXT)
-    def copyright: String = asString(COPYRIGHT)
-    def title:     String = asString(TITLE)
-    def instrument:String = asString(INSTRUMENT)
-    def lyric:     String = asString(LYRIC)
-    def marker:    String = asString(MARKER)
-    def cue:       String = asString(CUE)
-    def program:   String = asString(PROGRAM)
-    def device:    String = asString(COPYRIGHT)
+    def string: String = new String(m.getData)
 
-    def channel: ℕ =
-    {
-      assert(m.getType == CHANNEL)
-
-      int(0)
-    }
-
-    def port: ℕ =
-    {
-      assert(m.getType == PORT)
-
-      int(0)
-    }
-
-    def tempo: ℝ =
+    def bpm: ℝ =
     {
       assert(m.getType == TEMPO)
 
-      val mspb = (int(0) << 16) | (int(1) <<  8) | int(2)
+      val mspb = uint24
       val mspq =
       if (mspb <= 0)
       {
@@ -112,56 +88,53 @@ object messages
       {
         60e6f / mspb
       }
-        Math.round(mspq * 100.0F) / 100.0F
+
+      Math.round(mspq * 100.0F) / 100.0F
     }
 
     def smpte: (ℕ,ℕ,ℕ,ℕ,ℕ) =
     {
       assert(m.getType == SMPTE)
 
-      (int(0),int(1),int(2),int(3),int(4))
+      (byte(0),byte(1),byte(2),byte(3),byte(4))
     }
 
     def meter: Meter =
     {
       assert(m.getType == METER)
-
-      Meter(int(0),1 << int(1))
+      Meter(uint7,1 << byte(1))
     }
 
-    def time: (ℕ,ℕ) =
+    def ticksPerBeat: ℕ =
     {
       assert(m.getType == METER)
-
-      (int(0) , 1 << int(1))
+      byte(2)
     }
 
-    def key: String =
+    def key: Scale =
     {
       assert(m.getType == KEY)
 
-      val keys = Seq("C♭","G♭","D♭","A♭","E♭","B♭","F","C","G","D","A","E","B","F♯","C♯")
-      val mode = Seq(" maj"," min")
+      val root = Seq(C♭,G♭,D♭,A♭,E♭,B♭,F,C,G,D,A,E,B,F♯,C♯).apply(uint7)
 
-      keys(7 + int(0)) + mode(int(1))
+      if (byte(1) == 0)
+      {
+        Scale(root,"ionian").get
+      }
+      else
+      {
+        Scale(root,"aeolian").get
+      }
     }
 
     def scale:Scale = asObject[Scale](SCALE)
-    def string:   ℕ = asObject[ℕ](STRING)
     def position: ℕ = asObject[ℕ](POSITION)
 
     private
-    def int(index: ℕ): ℤ =
+    def byte(index: ℕ): Byte =
     {
-      m.getData.apply(index) & 0xFF
-    }
-
-    private
-    def asString(byte: Byte): String =
-    {
-      assert(m.getType == byte)
-
-      new String(m.getData)
+      assert(between(index,0,m.getLength))
+      m.getData.apply(index)
     }
 
     private
