@@ -95,10 +95,10 @@ class StringedController(val instrument: StringedInstrument) extends Controller
       }
       case m: MetaMessage ⇒ m.getType match
       {
-        case HARMONY  ⇒ onHarmony(m.scale)
-        case _        ⇒
+        case SCALE ⇒ onScale(m.scale)
+        case _     ⇒
       }
-      case   _        ⇒
+      case   _     ⇒
     }
   }
 
@@ -118,7 +118,7 @@ class StringedController(val instrument: StringedInstrument) extends Controller
     }
   }
 
-  def onHarmony(scale: Scale) =
+  def onScale(scale: Scale) =
   {
     for (stop ← instrument.stops if scale.contains(stop.pitch.note))
     {

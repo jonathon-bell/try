@@ -55,16 +55,15 @@ object messages
 //Owl Events
 
   val SCALE:         Byte = 0x60
-  val HARMONY:       Byte = 0x60
   val STRING:        Byte = 0x61
   val POSITION:      Byte = 0x62
 
   implicit final class ShortMessageEx(val m: ShortMessage) extends AnyVal
   {
     def isChannelMessage: Bool  = m.getCommand != 0xF0
-    def isSystemMessage:  Bool  = m.getCommand == 0xF0
-    def pitch          :  Pitch = Pitch(m.getData1)
-    def integer        :  ℕ     = (m.getData1 & 0x7F) | ((m.getData2 & 0x7F) << 7)
+    def isSystemMessage : Bool  = m.getCommand == 0xF0
+    def pitch           : Pitch = Pitch(m.getData1)
+    def integer         : ℕ     = (m.getData1 & 0x7F) | ((m.getData2 & 0x7F) << 7)
   }
 
   implicit final class MetaMessageEx(val m: MetaMessage) extends AnyVal
@@ -147,7 +146,7 @@ object messages
       keys(7 + int(0)) + mode(int(1))
     }
 
-    def scale:Scale = asObject[Scale](HARMONY)
+    def scale:Scale = asObject[Scale](SCALE)
     def string:   ℕ = asObject[ℕ](STRING)
     def position: ℕ = asObject[ℕ](POSITION)
 
@@ -191,7 +190,6 @@ object messages
   }
 
   def scale(scale: Scale):   MetaMessage = create[Scale](SCALE,scale)
-  def harmony(scale: Scale): MetaMessage = create[Scale](HARMONY,scale)
   def string(string: ℕ):     MetaMessage = create[ℕ]    (STRING,string)
   def position(position: ℕ): MetaMessage = create[ℕ]    (POSITION,position)
 }

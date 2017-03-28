@@ -64,7 +64,7 @@ class MainController(controller: Controller,transport: MetaEventListener) extend
     owl.sequencer.addMetaEventListener(transport)
     owl.sequencer.addMetaEventListener(new MetaEventListener{def meta(m:MetaMessage):Unit = controller.send(m,-1)})
 
-    controller.send(messages.harmony(Scale(F,"whole tone").get))
+    controller.send(messages.scale(Scale(F,"whole tone").get))
     owl.sequencer.setSequence(load.sequence("sample"))
   }
 }
