@@ -94,6 +94,7 @@ class TransportController extends MetaEventListener
 
   def onTempoChange(bpm: ℝ): Unit =
   {
+    println(bpm)
     m_tempo.setText(f"$bpm%3.2f")
   }
 

@@ -10,6 +10,9 @@
 //*  Comments: This file uses a tab size of 2 spaces.
 //*
 //*
+//*  See Also: http://www.somascape.org/midi/tech/mfile.html
+//*
+//*
 //****************************************************************************
 
 package com.wolery.owl.midi
@@ -17,7 +20,7 @@ package com.wolery.owl.midi
 //****************************************************************************
 
 import java.io._
-
+import Math.{max}
 import scala.language.postfixOps
 
 import com.wolery.owl.core._
@@ -66,58 +69,55 @@ object messages
 
   implicit final class MetaMessageEx(val m: MetaMessage) extends AnyVal
   {
-    def uint4 : ℕ =  byte(0) & 0x0F
-    def uint7 : ℕ =  byte(0) & 0x7F
-    def uint8 : ℕ =  byte(0) & 0xFF
-    def uint16: ℕ =                   (byte(0) <<  8) | byte(1)
-    def uint24: ℕ = (byte(0) << 16) | (byte(1) <<  8) | byte(2)
-
     def string: String = new String(m.getData)
+
+    def uint4 : ℕ =  uint8(0) & 0x0F
+    def uint7 : ℕ =  uint8(0) & 0x7F
+    def uint8 : ℕ =  uint8(0) & 0xFF
+    def uint16: ℕ =                    (uint8(0) << 8) | uint8(1)
+    def uint24: ℕ = (uint8(0) << 16) | (uint8(1) << 8) | uint8(2)
+
+    def uint8(index: ℕ = 0): ℕ =
+    {
+      assert(between(index,0,m.getLength))
+
+      m.getData.apply(index) & 0xFF
+    }
 
     def bpm: ℝ =
     {
       assert(m.getType == TEMPO)
 
-      val mspb = uint24
-      val mspq =
-      if (mspb <= 0)
-      {
-        60e6f / 0.1F
-      }
-      else
-      {
-        60e6f / mspb
-      }
-
-      Math.round(mspq * 100.0F) / 100.0F
+      60e6 / max(uint24,0.1)
     }
 
     def smpte: (ℕ,ℕ,ℕ,ℕ,ℕ) =
     {
       assert(m.getType == SMPTE)
 
-      (byte(0),byte(1),byte(2),byte(3),byte(4))
+      (uint8(0),uint8(1),uint8(2),uint8(3),uint8(4))
     }
 
     def meter: Meter =
     {
       assert(m.getType == METER)
-      Meter(uint7,1 << byte(1))
+
+      Meter(uint8(0),1 << uint8(1))
     }
 
     def ticksPerBeat: ℕ =
     {
       assert(m.getType == METER)
-      byte(2)
+      uint8(2)
     }
 
     def key: Scale =
     {
       assert(m.getType == KEY)
 
-      val root = Seq(C♭,G♭,D♭,A♭,E♭,B♭,F,C,G,D,A,E,B,F♯,C♯).apply(uint7)
+      val root = Seq(C♭,G♭,D♭,A♭,E♭,B♭,F,C,G,D,A,E,B,F♯,C♯).apply(uint4)
 
-      if (byte(1) == 0)
+      if (uint8(1) == 0)
       {
         Scale(root,"ionian").get
       }
@@ -127,18 +127,12 @@ object messages
       }
     }
 
-    def scale:Scale = asObject[Scale](SCALE)
-    def position: ℕ = asObject[ℕ](POSITION)
+    def scale:Scale = anything[Scale](SCALE)
+  //def string: ℕ   = anything[ℕ](STRING)
+    def position: ℕ = anything[ℕ](POSITION)
 
     private
-    def byte(index: ℕ): Byte =
-    {
-      assert(between(index,0,m.getLength))
-      m.getData.apply(index)
-    }
-
-    private
-    def asObject[α](byte: Byte): α =
+    def anything[α](byte: Byte): α =
     {
       assert(m.getType == byte)
       val b = new ByteArrayInputStream(m.getData)
