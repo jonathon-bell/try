@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
 <HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="53.0" prefWidth="1400.0" styleClass="transport-pane" stylesheets="@TransportView.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="663.0">
+      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="55.0" prefWidth="758.0">
          <children>
             <Label fx:id="m_bars" alignment="BOTTOM_CENTER" layoutX="18.0" layoutY="11.0" styleClass="active-text" text="0000.00.00" />
             <Label fx:id="m_prev" alignment="CENTER" contentDisplay="CENTER" layoutX="111.0" layoutY="13.0" onMouseClicked="#onPrevious" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
@@ -14,20 +15,20 @@
             <Label fx:id="m_fwrd" alignment="CENTER" contentDisplay="CENTER" layoutX="167.0" layoutY="13.0" onMouseClicked="#onAdvance" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
             <Label fx:id="m_next" alignment="CENTER" contentDisplay="CENTER" layoutX="195.0" layoutY="13.0" onMouseClicked="#onNext" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
             <Label fx:id="m_rset" alignment="CENTER" contentDisplay="CENTER" layoutX="222.0" layoutY="13.0" onMouseClicked="#onReset" prefHeight="24.0" prefWidth="24.0" styleClass="transport-button" />
-            <Label fx:id="m_stop" alignment="CENTER" contentDisplay="CENTER" layoutX="249.0" layoutY="10.0" onMouseClicked="#onStop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
             <Label fx:id="m_play" alignment="CENTER" contentDisplay="CENTER" layoutX="280.0" layoutY="10.0" onMouseClicked="#onPlay" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
+            <Label fx:id="m_stop" alignment="CENTER" contentDisplay="CENTER" layoutX="249.0" layoutY="10.0" onMouseClicked="#onStop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
             <Label fx:id="m_loop" alignment="CENTER" contentDisplay="CENTER" layoutX="311.0" layoutY="10.0" onMouseClicked="#onLoop" prefHeight="28.0" prefWidth="28.0" style="-fx-font-size: 23;" styleClass="transport-button" />
             <Label fx:id="m_left" alignment="BOTTOM_CENTER" layoutX="380.0" layoutY="11.0" styleClass="active-text" text="0000.00.00" />
             <Label fx:id="m_right" alignment="BOTTOM_CENTER" layoutX="380.0" layoutY="28.0" styleClass="active-text" text="0000.00.00" />
             <Label fx:id="m_meter" alignment="BOTTOM_CENTER" layoutX="464.0" layoutY="11.0" prefHeight="16.0" prefWidth="45.0" styleClass="active-text" text="4 / 4" />
-            <Label fx:id="m_tempo" alignment="BOTTOM_CENTER" layoutX="519.0" layoutY="11.0" prefHeight="16.0" prefWidth="45.0" styleClass="active-text" text="95.00" />
-            <Label fx:id="m_harm" alignment="BOTTOM_CENTER" layoutX="563.0" layoutY="11.0" prefHeight="16.0" prefWidth="98.0" styleClass="active-text" text="C ionian" />
+            <Label fx:id="m_harm" alignment="BOTTOM_CENTER" layoutX="616.0" layoutY="11.0" prefHeight="16.0" prefWidth="127.0" styleClass="active-text" text="C ionian" />
             <Label alignment="BOTTOM_CENTER" layoutX="17.0" layoutY="28.0" prefHeight="14.0" prefWidth="70.0" styleClass="static-text" text="Bars" />
-            <Label alignment="BOTTOM_CENTER" layoutX="362.0" layoutY="11.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="L" />
+            <Label alignment="BOTTOM_CENTER" layoutX="361.0" layoutY="11.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="L" />
             <Label alignment="BOTTOM_CENTER" layoutX="361.0" layoutY="28.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="R" />
             <Label alignment="BOTTOM_CENTER" layoutX="466.0" layoutY="28.0" prefHeight="14.0" prefWidth="45.0" styleClass="static-text" text="Meter" />
-            <Label alignment="BOTTOM_CENTER" layoutX="519.0" layoutY="28.0" prefHeight="14.0" prefWidth="45.0" styleClass="static-text" text="Tempo" />
-            <Label alignment="BOTTOM_CENTER" layoutX="563.0" layoutY="28.0" prefHeight="14.0" prefWidth="98.0" styleClass="static-text" text="Harmony" />
+            <Label alignment="BOTTOM_CENTER" layoutX="527.0" layoutY="28.0" prefHeight="14.0" prefWidth="82.0" styleClass="static-text" text="Tempo" />
+            <Label alignment="BOTTOM_CENTER" layoutX="616.0" layoutY="28.0" prefHeight="14.0" prefWidth="127.0" styleClass="static-text" text="Harmony" />
+            <Spinner fx:id="m_tempo" editable="true" layoutX="521.0" layoutY="8.0" prefHeight="16.0" prefWidth="89.0" styleClass="split-arrows-horizontal" />
          </children>
       </Pane>
    </children>

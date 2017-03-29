@@ -17,9 +17,12 @@ package com.wolery.owl.utils
 //****************************************************************************
 
 import scala.language.implicitConversions
+
 import javafx.concurrent.Task
 import javafx.event.Event
 import javafx.event.EventHandler
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
 
 //****************************************************************************
 
@@ -41,6 +44,12 @@ object implicits
   def asRunnable(lambda: ⇒ Unit): Runnable =  new Runnable
   {
     def run(): Unit = lambda
+  }
+
+  implicit
+  def asChangeListener[α](lambda: (ObservableValue[_ <: α],α,α) ⇒ Unit) = new ChangeListener[α]
+  {
+    def changed(o: ObservableValue[_ <: α],w: α,n: α): Unit = lambda(o,w,n)
   }
 }
 

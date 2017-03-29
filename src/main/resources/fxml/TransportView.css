@@ -15,9 +15,10 @@
 .transport-pane
 {
   -fx-font-family:         Arial;
-  -fx-background-color:    #101010;
+  -fx-background-color:    -panel-color;
   -fx-alignment:           center;
 
+  -panel-color:            #101010;
   -static-color:           grey;
   -active-color:           lightgrey;
   -button-color:           #bbbbbb;
@@ -66,6 +67,48 @@
 .transport-button:looping
 {
   -fx-text-fill:           -looping-color;
+}
+
+//****************************************************************************
+
+.spinner:focused,
+.spinner:contains-focus 
+{
+  -fx-background-color: -panel-color;
+}
+
+.spinner > .text-field 
+{
+  -fx-background-color:  -panel-color;
+  -fx-text-fill:         -active-color;
+  -fx-font-size:         12;
+  -fx-font-weight:       bold;
+  -fx-alignment:         center;
+}
+
+.spinner .increment-arrow-button .increment-arrow 
+{
+  -fx-rotate: 180;
+}
+
+.spinner.split-arrows-horizontal .increment-arrow-button,
+.spinner.split-arrows-horizontal .decrement-arrow-button 
+{
+  -fx-background-color: -panel-color;
+}
+
+.spinner.split-arrows-horizontal .increment-arrow-button .increment-arrow,
+.spinner.split-arrows-horizontal .decrement-arrow-button .decrement-arrow
+{
+  -fx-padding:          6 3 6 3;
+  -fx-shape:            "M 4 0 v 7 l -4 -3.5 z";
+  -fx-background-color: -button-color;
+}
+
+.spinner.split-arrows-horizontal .increment-arrow-button:hover .increment-arrow,
+.spinner.split-arrows-horizontal .decrement-arrow-button:hover .decrement-arrow
+{
+  -fx-background-color: -hover-color;
 }
 
 //****************************************************************************

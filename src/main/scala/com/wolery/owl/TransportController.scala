@@ -38,6 +38,12 @@ import javax.sound.midi.MetaMessage
 import javax.sound.midi.Sequence._
 import javax.sound.midi.Sequencer
 
+import javafx.scene.control.Spinner
+import javafx.scene.control.SpinnerValueFactory
+import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory
+import javafx.beans.value.ChangeListener
+import javafx.beans.value.ObservableValue
+
 //****************************************************************************
 
 class TransportController extends MetaEventListener
@@ -53,13 +59,13 @@ class TransportController extends MetaEventListener
   @fx var m_loop:  Label = _
   @fx var m_left:  Label = _
   @fx var m_right: Label = _
-  @fx var m_tempo: Label = _
+  @fx var m_tempo: Spinner[ℝ] = _
   @fx var m_meter: Label = _
   @fx var m_scale: Label = _
 
       val m_seq  : Sequencer = owl.sequencer
       val m_tmr  : Timeline  = newTimer()
-      var m_mtr  : Meter     = Meter(4,4)
+      var m_mtr  : Meter     = _
 
   def initialize(): Unit =
   {
@@ -72,16 +78,18 @@ class TransportController extends MetaEventListener
     m_play.setText("\uf04b")
     m_loop.setText("\uf01e")
 
-    m_meter.setText(m_mtr.toString)
-    m_tempo.setText("128.00")
+    m_tempo.setValueFactory((new DoubleSpinnerValueFactory(1,300,owl.sequencer.getTempoInBPM))
+                            .asInstanceOf[SpinnerValueFactory[ℝ]])
+    m_tempo.valueProperty.addListener(onTempoSpinChange _)
 
+    onMeterChange(Meter(4,4))
     updateButtons()
   }
 
   def meta(message: MetaMessage): Unit = message.getType match
   {
-    case METER ⇒ defer(onMeterChange(message.meter))
     case TEMPO ⇒ defer(onTempoChange(message.bpm))
+    case METER ⇒ defer(onMeterChange(message.meter))
     case SCALE ⇒ defer(onScaleChange(message.scale))
     case _     ⇒
   }
@@ -94,8 +102,17 @@ class TransportController extends MetaEventListener
 
   def onTempoChange(bpm: ℝ): Unit =
   {
-    println(bpm)
-    m_tempo.setText(f"$bpm%3.2f")
+    val fac = m_seq.getTempoFactor
+
+    m_tempo.getValueFactory.setValue(bpm * fac)
+  }
+
+  def onTempoSpinChange(ov: ObservableValue[_<: ℝ],was: ℝ,now: ℝ): Unit =
+  {
+    val was = m_seq.getTempoInBPM
+    val fac = now / was
+
+    m_seq.setTempoFactor(fac.toFloat)
   }
 
   def onScaleChange(scale: Scale): Unit =
@@ -135,7 +152,7 @@ class TransportController extends MetaEventListener
   def isLooping: Bool = m_seq.getLoopCount != 0
   def isPlaying: Bool = m_seq.isRunning
 
-  def update(): Unit =
+  def updateClock(): Unit =
   {
     assert(m_seq.getSequence.getDivisionType == 0) // PPQ
 
@@ -158,7 +175,7 @@ class TransportController extends MetaEventListener
 
   def newTimer(): Timeline =
   {
-    val t = new Timeline(new KeyFrame(millis(100),(a:ActionEvent) ⇒ update()))
+    val t = new Timeline(new KeyFrame(millis(100),(a:ActionEvent) ⇒ updateClock()))
     t.setCycleCount(-1)
     t
   }
