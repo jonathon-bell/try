@@ -149,12 +149,17 @@ class TransportController extends MetaEventListener
     updateClock()
   }
 
+  def onTempoTap(): Unit =
+  {
+    println("onTempoTap")
+  }
+
   def onRewind   (e: MouseEvent): Unit = println("rewind")
   def onForward  (e: MouseEvent): Unit = println("advance")
   def isLooping: Bool = m_seq.getLoopCount != 0
   def isPlaying: Bool = m_seq.isRunning
 
- def updateClock(): Unit =
+  def updateClock(): Unit =
   {
     assert(m_seq.getSequence.getDivisionType == 0) // PPQ
 

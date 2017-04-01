@@ -1,36 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 
-<HBox alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="53.0" prefWidth="1400.0" styleClass="transport-pane" stylesheets="@TransportView.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<HBox id="transport-frame" alignment="CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="53.0" prefWidth="1400.0" styleClass="transport-frame" stylesheets="@TransportView.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="784.0">
+      <Pane id="transport-pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="45.0" prefWidth="800.0" HBox.hgrow="NEVER">
          <children>
-            <Pane id="transport-button-prev" fx:id="m_prev" layoutX="108.0" layoutY="10.0" onMouseClicked="#onPrevious" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
-            <Pane id="transport-button-rwnd" fx:id="m_rwnd" layoutX="138.0" layoutY="10.0" onMouseClicked="#onRewind" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
-            <Pane id="transport-button-fwrd" fx:id="m_fwrd" layoutX="168.0" layoutY="10.0" onMouseClicked="#onForward" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
-            <Pane id="transport-button-next" fx:id="m_next" layoutX="193.0" layoutY="10.0" onMouseClicked="#onNext" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
-            <Pane id="transport-button-rset" fx:id="m_rest" layoutX="216.0" layoutY="10.0" onMouseClicked="#onReset" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
-            <Pane id="transport-button-stop" fx:id="m_stop" layoutX="246.0" layoutY="10.0" onMouseClicked="#onStop" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
-            <Pane id="transport-button-play" fx:id="m_play" layoutX="276.0" layoutY="10.0" onMouseClicked="#onPlay" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
-            <Pane id="transport-button-loop" fx:id="m_loop" layoutX="310.0" layoutY="16.0" onMouseClicked="#onLoop" prefHeight="18.0" prefWidth="18.0" styleClass="transport-button" />
-            <Label fx:id="m_bars" alignment="BOTTOM_CENTER" layoutX="18.0" layoutY="11.0" styleClass="active-text" text="0000.00.00" />
-            <Label fx:id="m_left" alignment="BOTTOM_CENTER" layoutX="357.0" layoutY="11.0" styleClass="active-text" text="0000.00.00" />
-            <Label fx:id="m_right" alignment="BOTTOM_CENTER" layoutX="357.0" layoutY="26.0" styleClass="active-text" text="0000.00.00" />
-            <Label fx:id="m_meter" alignment="BOTTOM_CENTER" layoutX="441.0" layoutY="11.0" prefHeight="16.0" prefWidth="45.0" styleClass="active-text" text="4 / 4" />
-            <Spinner fx:id="m_tempo" editable="true" layoutX="498.0" layoutY="8.0" prefHeight="16.0" prefWidth="89.0" styleClass="split-arrows-horizontal" />
-            <Label fx:id="m_harm" alignment="BOTTOM_CENTER" layoutX="593.0" layoutY="11.0" prefHeight="16.0" prefWidth="127.0" styleClass="active-text" text="C ionian" />
-            <Label alignment="BOTTOM_CENTER" layoutX="17.0" layoutY="28.0" prefHeight="14.0" prefWidth="70.0" styleClass="static-text" text="Bars" />
-            <Label alignment="BOTTOM_CENTER" layoutX="338.0" layoutY="11.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="L" />
-            <Label alignment="BOTTOM_CENTER" layoutX="338.0" layoutY="26.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="R" />
-            <Label alignment="BOTTOM_CENTER" layoutX="443.0" layoutY="28.0" prefHeight="14.0" prefWidth="45.0" styleClass="static-text" text="Meter" />
-            <Label alignment="BOTTOM_CENTER" layoutX="504.0" layoutY="28.0" prefHeight="14.0" prefWidth="82.0" styleClass="static-text" text="Tempo" />
-            <Label alignment="BOTTOM_CENTER" layoutX="593.0" layoutY="28.0" prefHeight="14.0" prefWidth="127.0" styleClass="static-text" text="Harmony" />
-            <Pane id="tempo-tap" fx:id="m_ttap" layoutX="729.0" layoutY="5.0" onMouseClicked="#onTempoTap" prefHeight="40.0" prefWidth="40.0" />
+            <Pane id="transport-button-prev" fx:id="m_prev" layoutX="108.0" layoutY="8.0" onMouseClicked="#onPrevious" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
+            <Pane id="transport-button-rwnd" fx:id="m_rwnd" layoutX="134.0" layoutY="8.0" onMouseClicked="#onRewind" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
+            <Pane id="transport-button-fwrd" fx:id="m_fwrd" layoutX="166.0" layoutY="8.0" onMouseClicked="#onForward" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
+            <Pane id="transport-button-next" fx:id="m_next" layoutX="188.0" layoutY="8.0" onMouseClicked="#onNext" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
+            <Pane id="transport-button-rset" fx:id="m_rest" layoutX="213.0" layoutY="8.0" onMouseClicked="#onReset" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
+            <Pane id="transport-button-stop" fx:id="m_stop" layoutX="250.0" layoutY="8.0" onMouseClicked="#onStop" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
+            <Pane id="transport-button-play" fx:id="m_play" layoutX="288.0" layoutY="8.0" onMouseClicked="#onPlay" prefHeight="30.0" prefWidth="30.0" styleClass="transport-button" />
+            <Pane id="transport-button-loop" fx:id="m_loop" layoutX="328.0" layoutY="14.0" onMouseClicked="#onLoop" prefHeight="18.0" prefWidth="18.0" styleClass="transport-button" />
+            <Pane id="tempo-tap" fx:id="m_ttap" layoutX="749.0" layoutY="8.0" onMouseClicked="#onTempoTap" prefHeight="14.0" prefWidth="18.0" styleClass="transport-button" />
+            <Label fx:id="m_bars" alignment="BOTTOM_CENTER" layoutX="26.0" layoutY="7.0" styleClass="active-text" text="0000.00.00" />
+            <Label fx:id="m_left" alignment="BOTTOM_CENTER" layoutX="367.0" layoutY="7.0" styleClass="active-text" text="0000.00.00" />
+            <Label fx:id="m_right" alignment="BOTTOM_CENTER" layoutX="367.0" layoutY="21.0" styleClass="active-text" text="0000.00.00" />
+            <Label fx:id="m_meter" alignment="BOTTOM_CENTER" layoutX="455.0" layoutY="7.0" prefHeight="16.0" prefWidth="45.0" styleClass="active-text" text="4 / 4" />
+            <Spinner fx:id="m_tempo" editable="true" layoutX="512.0" layoutY="4.0" prefHeight="16.0" prefWidth="89.0" styleClass="split-arrows-horizontal" />
+            <Label fx:id="m_harm" alignment="BOTTOM_CENTER" layoutX="607.0" layoutY="7.0" prefHeight="16.0" prefWidth="127.0" styleClass="active-text" text="C ionian" />
+            <Label alignment="BOTTOM_CENTER" layoutX="25.0" layoutY="24.0" prefHeight="14.0" prefWidth="70.0" styleClass="static-text" text="Bars" />
+            <Label alignment="BOTTOM_CENTER" layoutX="352.0" layoutY="7.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="L" />
+            <Label alignment="BOTTOM_CENTER" layoutX="352.0" layoutY="21.0" style="-fx-text-fill: -marker-color;" styleClass="active-text" text="R" />
+            <Label alignment="BOTTOM_CENTER" layoutX="457.0" layoutY="24.0" prefHeight="14.0" prefWidth="45.0" styleClass="static-text" text="Meter" />
+            <Label alignment="BOTTOM_CENTER" layoutX="518.0" layoutY="24.0" prefHeight="14.0" prefWidth="82.0" styleClass="static-text" text="Tempo" />
+            <Label alignment="BOTTOM_CENTER" layoutX="607.0" layoutY="24.0" prefHeight="14.0" prefWidth="127.0" styleClass="static-text" text="Harmony" />
+            <Label alignment="BOTTOM_CENTER" layoutX="735.0" layoutY="24.0" prefHeight="14.0" prefWidth="45.0" styleClass="static-text" text="Tap" />
          </children>
+         <HBox.margin>
+            <Insets bottom="6.0" />
+         </HBox.margin>
       </Pane>
    </children>
 </HBox>

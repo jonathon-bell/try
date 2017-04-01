@@ -12,33 +12,41 @@
 //*
 //****************************************************************************
 
-.transport-pane
+.transport-frame
 {
-  -fx-font-family:         Arial;
-  -fx-background-color:    -panel-color;
-  -fx-alignment:           center;
-
-  -panel-color:            #101010;
+  -frame-color:            #5D646A;
+  -panel-color:            #141414;
+  -hover-color :           white;
   -static-color:           grey;
   -active-color:           lightgrey;
   -button-color:           #bbbbbb;
   -marker-color:           #2d659a;
-  -hover-color :           white;
-  -playing-color:          lawngreen;
+  -playing-color:          lightgreen;
   -stopped-color:          deepskyblue;
   -looping-color:          deepskyblue;
+
+  -fx-font-family:         Arial;
+  -fx-background-color:    -frame-color,linear-gradient(to bottom,-frame-color,derived(-frame-color,-50%));
+  -fx-background-insets:   0, 45 0 0 0;
+  -fx-alignment:           center;
+}
+
+#transport-pane
+{
+  -fx-background-color:    -panel-color;
+  -fx-shape:               "M0,0 l15,50 h1000 l15,-50z";
 }
 
 .static-text
 {
-  -fx-text-fill:           -static-color;
   -fx-font-size:           11;
+  -fx-text-fill:           -static-color;
 }
 
 .active-text
 {
-  -fx-text-fill:           -active-color;
   -fx-font-size:           14;
+  -fx-text-fill:           -active-color;
   -fx-font-weight:         bold;
 }
 
@@ -65,40 +73,13 @@
   -fx-background-color:    -playing-color;
 }
 
-#transport-button-prev
-{
-  -fx-shape:               "M0,6 l 12,6 v -12 z";
-}
-
-#transport-button-rwnd
-{
-  -fx-shape:               "M0,6 l 12,6 v -12 z M8,6 l 12,6 v -12 z";
-}
-
-#transport-button-fwrd
-{
-  -fx-shape:               "M0,0 v 12,l 12,-6 z M8,0 v 12 l 12,-6 z";
-}
-
-#transport-button-next
-{
-  -fx-shape:               "M0,0 v 12,l 12,-6 z";
-}
-
-#transport-button-rset
-{
-  -fx-shape:               "M0,6 l 12,6 v -12 z M0,0 v 12 h 2 v -12 z";
-}
-
-#transport-button-stop
-{
-  -fx-shape:               "M0,0 v 20 h 20 v -20 z";
-}
-
-#transport-button-play
-{
-  -fx-shape:               "M0,0 v 20 l 20,-10 z";
-}
+#transport-button-prev     {-fx-shape:"M0,6 l 12,6 v -12 z";}
+#transport-button-rwnd     {-fx-shape:"M0,6 l 12,6 v -12 z M8,6 l 12,6 v -12 z";}
+#transport-button-fwrd     {-fx-shape:"M0,0 v 12,l 12,-6 z M8,0 v 12 l 12,-6 z";}
+#transport-button-next     {-fx-shape:"M0,0 v 12,l 12,-6 z";}
+#transport-button-rset     {-fx-shape:"M0,6 l 12,6 v -12 z M0,0 v 12 h 2 v -12 z";}
+#transport-button-stop     {-fx-shape:"M0,0 v 20 h 20 v -20 z";}
+#transport-button-play     {-fx-shape:"M0,0 v 20 l 16,-10 z";}
 
 #transport-button-loop
 {
