@@ -26,8 +26,9 @@ package object owl
   type Name      = core.Name
   type Chord     = Seq[Pitch]
   type Pitches   = Seq[Pitch]
-        
+
   type Pane      = javafx.scene.layout.Pane
+  type Tick      = Long
 }
 
 //****************************************************************************

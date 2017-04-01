@@ -17,6 +17,7 @@ package com.wolery.owl
 //****************************************************************************
 
 import com.wolery.owl.core._
+import com.wolery.owl.core.utilities._
 import com.wolery.owl.midi.messages._
 import com.wolery.owl.utils.implicits._
 import com.wolery.owl.utils.implicits.asEventHandler
@@ -69,8 +70,7 @@ class TransportController extends MetaEventListener
 
   def initialize(): Unit =
   {
-
-    m_tempo.setValueFactory((new DoubleSpinnerValueFactory(1,300,owl.sequencer.getTempoInBPM))
+    m_tempo.setValueFactory((new DoubleSpinnerValueFactory(2,208,getEffectiveTempoInBPM))
                             .asInstanceOf[SpinnerValueFactory[ℝ]])
     m_tempo.valueProperty.addListener(onTempoSpinChange _)
 
@@ -149,10 +149,35 @@ class TransportController extends MetaEventListener
     updateClock()
   }
 
-  def onTempoTap(): Unit =
+  var m_tap: Tick = 0
+
+  def onTapTempo(me: MouseEvent): Unit =
   {
-    println("onTempoTap")
+    if (isPlaying)
+    {
+      val t = m_seq.getTickPosition
+      val d = Math.max(t - m_tap, 0)
+      val s = if (me.isShiftDown)   2 else 1
+      val c = if (me.isControlDown) 4 else 1
+      val e = getEffectiveTempoInTPM.toFloat / (d *  s * c)
+
+      if (between(e,2,208))
+      {
+    val was = m_seq.getTempoInBPM
+    val fac = e / was
+
+    m_seq.setTempoFactor(fac.toFloat)
+    m_tempo.getValueFactory.setValue(e)
+      }
+
+      m_tap = t
+    }
   }
+
+  def getEffectiveTempoInBPM: ℝ = m_seq.getTempoInBPM * m_seq.getTempoFactor
+  def getEffectiveTempoInTPM: ℝ = m_seq.getTempoInBPM * m_seq.getTempoFactor * m_seq.getSequence.getResolution
+
+  ////
 
   def onRewind   (e: MouseEvent): Unit = println("rewind")
   def onForward  (e: MouseEvent): Unit = println("advance")
