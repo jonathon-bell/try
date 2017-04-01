@@ -25,9 +25,10 @@
   -stopped-color:          deepskyblue;
   -looping-color:          deepskyblue;
 
-  -fx-font-family:         Arial;
   -fx-background-color:    -frame-color,linear-gradient(to bottom,-frame-color,derived(-frame-color,-50%));
   -fx-background-insets:   0, 45 0 0 0;
+  -fx-background-radius:   0 0 10 10;
+  -fx-font-family:         Arial;
   -fx-alignment:           center;
 }
 

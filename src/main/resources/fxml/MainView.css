@@ -14,7 +14,8 @@
 
 .main-view
 {
-   -fx-background-image: url("/img/linen-1.jpg")
+  -fx-background-color:    rgb(52,56,59);
+  -fx-background-radius:   0 0 10 10;
 }
 
 //****************************************************************************
