@@ -49,14 +49,14 @@ import javafx.beans.value.ObservableValue
 class TransportController extends MetaEventListener
 {
   @fx var m_bars:  Label = _
-  @fx var m_prev:  Label = _
-  @fx var m_rwnd:  Label = _
-  @fx var m_fwrd:  Label = _
-  @fx var m_next:  Label = _
-  @fx var m_rset:  Label = _
-  @fx var m_stop:  Label = _
-  @fx var m_play:  Label = _
-  @fx var m_loop:  Label = _
+  @fx var m_prev:  Pane  = _
+  @fx var m_rwnd:  Pane  = _
+  @fx var m_fwrd:  Pane  = _
+  @fx var m_next:  Pane  = _
+  @fx var m_rset:  Pane  = _
+  @fx var m_stop:  Pane  = _
+  @fx var m_play:  Pane  = _
+  @fx var m_loop:  Pane  = _
   @fx var m_left:  Label = _
   @fx var m_right: Label = _
   @fx var m_tempo: Spinner[ℝ] = _
@@ -69,14 +69,6 @@ class TransportController extends MetaEventListener
 
   def initialize(): Unit =
   {
-    m_prev.setText("\uf048")
-    m_rwnd.setText("\uf04a")
-    m_fwrd.setText("\uf04e")
-    m_next.setText("\uf051")
-    m_rset.setText("\uf049")
-    m_stop.setText("\uf04d")
-    m_play.setText("\uf04b")
-    m_loop.setText("\uf01e")
 
     m_tempo.setValueFactory((new DoubleSpinnerValueFactory(1,300,owl.sequencer.getTempoInBPM))
                             .asInstanceOf[SpinnerValueFactory[ℝ]])
@@ -145,25 +137,35 @@ class TransportController extends MetaEventListener
     updateButtons()
   }
 
-  def onPrevious (e: MouseEvent): Unit = println("previous")
-  def onNext     (e: MouseEvent): Unit = println("next")
+  def onPrevious (e: MouseEvent): Unit =
+  {
+    m_seq.setTickPosition(m_seq.getLoopStartPoint)
+    updateClock()
+  }
+
+  def onNext(e: MouseEvent): Unit =
+  {
+    m_seq.setTickPosition(m_seq.getLoopEndPoint)
+    updateClock()
+  }
+
   def onRewind   (e: MouseEvent): Unit = println("rewind")
-  def onAdvance  (e: MouseEvent): Unit = println("advance")
+  def onForward  (e: MouseEvent): Unit = println("advance")
   def isLooping: Bool = m_seq.getLoopCount != 0
   def isPlaying: Bool = m_seq.isRunning
 
-  def updateClock(): Unit =
+ def updateClock(): Unit =
   {
     assert(m_seq.getSequence.getDivisionType == 0) // PPQ
 
     val tpb   = m_seq.getSequence.getResolution
     val tick  = m_seq.getTickPosition
     val beat  = tick / tpb
-    val bars  = beat / m_mtr.count
-    val beats = beat % m_mtr.count
-    val parts = tick % tpb
+    val bars  = 1 + beat / m_mtr.count
+    val beats = 1 + beat % m_mtr.count
+    val parts = 1 + Math.floor(((tick % tpb).toFloat / tpb) * 4).toInt % 4
 
-    m_bars.setText(f"$bars%04d.$beats%02d.$parts%03d")
+    m_bars.setText(f"$bars%04d.$beats%02d.$parts%02d")
   }
 
   def updateButtons(): Unit =

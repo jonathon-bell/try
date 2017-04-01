@@ -44,29 +44,91 @@
 
 .transport-button
 {
-  -fx-font-family:         "FontAwesome";
-  -fx-font-size:           14;
-  -fx-text-fill:           -button-color;
+  -fx-background-color:    -button-color;
+  -fx-scale-shape:         false;
 }
 
 .transport-button:hover
 {
-  -fx-text-fill:           -hover-color;
+  -fx-background-color:    -hover-color;
+  -fx-border-color:        -hover-color;
+}
+
+.transport-button:stopped,
+.transport-button:looping
+{
+  -fx-background-color:    -stopped-color;
 }
 
 .transport-button:playing
 {
-  -fx-text-fill:           -playing-color;
+  -fx-background-color:    -playing-color;
 }
 
-.transport-button:stopped
+#transport-button-prev
 {
-  -fx-text-fill:           -stopped-color;
+  -fx-shape:               "M0,6 l 12,6 v -12 z";
 }
 
-.transport-button:looping
+#transport-button-rwnd
 {
-  -fx-text-fill:           -looping-color;
+  -fx-shape:               "M0,6 l 12,6 v -12 z M8,6 l 12,6 v -12 z";
+}
+
+#transport-button-fwrd
+{
+  -fx-shape:               "M0,0 v 12,l 12,-6 z M8,0 v 12 l 12,-6 z";
+}
+
+#transport-button-next
+{
+  -fx-shape:               "M0,0 v 12,l 12,-6 z";
+}
+
+#transport-button-rset
+{
+  -fx-shape:               "M0,6 l 12,6 v -12 z M0,0 v 12 h 2 v -12 z";
+}
+
+#transport-button-stop
+{
+  -fx-shape:               "M0,0 v 20 h 20 v -20 z";
+}
+
+#transport-button-play
+{
+  -fx-shape:               "M0,0 v 20 l 20,-10 z";
+}
+
+#transport-button-loop
+{
+  -fx-scale-shape:         true;                           
+  -fx-shape:               "
+                           M485.65,84.294
+                           l-111.9-75.3
+                           c-6.1-4.1-14.3,0.3-14.3,7.6
+                           v40.7
+                           H40.65c-19.1,0-34.6,15.5-34.6,34.6
+                           v183.9h69.2
+                           v-149.2
+                           h284.1
+                           v40.8
+                           c0,7.4,8.2,11.7,14.3,7.6
+                           l111.9-75.4
+                           C491.05,95.994,491.05,87.994,485.65,84.294z
+
+                           M414.45,362.994
+                           h-284.1v-40.7
+                           c0-7.4-8.2-11.7-14.3-7.6
+                           l-112,75.3
+                           c-5.4,3.6-5.4,11.6,0,15.3
+                           l111.9,75.4
+                           c6.1,4.1,14.3-0.3,14.3-7.6
+                           v-40.8h318.7
+                           c19.1,0,34.6-15.5,34.6-34.6
+                           v-183.9h-69.2v149.2
+                           H414.45z
+                           ";
 }
 
 //****************************************************************************
