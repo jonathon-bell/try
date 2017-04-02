@@ -44,6 +44,7 @@ import javafx.scene.control.SpinnerValueFactory
 import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory
 import javafx.beans.value.ChangeListener
 import javafx.beans.value.ObservableValue
+import javafx.util.StringConverter;
 
 //****************************************************************************
 
@@ -60,7 +61,7 @@ class TransportController extends MetaEventListener
   @fx var m_loop:  Pane  = _
   @fx var m_left:  Label = _
   @fx var m_right: Label = _
-  @fx var m_tempo: Spinner[ℝ] = _
+  @fx var m_tempo: Spinner[ℝℝ] = _
   @fx var m_meter: Label = _
   @fx var m_scale: Label = _
 
@@ -68,10 +69,19 @@ class TransportController extends MetaEventListener
       val m_tmr  : Timeline  = newTimer()
       var m_mtr  : Meter     = _
 
+  type ℝℝ    = java.lang.Double
+
   def initialize(): Unit =
   {
-    m_tempo.setValueFactory((new DoubleSpinnerValueFactory(2,208,getEffectiveTempoInBPM))
-                            .asInstanceOf[SpinnerValueFactory[ℝ]])
+    val f = (new DoubleSpinnerValueFactory(2,208,getEffectiveTempoInBPM))
+    val c = f.getConverter
+    f.setConverter(new StringConverter[ℝℝ]
+    {
+      def toString  (r: ℝℝ): String = f"$r%.2f"
+      def fromString(s: String): ℝℝ = c.fromString(s)
+    })
+
+    m_tempo.setValueFactory(f)
     m_tempo.valueProperty.addListener(onTempoSpinChange _)
 
     onMeterChange(Meter(4,4))
@@ -96,10 +106,10 @@ class TransportController extends MetaEventListener
   {
     val fac = m_seq.getTempoFactor
 
-    m_tempo.getValueFactory.setValue(bpm * fac)
+//    m_tempo.getValueFactory.setValue(bpm * fac)
   }
 
-  def onTempoSpinChange(ov: ObservableValue[_<: ℝ],was: ℝ,now: ℝ): Unit =
+  def onTempoSpinChange(ov: ObservableValue[_<: ℝℝ],was: ℝℝ,now: ℝℝ): Unit =
   {
     val was = m_seq.getTempoInBPM
     val fac = now / was
@@ -218,3 +228,51 @@ class TransportController extends MetaEventListener
 }
 
 //****************************************************************************
+/*
+class TempoSpinnerValueFactory(m_min: Double = 1,m_max: Double = 208,m_val: Double = 120,m_step: Double=1) extends SpinnerValueFactory[Double]
+{
+  setMin(m_min)
+  this.setMax(m_max)
+  this.setAmountToStepBy(m_step)
+  this.setConverter(new StringConverter[Double]
+  {
+      def toString(value:Double): String = f"$value%.2f"
+
+      def fromString(value:String):Double
+      {
+          try
+          {
+              // If the specified value is null or zero-length, return null
+              if (value == null) {
+                  return null;
+              }
+
+              value = value.trim();
+
+              if (value.length() < 1)
+              {
+                  return null;
+              }
+
+              // Perform the requested parsing
+              return df.parse(value).doubleValue();
+          }
+          catchsex)
+          {
+              throw new RuntimeException(ex);
+          }
+      }
+  });
+
+  valueProperty().addListener((o, oldValue, newValue) -> {
+
+      if (newValue < getMin()) {
+          setValue(getMin());
+      } else if (newValue > getMax()) {
+          setValue(getMax());
+      }
+  });
+
+  setValue(initialValue >= min && initialValue <= max ? initialValue : min);
+}
+*/

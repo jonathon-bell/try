@@ -16,7 +16,7 @@
 {
   -frame-color:            #5D646A;
   -panel-color:            #141414;
-  -hover-color :           white;
+  -hover-color:            white;
   -static-color:           grey;
   -active-color:           lightgrey;
   -button-color:           #bbbbbb;
@@ -137,6 +137,19 @@
   -fx-background-radius:   0;
 }
 
+.spinner.arrows-on-right-horizontal .increment-arrow-button .increment-arrow,
+.spinner.arrows-on-right-horizontal .decrement-arrow-button .decrement-arrow
+{
+  -fx-scale-shape:        false;
+  -fx-background-color:   -button-color;
+}
+
+.spinner.arrows-on-right-horizontal .increment-arrow-button:hover .increment-arrow,
+.spinner.arrows-on-right-horizontal .decrement-arrow-button:hover .decrement-arrow
+{
+  -fx-background-color:   -hover-color;
+}
+
 .spinner.arrows-on-right-horizontal .increment-arrow-button .increment-arrow
 {
   -fx-shape:              "M8,5
@@ -154,9 +167,6 @@
                            h  2 
                            v -4
                            h -2";
-
-  -fx-scale-shape:        false;
-  -fx-background-color:   -button-color;
 }
 
 .spinner.arrows-on-right-horizontal .decrement-arrow-button .decrement-arrow
@@ -166,15 +176,6 @@
                            v   2
                            h -10
                            v  -2";
-
-  -fx-scale-shape:        false;
-  -fx-background-color:   -button-color;
-}
-
-.spinner.arrows-on-right-horizontal .increment-arrow-button:hover .increment-arrow,
-.spinner.arrows-on-right-horizontal .decrement-arrow-button:hover .decrement-arrow
-{
-  -fx-background-color:   -hover-color;
 }
 
 //****************************************************************************
