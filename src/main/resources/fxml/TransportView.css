@@ -81,7 +81,6 @@
 #transport-button-rset     {-fx-shape:"M0,6 l 12,6 v -12 z M0,0 v 12 h 2 v -12 z";}
 #transport-button-stop     {-fx-shape:"M0,0 v 20 h 20 v -20 z";}
 #transport-button-play     {-fx-shape:"M0,0 v 20 l 16,-10 z";}
-
 #transport-button-loop
 {
   -fx-scale-shape:         true;                           
@@ -118,41 +117,64 @@
 .spinner:focused,
 .spinner:contains-focus 
 {
-  -fx-background-color: -panel-color;
+  -fx-background-color:    -panel-color;
 }
 
 .spinner > .text-field 
 {
-  -fx-background-color:  -panel-color;
-  -fx-text-fill:         -active-color;
-  -fx-font-size:         12;
-  -fx-font-weight:       bold;
-  -fx-alignment:         center;
+  -fx-background-color:    -panel-color;
+  -fx-background-radius:   0;
+  -fx-text-fill:           -active-color;
+  -fx-font-size:           14;
+  -fx-font-weight:         bold;
+  -fx-alignment:           center;
 }
 
-.spinner .increment-arrow-button .increment-arrow 
+.spinner.arrows-on-right-horizontal .increment-arrow-button,
+.spinner.arrows-on-right-horizontal .decrement-arrow-button 
 {
-  -fx-rotate: 180;
+  -fx-background-color:    -panel-color;
+  -fx-background-radius:   0;
 }
 
-.spinner.split-arrows-horizontal .increment-arrow-button,
-.spinner.split-arrows-horizontal .decrement-arrow-button 
+.spinner.arrows-on-right-horizontal .increment-arrow-button .increment-arrow
 {
-  -fx-background-color: -panel-color;
+  -fx-shape:              "M8,5
+                           v  4
+                           h  2 
+                           v -4
+                           h -2
+                           M4,9
+                           h  10
+                           v   2
+                           h -10
+                           v  -2
+                           M8,11
+                           v  4
+                           h  2 
+                           v -4
+                           h -2";
+
+  -fx-scale-shape:        false;
+  -fx-background-color:   -button-color;
 }
 
-.spinner.split-arrows-horizontal .increment-arrow-button .increment-arrow,
-.spinner.split-arrows-horizontal .decrement-arrow-button .decrement-arrow
+.spinner.arrows-on-right-horizontal .decrement-arrow-button .decrement-arrow
 {
-  -fx-padding:          6 3 6 3;
-  -fx-shape:            "M 4 0 v 7 l -4 -3.5 z";
-  -fx-background-color: -button-color;
+  -fx-shape:              "M4,10
+                           h  10
+                           v   2
+                           h -10
+                           v  -2";
+
+  -fx-scale-shape:        false;
+  -fx-background-color:   -button-color;
 }
 
-.spinner.split-arrows-horizontal .increment-arrow-button:hover .increment-arrow,
-.spinner.split-arrows-horizontal .decrement-arrow-button:hover .decrement-arrow
+.spinner.arrows-on-right-horizontal .increment-arrow-button:hover .increment-arrow,
+.spinner.arrows-on-right-horizontal .decrement-arrow-button:hover .decrement-arrow
 {
-  -fx-background-color: -hover-color;
+  -fx-background-color:   -hover-color;
 }
 
 //****************************************************************************
