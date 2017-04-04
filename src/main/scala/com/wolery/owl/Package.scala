@@ -29,6 +29,7 @@ package object owl
 
   type Pane      = javafx.scene.layout.Pane
   type Tick      = Long
+  type BPM       = ℝ
 }
 
 //****************************************************************************

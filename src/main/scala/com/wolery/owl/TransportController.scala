@@ -18,10 +18,10 @@ package com.wolery.owl
 
 import Math.max
 
-import com.wolery.owl.core.{ Bool, Meter, Scale }
-import com.wolery.owl.core.utilities.between
-import com.wolery.owl.midi.messages.{ METER, MetaMessageEx, SCALE, TEMPO }
-import com.wolery.owl.utils.implicits.{ asChangeListener, asEventHandler, asRunnable }
+import com.wolery.owl.core._
+import com.wolery.owl.core.utilities._
+import com.wolery.owl.midi.messages._
+import com.wolery.owl.utils.implicits._
 
 import javafx.animation.{ KeyFrame, Timeline }
 import javafx.application.Platform.{ runLater ⇒ defer }
@@ -35,6 +35,7 @@ import javafx.scene.input.MouseEvent
 import javafx.util.Duration.millis
 import javafx.util.StringConverter
 import javax.sound.midi.{ MetaEventListener, MetaMessage, Sequencer }
+import sequencer._
 
 //****************************************************************************
 
@@ -82,17 +83,14 @@ class TransportController extends MetaEventListener
 
   def onTempoChange(bpm: ℝ): Unit =
   {
-    val fac = m_seq.getTempoFactor
+    val bpm = m_seq.getEffectiveTempoInBPM
 
-    m_tempo.getValueFactory.setValue(bpm * fac)
+    m_tempo.getValueFactory.setValue(bpm)
   }
 
   def onTempoSpinChange(was: ℝ,now: ℝ): Unit =
   {
-    val was = m_seq.getTempoInBPM
-    val fac = now / was
-
-    m_seq.setTempoFactor(fac.toFloat)
+    m_seq.setEffectiveTempoInBPM(now)
   }
 
   def onScaleChange(scale: Scale): Unit =
@@ -121,7 +119,7 @@ class TransportController extends MetaEventListener
 
   def onLoop(e: MouseEvent): Unit =
   {
-    m_seq.setLoopCount(if (isLooping) 0 else -1)
+    m_seq.setLoopCount(if (m_seq.isLooping) 0 else -1)
     updateButtons()
   }
 
@@ -141,20 +139,16 @@ class TransportController extends MetaEventListener
 
   def onTapTempo(me: MouseEvent): Unit =
   {
-    if (isPlaying)
+    if (m_seq.isPlaying)
     {
       val t = m_seq.getTickPosition
-      val d = max(t - m_tap, 0)
-      val s = if (me.isShiftDown)   2 else 1
-      val c = if (me.isControlDown) 4 else 1
-      val e = getEffectiveTempoInTPM.toFloat / (d *  s * c)
+      val d = max(t - m_tap,1) * (if (me.isShiftDown) 2 else 1) * (if (me.isShiftDown)   2 else 1)
+      val e = m_seq.getEffectiveTempoInBPM * m_seq.getTicksPerBeat / d
 
-      if (between(e,2,208))
+      if (between(e,MIN_TEMPO,MAX_TEMPO))
       {
-        val was = m_seq.getTempoInBPM
-        val fac = e / was
+        m_seq.setEffectiveTempoInBPM(e)
 
-        m_seq.setTempoFactor(fac.toFloat)
         m_tempo.getValueFactory.setValue(e)
       }
 
@@ -162,15 +156,8 @@ class TransportController extends MetaEventListener
     }
   }
 
-  def getEffectiveTempoInBPM: ℝ = m_seq.getTempoInBPM * m_seq.getTempoFactor
-  def getEffectiveTempoInTPM: ℝ = m_seq.getTempoInBPM * m_seq.getTempoFactor * m_seq.getSequence.getResolution
-
-  ////
-
   def onRewind   (e: MouseEvent): Unit = println("rewind")
   def onForward  (e: MouseEvent): Unit = println("advance")
-  def isLooping: Bool = m_seq.getLoopCount != 0
-  def isPlaying: Bool = m_seq.isRunning
 
   def updateClock(): Unit =
   {
@@ -188,9 +175,9 @@ class TransportController extends MetaEventListener
 
   def updateButtons(): Unit =
   {
-    m_stop.pseudoClassStateChanged(STOPPED,!isPlaying)
-    m_play.pseudoClassStateChanged(PLAYING, isPlaying)
-    m_loop.pseudoClassStateChanged(LOOPING, isLooping)
+    m_stop.pseudoClassStateChanged(STOPPED,!m_seq.isPlaying)
+    m_play.pseudoClassStateChanged(PLAYING, m_seq.isPlaying)
+    m_loop.pseudoClassStateChanged(LOOPING, m_seq.isLooping)
   }
 
   def newTimer(): Timeline =
@@ -202,7 +189,7 @@ class TransportController extends MetaEventListener
 
   def initTempoSpinner() =
   {
-    val f = new DoubleSpinnerValueFactory(2,208,getEffectiveTempoInBPM,1)
+    val f = new DoubleSpinnerValueFactory(MIN_TEMPO,MAX_TEMPO,m_seq.getEffectiveTempoInBPM)
     {
       val c = getConverter
 
@@ -217,9 +204,11 @@ class TransportController extends MetaEventListener
     m_tempo.valueProperty.addListener(onTempoSpinChange _)
   }
 
-  val STOPPED = getPseudoClass("stopped")
-  val PLAYING = getPseudoClass("playing")
-  val LOOPING = getPseudoClass("looping")
+  val MIN_TEMPO =   1.0F
+  val MAX_TEMPO = 300.0F
+  val STOPPED   = getPseudoClass("stopped")
+  val PLAYING   = getPseudoClass("playing")
+  val LOOPING   = getPseudoClass("looping")
 }
 
 //****************************************************************************
