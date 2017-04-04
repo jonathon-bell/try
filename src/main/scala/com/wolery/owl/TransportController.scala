@@ -87,7 +87,7 @@ class TransportController extends MetaEventListener
     m_tempo.getValueFactory.setValue(bpm * fac)
   }
 
-  def onTempoSpinChange(ov: ObservableValue[_<: ℝ],was: ℝ,now: ℝ): Unit =
+  def onTempoSpinChange(was: ℝ,now: ℝ): Unit =
   {
     val was = m_seq.getTempoInBPM
     val fac = now / was
@@ -179,8 +179,8 @@ class TransportController extends MetaEventListener
     val tpb   = m_seq.getSequence.getResolution
     val tick  = m_seq.getTickPosition
     val beat  = tick / tpb
-    val bars  = 1 + beat / m_mtr.count
-    val beats = 1 + beat % m_mtr.count
+    val bars  = 1 + beat / m_mtr.beats
+    val beats = 1 + beat % m_mtr.beats
     val parts = 1 + Math.floor(((tick % tpb).toFloat / tpb) * 4).toInt % 4
 
     m_bars.setText(f"$bars%04d.$beats%02d.$parts%02d")

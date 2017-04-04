@@ -16,12 +16,12 @@ package com.wolery.owl.core
 
 //****************************************************************************
 
-case class Meter(count: ℕ,beat: ℕ)
+case class Meter(beats: ℕ,pulse: ℕ)
 {
-  assert(count>0 && beat>0)
+  assert(beats>0 && pulse>0)
 
   override
-  def toString(): String = s"$count / $beat"
+  def toString(): String = s"$beats / $pulse"
 }
 
 //****************************************************************************

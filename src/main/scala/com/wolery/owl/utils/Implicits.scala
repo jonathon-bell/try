@@ -47,6 +47,12 @@ object implicits
   }
 
   implicit
+  def asChangeListener[α](lambda: (α,α) ⇒ Unit) = new ChangeListener[α]
+  {
+    def changed(o: ObservableValue[_ <: α],w: α,n: α): Unit = lambda(w,n)
+  }
+
+  implicit
   def asChangeListener[α](lambda: (ObservableValue[_ <: α],α,α) ⇒ Unit) = new ChangeListener[α]
   {
     def changed(o: ObservableValue[_ <: α],w: α,n: α): Unit = lambda(o,w,n)
