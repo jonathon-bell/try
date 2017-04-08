@@ -102,7 +102,7 @@ object messages
     {
       assert(m.getType == METER)
 
-      Meter(uint8(0),1 << uint8(1))
+      Meter(uint8(0),1 << uint8(1),uint8(2),uint8(3))
     }
 
     def ticksPerBeat: ℕ =

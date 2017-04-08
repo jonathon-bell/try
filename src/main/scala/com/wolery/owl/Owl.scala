@@ -32,7 +32,7 @@ object owl extends utils.Application
 
   val initialize: Task[Unit] =
   {
-    load.font("fontawesome-webfont")
+  //load.font("fontawesome-webfont")
     synthesizer.open()
   //synthesizer.loadAllInstruments(load.soundbank("FluidR3 GM2-2"))
     sequencer.open()

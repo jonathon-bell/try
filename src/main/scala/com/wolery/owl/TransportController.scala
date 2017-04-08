@@ -166,8 +166,8 @@ class TransportController extends MetaEventListener
     val tpb   = m_seq.getSequence.getResolution
     val tick  = m_seq.getTickPosition
     val beat  = tick / tpb
-    val bars  = 1 + beat / m_mtr.beats
-    val beats = 1 + beat % m_mtr.beats
+    val bars  = 1 + beat / m_mtr.meter
+    val beats = 1 + beat % m_mtr.meter
     val parts = 1 + Math.floor(((tick % tpb).toFloat / tpb) * 4).toInt % 4
 
     m_bars.setText(f"$bars%04d.$beats%02d.$parts%02d")

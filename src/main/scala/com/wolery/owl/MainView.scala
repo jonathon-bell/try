@@ -65,7 +65,7 @@ class MainController(controller: Controller,transport: MetaEventListener) extend
     owl.sequencer.addMetaEventListener(new MetaEventListener{def meta(m:MetaMessage):Unit = controller.send(m,-1)})
 
     controller.send(messages.scale(Scale(F,"whole tone").get))
-    owl.sequencer.setSequence(load.sequence("sample"))
+    owl.sequencer.setSequence(load.sequence("time"))
   }
 }
 
@@ -81,7 +81,6 @@ object MainView
     val (t,x) = load.view("TransportView",new TransportController)
     val (m,_) = load.view("MainView"     ,new MainController(c,x))
 
-   // m.asInstanceOf[javafx.scene.layout.VBox].setSpacing(20)
     m.getChildren.addAll(c.view,t)
 
     new Stage(StageStyle.DECORATED)
