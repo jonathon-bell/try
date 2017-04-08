@@ -18,7 +18,7 @@
   -panel-color:            #141414;
   -hover-color:            white;
   -static-color:           grey;
-  -active-color:           lightgrey;
+  -active-color:           snow;
   -button-color:           #bbbbbb;
   -marker-color:           #2d659a;
   -playing-color:          lightgreen;
@@ -48,7 +48,6 @@
 {
   -fx-font-size:           14;
   -fx-text-fill:           -active-color;
-  -fx-font-weight:         bold;
 }
 
 .transport-button
@@ -126,7 +125,6 @@
   -fx-background-radius:   0;
   -fx-text-fill:           -active-color;
   -fx-font-size:           14;
-  -fx-font-weight:         bold;
   -fx-alignment:           center;
 }
 

@@ -145,7 +145,7 @@ class TransportController extends MetaEventListener
       val d = max(t - m_tap,1) * (if (me.isShiftDown) 2 else 1) * (if (me.isShiftDown)   2 else 1)
       val e = m_seq.getEffectiveTempoInBPM * m_seq.getTicksPerBeat / d
 
-      if (between(e,MIN_TEMPO,MAX_TEMPO))
+      if (isBetween(e,MIN_TEMPO,MAX_TEMPO))
       {
         m_seq.setEffectiveTempoInBPM(e)
 

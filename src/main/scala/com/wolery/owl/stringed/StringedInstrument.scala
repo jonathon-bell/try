@@ -71,7 +71,7 @@ case class StringedInstrument(strings: Seq[Pitch],frets: ℕ) extends Instrument
 
   def stops(pitch: Pitch): Seq[Stop] =
   {
-    for (s ← 0 until strings.size if between(pitch,strings(s),strings(s)+frets-1)) yield
+    for (s ← 0 until strings.size if isBetween(pitch,strings(s),strings(s)+frets-1)) yield
     {
       new Stop(s,pitch-strings(s))
     }

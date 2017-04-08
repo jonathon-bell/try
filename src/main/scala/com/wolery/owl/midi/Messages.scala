@@ -79,7 +79,7 @@ object messages
 
     def uint8(index: ℕ = 0): ℕ =
     {
-      assert(between(index,0,m.getLength))
+      assert(isBetween(index,0,m.getLength))
 
       m.getData.apply(index) & 0xFF
     }
