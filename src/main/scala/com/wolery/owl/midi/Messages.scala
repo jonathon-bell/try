@@ -25,6 +25,7 @@ import scala.language.postfixOps
 
 import com.wolery.owl.core._
 import com.wolery.owl.core.utilities._
+import com.wolery.owl.Tempo
 
 import javax.sound.midi.{ MetaMessage, ShortMessage }
 
@@ -91,6 +92,13 @@ object messages
       60e6 / max(uint24,0.1)
     }
 
+    def tempo: Tempo =
+    {
+      assert(m.getType == TEMPO)
+
+      60e6 / max(uint24,0.1)
+    }
+
     def smpte: (ℕ,ℕ,ℕ,ℕ,ℕ) =
     {
       assert(m.getType == SMPTE)
@@ -115,16 +123,15 @@ object messages
     {
       assert(m.getType == KEY)
 
-      val root = Seq(C♭,G♭,D♭,A♭,E♭,B♭,F,C,G,D,A,E,B,F♯,C♯).apply(uint4)
+      val keys = Seq(C♭,G♭,D♭,A♭,E♭,B♭,F,C,G,D,A,E,B,F♯,C♯)
+      val root = keys(7 + m.getData.apply(0))
+      val mode = uint8(1) match
+      {
+        case 0 ⇒ "ionian"
+        case _ ⇒ "aeolean"
+      }
 
-      if (uint8(1) == 0)
-      {
-        Scale(root,"ionian").get
-      }
-      else
-      {
-        Scale(root,"aeolian").get
-      }
+      Scale(root,mode).get
     }
 
     def scale:Scale = anything[Scale](SCALE)

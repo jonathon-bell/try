@@ -65,6 +65,10 @@ class MainController(controller: Controller,transport: MetaEventListener) extend
     owl.sequencer.addMetaEventListener(new MetaEventListener{def meta(m:MetaMessage):Unit = controller.send(m,-1)})
 
     controller.send(messages.scale(Scale(F,"whole tone").get))
+    val(m,t) = TempoMap.getTimingMaps(load.sequence("time"))
+
+    println(m)
+    println(t)
     owl.sequencer.setSequence(load.sequence("time"))
   }
 }
