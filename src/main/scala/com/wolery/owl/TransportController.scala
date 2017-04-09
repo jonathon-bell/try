@@ -39,7 +39,7 @@ import sequencer._
 
 //****************************************************************************
 
-class TransportController extends MetaEventListener
+class TransportController(transport: Transport) extends MetaEventListener
 {
   @fx var m_bars:  Label = _
   @fx var m_prev:  Pane  = _

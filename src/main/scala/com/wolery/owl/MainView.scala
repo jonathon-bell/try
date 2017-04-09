@@ -63,13 +63,6 @@ class MainController(controller: Controller,transport: MetaEventListener) extend
     owl.sequencer.getTransmitter.setReceiver(controller)
     owl.sequencer.addMetaEventListener(transport)
     owl.sequencer.addMetaEventListener(new MetaEventListener{def meta(m:MetaMessage):Unit = controller.send(m,-1)})
-
-    controller.send(messages.scale(Scale(F,"whole tone").get))
-    val(m,t) = TempoMap.getTimingMaps(load.sequence("time"))
-
-    println(m)
-    println(t)
-    owl.sequencer.setSequence(load.sequence("time"))
   }
 }
 
@@ -80,9 +73,11 @@ object MainView
   def apply(): Unit =
   {
     val instrument = stringed.StringedInstrument(24,E(2),A(2),D(3),G(3),B(3),E(4))
+    owl.sequencer.setSequence(load.sequence("time"))
+    val transport = new Transport(owl.sequencer)
 
     val (_,c) = instrument.view("Guitar")
-    val (t,x) = load.view("TransportView",new TransportController)
+    val (t,x) = load.view("TransportView",new TransportController(transport))
     val (m,_) = load.view("MainView"     ,new MainController(c,x))
 
     m.getChildren.addAll(c.view,t)
