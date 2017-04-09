@@ -69,7 +69,7 @@ class TransportController extends MetaEventListener
 
   def meta(message: MetaMessage): Unit = message.getType match
   {
-    case TEMPO ⇒ defer(onTempoChange(message.bpm))
+    case TEMPO ⇒ defer(onTempoChange(message.tempo))
     case METER ⇒ defer(onMeterChange(message.meter))
     case SCALE ⇒ defer(onScaleChange(message.scale))
     case _     ⇒

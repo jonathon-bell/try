@@ -72,6 +72,7 @@ object messages
   {
     def string: String = new String(m.getData)
 
+    def int8  : ℤ = m.getData.apply(0)
     def uint4 : ℕ =  uint8(0) & 0x0F
     def uint7 : ℕ =  uint8(0) & 0x7F
     def uint8 : ℕ =  uint8(0) & 0xFF
@@ -83,13 +84,6 @@ object messages
       assert(isBetween(index,0,m.getLength))
 
       m.getData.apply(index) & 0xFF
-    }
-
-    def bpm: ℝ =
-    {
-      assert(m.getType == TEMPO)
-
-      60e6 / max(uint24,0.1)
     }
 
     def tempo: Tempo =
@@ -113,18 +107,12 @@ object messages
       Meter(uint8(0),1 << uint8(1),uint8(2),uint8(3))
     }
 
-    def ticksPerBeat: ℕ =
-    {
-      assert(m.getType == METER)
-      uint8(2)
-    }
-
     def key: Scale =
     {
       assert(m.getType == KEY)
 
       val keys = Seq(C♭,G♭,D♭,A♭,E♭,B♭,F,C,G,D,A,E,B,F♯,C♯)
-      val root = keys(7 + m.getData.apply(0))
+      val root = keys(7 + m.int8)
       val mode = uint8(1) match
       {
         case 0 ⇒ "ionian"

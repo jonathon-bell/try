@@ -140,7 +140,7 @@ final class DumpReceiver(m_out: PrintStream = System.out) extends Receiver
       case CHANNEL   ⇒ print("channel           ",mm.uint4)
       case PORT      ⇒ print("port              ",mm.uint7)
       case END       ⇒ print("end-of-track      ")
-      case TEMPO     ⇒ print("tempo             ",mm.bpm)
+      case TEMPO     ⇒ print("tempo             ",mm.tempo)
       case SMPTE     ⇒ print("smpte-offset      ",mm.smpte)
       case METER     ⇒ print("time-signature    ",mm.meter)
       case KEY       ⇒ print("key-signature     ",mm.key)
