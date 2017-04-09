@@ -16,58 +16,44 @@ package com.wolery.owl
 
 //****************************************************************************
 
-import scala.collection.Searching._
-import scala.collection.Searching.Found
-import scala.collection.Searching.InsertionPoint
+import scala.collection.Searching.{ Found, InsertionPoint, search }
 import scala.collection.mutable.ArrayBuffer
 
-import com.wolery.owl.core.Bool
-import com.wolery.owl.core.Meter
-import com.wolery.owl.midi.messages._
+import com.wolery.owl.core.{ Bool, Meter }
+import com.wolery.owl.midi.messages.{ METER, MetaMessageEx, TEMPO }
 
-import javax.sound.midi._
-import javax.sound.midi.Sequencer
+import javax.sound.midi.{ MetaMessage, Sequencer }
 
 //****************************************************************************
 
 final class Transport(m_seq: Sequencer)
 {
-  def start(): Unit = m_seq.start()
-  def stop(): Unit = m_seq.stop()
+  def isPlaying: Bool                         = m_seq.isRunning
+  def isRunning: Bool                         = m_seq.isRunning
+  def isLooping: Bool                         = m_seq.getLoopCount < 0
 
-  def isRunning(): Bool = m_seq.isRunning
-  def isLooping(): Bool = m_seq.getLoopCount < 0
+  def start(): Unit                           = m_seq.start()
+  def stop(): Unit                            = m_seq.stop()
 
-  def getTempoInBPM(): Tempo =
-  {
-    m_seq.getTempoFactor * m_seq.getTempoInBPM
-  }
+  def getTempoInBPM: Tempo                    = m_seq.getTempoFactor * m_seq.getTempoInBPM
 
-  def setTempoInBPM(bpm: Tempo): Unit =
-  {
-    m_seq.setTempoFactor(bpm.toFloat / m_seq.getTempoInBPM)
-  }
+  def setTempoInBPM(bpm: Tempo): Unit         = m_seq.setTempoFactor(bpm.toFloat / m_seq.getTempoInBPM)
 
-  def getTickLength(): Tick                           = m_seq.getTickLength
-  def getTickPosition(): Tick                         = m_seq.getTickPosition
-  def setTickPosition(tick: Tick): Unit               = m_seq.setTickPosition(tick)
+  def getTickLength: Tick                     = m_seq.getTickLength
+  def getTickPosition: Tick                   = m_seq.getTickPosition
+  def setTickPosition(tick: Tick): Unit       = m_seq.setTickPosition(tick)
 
-  def getMicrosecondLength(): Long                    = m_seq.getMicrosecondLength
-  def getMicrosecondPosition(): Long                  = m_seq.getMicrosecondPosition
-  def setMicrosecondPosition(microseconds: Long): Unit= m_seq.setMicrosecondPosition(microseconds)
+  def getMicrosecondLength: Long              = m_seq.getMicrosecondLength
+  def getMicrosecondPosition: Long            = m_seq.getMicrosecondPosition
+  def setMicrosecondPosition(ms: Long): Unit  = m_seq.setMicrosecondPosition(ms)
 
-  def getLoopStartPoint(): Tick                        = m_seq.getLoopStartPoint
-  def setLoopStartPoint(tick: Tick): Unit             = m_seq.setLoopStartPoint(tick)
-  def getLoopEndPoint(): Tick                         = m_seq.getLoopEndPoint
-  def setLoopEndPoint(tick: Tick): Unit               = m_seq.setLoopStartPoint(tick)
-  def setLooping(loop: Bool): Unit =
-  {
-    m_seq.setLoopCount(if (loop) -1 else 0)
-  }
-    def getTicksPerBeat: ℕ =
-    {
-      m_seq.getSequence.getResolution
-    }
+  def getLoopStartPoint: Tick                 = m_seq.getLoopStartPoint
+  def setLoopStartPoint(tick: Tick): Unit     = m_seq.setLoopStartPoint(tick)
+  def getLoopEndPoint: Tick                   = m_seq.getLoopEndPoint
+  def setLoopEndPoint(tick: Tick): Unit       = m_seq.setLoopStartPoint(tick)
+  def setLooping(loop: Bool): Unit            = m_seq.setLoopCount(if (loop) -1 else 0)
+
+  def getTicksPerBeat: ℕ                      = m_seq.getSequence.getResolution
 
   private
   def getTimingMaps(): (Tick ⇒ Meter,Tick ⇒ Tempo)=
