@@ -20,12 +20,12 @@ import utilities.isPowerOf2
 
 //****************************************************************************
 
-case class Meter(meter: ℕ = 4,beat: ℕ = 4,clocks: ℕ = 24,n32s: ℕ = 8)
+case class Meter(beats: ℕ = 4,symbol: ℕ = 4,clocks: ℕ = 24,n32s: ℕ = 8)
 {
-  assert(meter>0 && isPowerOf2(beat) && clocks>0 && n32s>0)
+  assert(beats>0 && isPowerOf2(symbol) && clocks>0 && n32s>0)
 
   override
-  def toString(): String = s"$meter / $beat"
+  def toString(): String = s"beats / $symbol"
 }
 
 //****************************************************************************

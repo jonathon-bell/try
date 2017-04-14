@@ -116,7 +116,7 @@ final class Transport(m_seq: Sequencer)
         {
           case METER ⇒
           {
-            m_measure += (e.getTick,(e,v) ⇒ (v + e / ticksPerBeat * m_meter.recent.meter).toInt)
+            m_measure += (e.getTick,(e,v) ⇒ (v + e / ticksPerBeat * m_meter.recent.beats).toInt)
             m_meter   += (e.getTick,m.meter)
           }
           case TEMPO ⇒
