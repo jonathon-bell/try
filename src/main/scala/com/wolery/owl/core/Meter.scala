@@ -25,7 +25,7 @@ case class Meter(beats: ℕ = 4,symbol: ℕ = 4,clocks: ℕ = 24,n32s: ℕ = 8)
   assert(beats>0 && isPowerOf2(symbol) && clocks>0 && n32s>0)
 
   override
-  def toString(): String = s"beats / $symbol"
+  def toString(): String = s"$beats / $symbol"
 }
 
 //****************************************************************************

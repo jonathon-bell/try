@@ -22,54 +22,21 @@ import scala.collection.mutable.ArrayBuffer
 import com.wolery.owl.core._
 import com.wolery.owl.midi.messages._
 import com.wolery.owl.core.utilities._
+import com.wolery.owl.utils.Logging
 
 import javax.sound.midi.MetaMessage
 import javax.sound.midi.Sequencer
 
 //****************************************************************************
 
-final class Transport(m_seq: Sequencer)
+final class Transport(m_seq: Sequencer) extends Logging
 {
   type Microsecond = Long
-  type Millisecond = Long
+  type Millisecond = Int
 
-  def isPlaying                       : Bool   = ???
-  def isLooping                       : Bool   = ???
+  case class Time(millisecond: ℕ)
 
-//def startsAt                        : Tick   = ???
-//def beginsAt                        : Tick   = ???
-//def endsAt                          : Tick   = ???
-//def first                           : Tick   = ???
-//def last                            : Tick   = ???
-  def end                             : Tick   = ???
-//def offset                          : Tick   = ???
-//def extent                          : Tick   = ???
-//def span                            : Region = ???
-//def finish                          : Tick   = ???
-
-  def play()                          : Unit   = ???
-  def stop()                          : Unit   = ???
-
-  def cursor                          : Tick   = ???
-  def cursor_=(tick: Tick)            : Unit   = ???
-
-  def meter                           : Meter  = ???
-//def meter(tick: Tick)               : Meter  = ???
-
-  def scale                           : Scale  = ???
-//def scale(tick: Tick)               : Scale  = ???
-
-  def tempo                           : Tempo  = ???
-//def tempo(tick: Tick)               : Tempo  = ???
-  def tempo_=(tempo: Tempo)           : Unit   = ???
-
-  def loop                            : Region = ???
-  def loop_=(region: Region)          : Unit   = ???
-
-  def looping                         : Bool   = ???
-  def looping_=(loop: Bool)           : Unit   = ???
-
-  def ticksPerBeat                    : ℕ      = ???
+  case class Measure(measure: ℕ = 0,beat: ℕ = 0,partial: ℕ = 0)
 
   case class Region(from: Tick,to: Tick)
   {
@@ -80,31 +47,49 @@ final class Transport(m_seq: Sequencer)
     def toString: String = s"[$from,$to]"
   }
 
-  case class Time   (millisecond: ℕ)
-  case class Measure(measure: ℕ = 0,beat: ℕ = 0,partial: ℕ = 0)
+  def isPlaying                       : Bool   = ???
+  def isLooping                       : Bool   = ???
 
-//implicit def asMeasure(tick: Tick)        : Measure = ???
-//implicit def asTime   (tick: Tick)        : Time    = ???
-//implicit def asTick   (time: Time)        : Tick    = ???
-//implicit def asTick   (measure: Measure)  : Tick    = ???
+  def end                             : Tick   = ???
 
-  def meter      (tick: Tick): Meter          = m_map.m_meter(tick)
-  def tempo      (tick: Tick): Tempo          = m_map.m_tempo(tick)
-  def scale      (tick: Tick): Scale          = m_map.m_scale(tick)
-  def microsecond(tick: Tick): Microsecond    = m_map.m_time (tick)
-  def measure    (tick: Tick): Measure        = Measure(m_map.m_measure(tick))
-  def tick       (time : Microsecond): Tick   = m_map.m_time.invert(time)
-  def tick       (measure: Measure) : Tick    = m_map.m_measure.invert(measure.measure)
+  def play()                          : Unit   = ???
+  def stop()                          : Unit   = ???
+
+  def cursor                          : Tick   = ???
+  def cursor_=(tick: Tick)            : Unit   = ???
+
+  def meter                           : Meter  = ???
+  def meter(tick: Tick)               : Meter          = m_map.m_meter(tick)
+
+  def scale                           : Scale  = ???
+  def scale(tick: Tick)               : Scale          = m_map.m_scale(tick)
+
+  def tempo                           : Tempo  = ???
+  def tempo(tick: Tick)               : Tempo          = m_map.m_tempo(tick)
+  def tempo_=(tempo: Tempo)           : Unit   = ???
+
+  def loop                            : Region = ???
+  def loop_=(region: Region)          : Unit   = ???
+
+  def looping                         : Bool   = ???
+  def looping_=(loop: Bool)           : Unit   = ???
+
+  val ticksPerBeat                    : ℕ      = m_seq.getSequence.getResolution
+
+  def time(tick: Tick)                : Time    = Time(m_map.m_time (tick))
+  def measure(tick: Tick)             : Measure = Measure(m_map.m_measure(tick))
+  def tick(time: Time)                : Tick    = m_map.m_time.invert(time.millisecond)
+  def tick(measure: Measure)          : Tick    = m_map.m_measure.invert(measure.measure)
 
   private[this]
   object m_map
   {
-    val m_track   = m_seq.getSequence.getTracks.apply(0)
-    val m_meter   = new TickFunction [Meter]      (Meter(4,4))
-    val m_tempo   = new TickFunction [Tempo]      (120.0)
-    val m_scale   = new TickFunction [Scale]      (Scale(C,"ionian").get)
+    val m_meter   = new TickFunction[Meter]       (Meter(4,4))
+    val m_tempo   = new TickFunction[Tempo]       (120.0)
+    val m_scale   = new TickFunction[Scale]       (Scale(C,"ionian").get)
     val m_measure = new TickBijection[ℕ]          (1)
-    val m_time    = new TickBijection[Microsecond](0L)
+    val m_time    = new TickBijection[Millisecond](0)
+    val m_track   = m_seq.getSequence.getTracks.apply(0)
 
     for (i ← 0 until m_track.size)
     {
@@ -121,7 +106,7 @@ final class Transport(m_seq: Sequencer)
           }
           case TEMPO ⇒
           {
-            m_time    += (e.getTick,(e,v) ⇒ (v + e / (ticksPerBeat * m_tempo.recent) * 60e6).toLong)
+            m_time    += (e.getTick,(e,v) ⇒ (v + e / (ticksPerBeat * m_tempo.recent) * 60e3).toInt)
             m_tempo   += (e.getTick,m.tempo)
           }
           case SCALE ⇒
@@ -133,7 +118,19 @@ final class Transport(m_seq: Sequencer)
         case _       ⇒
       }
     }
+
+    override
+    def toString: String =
+    {
+      s" m_meter  : $m_meter\n"   +
+      s" m_tempo  : $m_tempo\n"   +
+      s" m_scale  : $m_scale\n"   +
+      s" m_measure: $m_measure\n" +
+      s" m_time   : $m_time\n"
+    }
   }
+
+  log.debug(s"m_map:\n$m_map")
 }
 
 //****************************************************************************
@@ -159,14 +156,14 @@ class TickFunction[Value](value: Value,hint: ℕ = 64)
   {
     if (value != m_vals.last)
     {
-      if (tick != m_keys.last)
+      if (tick > m_keys.last)
       {
         m_keys.append(tick)
         m_vals.append(value)
       }
       else
       {
-        assert(tick > m_keys.last)
+        assert(tick == m_keys.last)
 
         m_vals(m_vals.size - 1) = value
       }
@@ -176,6 +173,12 @@ class TickFunction[Value](value: Value,hint: ℕ = 64)
   }
 
   def recent: Value = m_vals.last
+
+  override
+  def toString: String =
+  {
+    m_keys.zip(m_vals).mkString("",", ","")
+  }
 }
 
 //****************************************************************************
@@ -197,11 +200,5 @@ class TickBijection[Value: Ordering](value: Value,hint: ℕ = 64) extends
     super.+= (tick,next(tick - m_keys.last,m_vals.last))
   }
 }
-
-//****************************************************************************
-//  m_meter   += (0,Meter(4,4))
-//  m_scale   += (0,Scale(C,"ionian").get)
-//  m_time    += (0,0)
-//  m_measure += (0,0)
 
 //****************************************************************************
