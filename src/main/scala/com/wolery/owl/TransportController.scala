@@ -25,7 +25,6 @@ import com.wolery.owl.utils.implicits._
 
 import javafx.animation.{ KeyFrame, Timeline }
 import javafx.application.Platform.{ runLater ⇒ defer }
-import javafx.beans.value.ObservableValue
 import javafx.css.PseudoClass.getPseudoClass
 import javafx.event.ActionEvent
 import javafx.fxml.{ FXML ⇒ fx }
@@ -34,13 +33,13 @@ import javafx.scene.control.SpinnerValueFactory.DoubleSpinnerValueFactory
 import javafx.scene.input.MouseEvent
 import javafx.util.Duration.millis
 import javafx.util.StringConverter
-import javax.sound.midi.{ MetaEventListener, MetaMessage, Sequencer }
-import sequencer._
+import javax.sound.midi.{ MetaEventListener, MetaMessage }
 
 //****************************************************************************
 
-class TransportController(transport: Transport) extends MetaEventListener
+class TransportController(m_xpt: Transport) extends MetaEventListener
 {
+  @fx var m_secs:  Label = _
   @fx var m_bars:  Label = _
   @fx var m_prev:  Pane  = _
   @fx var m_rwnd:  Pane  = _
@@ -56,140 +55,153 @@ class TransportController(transport: Transport) extends MetaEventListener
   @fx var m_meter: Label = _
   @fx var m_scale: Label = _
 
-      val m_seq  : Sequencer = owl.sequencer
       val m_tmr  : Timeline  = newTimer()
-      var m_mtr  : Meter     = _
 
   def initialize(): Unit =
   {
     initTempoSpinner()
-    onMeterChange(Meter(4,4))
     updateButtons()
+    updateLoopClocks()
   }
 
   def meta(message: MetaMessage): Unit = message.getType match
   {
-    case TEMPO ⇒ defer(onTempoChange(message.tempo))
-    case METER ⇒ defer(onMeterChange(message.meter))
-    case SCALE ⇒ defer(onScaleChange(message.scale))
+    case TEMPO ⇒ defer(onTempoChange())
+    case METER ⇒ defer(onMeterChange())
+    case SCALE ⇒ defer(onScaleChange())
     case _     ⇒
   }
 
-  def onMeterChange(meter: Meter): Unit =
+  def onMeterChange(): Unit =
   {
-     m_mtr = meter
-     m_meter.setText(meter.toString)
+     m_meter.setText(m_xpt.meter.toString)
   }
 
-  def onTempoChange(bpm: ℝ): Unit =
+  def onTempoChange(): Unit =
   {
-    val bpm = m_seq.getEffectiveTempoInBPM
+    m_tempo.getValueFactory.setValue(m_xpt.tempo)
+  }
 
-    m_tempo.getValueFactory.setValue(bpm)
+  def onScaleChange(): Unit =
+  {
+    m_scale.setText(m_xpt.scale.toString)
   }
 
   def onTempoSpinChange(was: ℝ,now: ℝ): Unit =
   {
-    m_seq.setEffectiveTempoInBPM(now)
-  }
-
-  def onScaleChange(scale: Scale): Unit =
-  {
-    m_scale.setText(scale.toString)
+    m_xpt.tempo = now
   }
 
   def onReset(e: MouseEvent): Unit =
   {
-    m_seq.setTickPosition(0)
+    m_xpt.cursor = 0
   }
 
   def onStop(e: MouseEvent): Unit =
   {
-    m_seq.stop()
+    m_xpt.stop()
     m_tmr.stop()
     updateButtons()
   }
 
   def onPlay(e: MouseEvent): Unit =
   {
-    m_seq.start()
+    m_xpt.play()
     m_tmr.play()
     updateButtons()
   }
 
   def onLoop(e: MouseEvent): Unit =
   {
-    m_seq.setLoopCount(if (m_seq.isLooping) 0 else -1)
+    m_xpt.looping = !m_xpt.looping
     updateButtons()
   }
 
-  def onPrevious (e: MouseEvent): Unit =
+  def onPrevious(e: MouseEvent): Unit =
   {
-    m_seq.setTickPosition(m_seq.getLoopStartPoint)
+    m_xpt.cursor = m_xpt.loop.from
     updateClock()
   }
 
   def onNext(e: MouseEvent): Unit =
   {
-    m_seq.setTickPosition(m_seq.getLoopEndPoint)
+    m_xpt.cursor = m_xpt.loop.to
     updateClock()
   }
 
   var m_tap: Tick = 0
-
   def onTapTempo(me: MouseEvent): Unit =
   {
-    if (m_seq.isPlaying)
-    {
-      val t = m_seq.getTickPosition
-      val d = max(t - m_tap,1) * (if (me.isShiftDown) 2 else 1) * (if (me.isShiftDown)   2 else 1)
-      val e = m_seq.getEffectiveTempoInBPM * m_seq.getTicksPerBeat / d
-
-      if (isBetween(e,MIN_TEMPO,MAX_TEMPO))
-      {
-        m_seq.setEffectiveTempoInBPM(e)
-
-        m_tempo.getValueFactory.setValue(e)
-      }
-
-      m_tap = t
-    }
+//    if (m_xpt.isPlaying)
+//    {
+//      val t = m_xpt.cursor
+//      val d = max(t - m_tap,1) * (if (me.isShiftDown) 2 else 1) * (if (me.isShiftDown)   2 else 1)
+//      val e = m_xpt.tempo * m_xpt.ticksPerBeat / d
+//
+//      if (isBetween(e,MIN_TEMPO,MAX_TEMPO))
+//      {
+//        m_xpt.tempo = e
+//        m_tempo.getValueFactory.setValue(e)
+//      }
+//
+//      m_tap = t
+//    }
   }
 
   def onRewind   (e: MouseEvent): Unit = println("rewind")
   def onForward  (e: MouseEvent): Unit = println("advance")
 
+////
+  def updateLoopClocks() =
+  {
+    updateLeftClock()
+    updateRightClock()
+  }
+
+  def updateLeftClock(): Unit =
+  {
+    m_left.setText(m_xpt.measure(m_xpt.loop.from).toString)
+  }
+
+  def updateRightClock(): Unit =
+  {
+    m_right.setText(m_xpt.measure(m_xpt.loop.to).toString)
+  }
+
   def updateClock(): Unit =
   {
-    assert(m_seq.getSequence.getDivisionType == 0) // PPQ
-
-    val tpb   = m_seq.getSequence.getResolution
-    val tick  = m_seq.getTickPosition
+    val tpb   = m_xpt.ticksPerBeat
+    val tick  = m_xpt.cursor
     val beat  = tick / tpb
-    val bars  = 1 + beat / m_mtr.beats
-    val beats = 1 + beat % m_mtr.beats
+    val bars  = 1 + beat / m_xpt.meter.beats
+    val beats = 1 + beat % m_xpt.meter.beats
     val parts = 1 + Math.floor(((tick % tpb).toFloat / tpb) * 4).toInt % 4
 
     m_bars.setText(f"$bars%04d.$beats%02d.$parts%02d")
+
+    val c = m_xpt.cursor
+    val m = m_xpt.measure(c)
+    println(s"$c : $m")
   }
 
   def updateButtons(): Unit =
   {
-    m_stop.pseudoClassStateChanged(STOPPED,!m_seq.isPlaying)
-    m_play.pseudoClassStateChanged(PLAYING, m_seq.isPlaying)
-    m_loop.pseudoClassStateChanged(LOOPING, m_seq.isLooping)
+    m_stop.pseudoClassStateChanged(STOPPED,!m_xpt.isPlaying)
+    m_play.pseudoClassStateChanged(PLAYING, m_xpt.isPlaying)
+    m_loop.pseudoClassStateChanged(LOOPING, m_xpt.isLooping)
   }
 
+////
   def newTimer(): Timeline =
   {
-    val t = new Timeline(new KeyFrame(millis(100),(a:ActionEvent) ⇒ updateClock()))
+    val t = new Timeline(new KeyFrame(millis(1000),(a:ActionEvent) ⇒ updateClock()))
     t.setCycleCount(-1)
     t
   }
 
   def initTempoSpinner() =
   {
-    val f = new DoubleSpinnerValueFactory(MIN_TEMPO,MAX_TEMPO,m_seq.getEffectiveTempoInBPM)
+    val f = new DoubleSpinnerValueFactory(MIN_TEMPO,MAX_TEMPO,m_xpt.tempo)
     {
       val c = getConverter
 

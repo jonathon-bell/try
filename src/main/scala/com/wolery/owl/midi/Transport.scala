@@ -31,56 +31,87 @@ import javax.sound.midi.Sequencer
 
 final class Transport(m_seq: Sequencer) extends Logging
 {
-  type Microsecond = Long
-  type Millisecond = Int
+  case class Time(ms: ℕ)
+  {
+    def hour        : ℕ = (ms / 360000)
+    def minute      : ℕ = (ms % 360000) / 60000
+    def second      : ℕ = (ms % 60000)  / 60
+    def millisecond : ℕ = (ms % 1000)
 
-  case class Time(millisecond: ℕ)
+    override
+    def toString: String =
+    {
+      f"$hour%04d:$minute%02d:$second%02d:$millisecond%02d"
+    }
+  }
 
-  case class Measure(measure: ℕ = 0,beat: ℕ = 0,partial: ℕ = 0)
+  case class Measure(measure: ℕ = 0,beat: ℕ = 0,subbeat: ℕ = 0)
+  {
+    override
+    def toString: String = f"$measure%04d.$beat%02d.$subbeat%02d"
+  }
 
   case class Region(from: Tick,to: Tick)
   {
-    assert(isBetween(from,0L,to))
+    assert(isBetween(from,0L,to ))
     assert(isBetween(to,from,end))
 
     override
     def toString: String = s"[$from,$to]"
   }
 
-  def isPlaying                       : Bool   = ???
-  def isLooping                       : Bool   = ???
+  def isPlaying                       : Bool   = m_seq.isRunning
+  def isLooping                       : Bool   = m_seq.getLoopCount != 0
 
-  def end                             : Tick   = ???
+  def end                             : Tick   = m_seq.getTickLength
 
-  def play()                          : Unit   = ???
-  def stop()                          : Unit   = ???
+  def play()                          : Unit   = m_seq.start()
+  def stop()                          : Unit   = m_seq.stop()
 
-  def cursor                          : Tick   = ???
-  def cursor_=(tick: Tick)            : Unit   = ???
+  def cursor                          : Tick   = m_seq.getTickPosition
+  def cursor_=(tick: Tick)            : Unit   = m_seq.setTickPosition(tick)
 
-  def meter                           : Meter  = ???
-  def meter(tick: Tick)               : Meter          = m_map.m_meter(tick)
+  def meter                           : Meter  = meter()
+  def meter(tick: Tick = cursor)      : Meter  = m_map.m_meter(tick)
 
-  def scale                           : Scale  = ???
-  def scale(tick: Tick)               : Scale          = m_map.m_scale(tick)
+  def scale                           : Scale  = scale()
+  def scale(tick: Tick = cursor)      : Scale  = m_map.m_scale(tick)
 
-  def tempo                           : Tempo  = ???
-  def tempo(tick: Tick)               : Tempo          = m_map.m_tempo(tick)
-  def tempo_=(tempo: Tempo)           : Unit   = ???
+  def tempo                           : Tempo  =tempo()
+  def tempo(tick: Tick = cursor)      : Tempo  = m_map.m_tempo(tick) * m_seq.getTempoFactor
+  def tempo_=(tempo: Tempo)           : Unit   = m_seq.setTempoFactor((tempo / m_seq.getTempoInBPM).toFloat)
 
-  def loop                            : Region = ???
-  def loop_=(region: Region)          : Unit   = ???
+  def loop                            : Region = {val e = m_seq.getLoopEndPoint;Region(m_seq.getLoopStartPoint,if (e<0)end else e)}
+  def loop_=(region: Region)          : Unit   = {m_seq.setLoopStartPoint(region.from);m_seq.setLoopStartPoint(region.to);}
 
-  def looping                         : Bool   = ???
-  def looping_=(loop: Bool)           : Unit   = ???
+  def looping                         : Bool   = m_seq.getLoopCount != 0
+  def looping_=(loop: Bool)           : Unit   =
+  {
+    if (loop)
+    {
+      m_seq.setLoopCount(Sequencer.LOOP_CONTINUOUSLY)
+    }
+    else
+    {
+      m_seq.setLoopCount(0)
+    }
+  }
 
   val ticksPerBeat                    : ℕ      = m_seq.getSequence.getResolution
 
+//conversions
+  def measure(tick: Tick)             : Measure =
+  {
+    val measure = m_map.m_measure(tick)
+    val meter  = m_map.m_meter(tick)
+    println(m_map.m_measure(tick))
+      Measure(m_map.m_measure(tick))
+  }
+
   def time(tick: Tick)                : Time    = Time(m_map.m_time (tick))
-  def measure(tick: Tick)             : Measure = Measure(m_map.m_measure(tick))
   def tick(time: Time)                : Tick    = m_map.m_time.invert(time.millisecond)
   def tick(measure: Measure)          : Tick    = m_map.m_measure.invert(measure.measure)
-
+///
   private[this]
   object m_map
   {
@@ -101,7 +132,7 @@ final class Transport(m_seq: Sequencer) extends Logging
         {
           case METER ⇒
           {
-            m_measure += (e.getTick,(e,v) ⇒ (v + e / ticksPerBeat * m_meter.recent.beats).toInt)
+            m_measure += (e.getTick,(e,v) ⇒ (v + e / (ticksPerBeat * m_meter.recent.beats)).toInt)
             m_meter   += (e.getTick,m.meter)
           }
           case TEMPO ⇒
