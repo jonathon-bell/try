@@ -41,7 +41,8 @@ object owl extends utils.Application
 
   def start(stage: Stage): Unit =
   {
-    splash(stage,initialize,() ⇒ MainView())
+    ConsoleView(stage)
+//    splash(stage,initialize,() ⇒ MainView())
   }
 
   override
