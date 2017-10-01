@@ -4,7 +4,7 @@
 //*  Version : Header:
 //*
 //*
-//*  Purpose :
+//*  Purpose : $Header:$
 //*
 //*
 //*  Comments: This file uses a tab size of 2 spaces.
@@ -35,7 +35,10 @@ class Console extends TextArea
 
   private
   var m_pos: ℕ = 0
-
+  
+  private
+  var m_rdy: Bool = true
+  
   def getBuffer: String =
   {
     getText.substring(m_pos)
@@ -66,10 +69,12 @@ class Console extends TextArea
     {
       super.replaceText(start,end,text)
 
-      if (text.contains("\n"))
+      if (m_rdy && text.contains("\n"))
       {
+        m_rdy = false
         getOnNewline.handle(new NewlineEvent(getBuffer))
         m_pos = getLength
+        m_rdy = true
       }
     }
   }
