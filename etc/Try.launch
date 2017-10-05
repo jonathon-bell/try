@@ -3,7 +3,7 @@
 <listAttribute key="StepOutExcludePkgsOrClasses"/>
 <stringAttribute key="bad_container_name" value="/etc"/>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/try/src/main/scala/com/wolery/owl/Application.scala"/>
+<listEntry value="/try/src/main/scala/com/wolery/owl/Owl.scala"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>

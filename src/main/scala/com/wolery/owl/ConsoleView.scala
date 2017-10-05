@@ -25,65 +25,53 @@ import scala.tools.nsc.interpreter._
 import scala.tools.nsc.Settings
 import javax.script._
 import java.io.{BufferedReader, StringReader, PrintWriter}
-    import Results._
+import Results._
+import ConsoleView.prefs
+import java.io.Writer
 
 //****************************************************************************
 
-import java.io.Writer
-
-class ConsoleWriter (con: Console) extends Writer
+class ConsoleWriter (console: Console) extends Writer
 {
-  override
-  def close: Unit = {} //flush
+  def close: Unit = {}
 
-  override
-  def flush:Unit = {}//Console.flush
+  def flush: Unit = {}
 
-  override
-  def write(cbuf: Array[Char], off: Int, len: Int): Unit =
+  def x : Int = 3
+  def x_=(x:Int) :Unit= {}
+
+  def write(array: Array[Char],offset: ℕ,length: ℕ): Unit =
   {
-    if (len > 0)
-    {
-      write(new String(cbuf.slice(off, off + len)))
-    }
+    console.appendText(new String(array.slice(offset,offset + length)))
   }
-
-  override
-  def write(text: String): Unit =
-  {
-    con.appendText(text)
-  }
-}
-
-class NewLinePrintWriter(con: Console,autoFlush: Boolean = false) extends PrintWriter(new ConsoleWriter(con),autoFlush)
-{
-  override def println() {print("\n"); flush()}
 }
 
 class ConsoleView
 {
-    val settings = new Settings
-    settings.processArgumentString("-deprecation -feature -Xlint")
-  def getPrompt1: String = "scala> "
-  def getPrompt2: String = "    | "
+  val settings = new scala.tools.nsc.Settings
+  settings.processArgumentString(prefs.compiler())
+  prefs.compiler("-deprecation")
+
+  val prompt1: String = prefs.prompt1()
+  def prompt2: String = prefs.prompt2()
 
   @fx var m_text: Console = _
-      var m_intp: IMain = _
-      var m_buff: String = ""
+      var m_intp: IMain   = _
+      var m_buff: String  = ""
 
   def interpret(code: String): Unit =
   {
     m_intp.interpret(code) match
     {
-      case Success    ⇒ m_buff = ""; m_text.appendText("scala> ")
-      case Error      ⇒ m_buff = ""; m_text.appendText("scala> ")
-      case Incomplete ⇒ m_buff += code; m_text.appendText("    | ")
+      case Success    ⇒ m_buff = "";    m_text.appendText(prompt1)
+      case Error      ⇒ m_buff = "";    m_text.appendText(prompt1)
+      case Incomplete ⇒ m_buff += code; m_text.appendText(prompt2)
      }
   }
 
   def initialize() =
   {
-    m_intp = new IMain(settings,new NewLinePrintWriter(m_text))
+    m_intp = new IMain(settings,new PrintWriter(new ConsoleWriter(m_text)))
 
     m_text.setOnNewline(onNewline(_))
 
@@ -100,6 +88,13 @@ class ConsoleView
 
 object ConsoleView
 {
+  object prefs extends utils.Preferences(owl.getClass)
+  {
+    val compiler = string("compiler","-deprecation -feature -Xlint")
+    val prompt1  = string("prompt1","scala> ")
+    val prompt2  = string("prompt2","    | ")
+  }
+
   def apply(stage: Stage): Unit =
   {
     val (r,c) = load.view[ConsoleView]("ConsoleView")
