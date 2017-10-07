@@ -14,46 +14,25 @@
 
 package com.wolery.owl
 
-import javafx.fxml.{FXML ⇒ fx}
+import scala.tools.nsc.interpreter.IMain
+import scala.tools.nsc.interpreter.Results.{ Error, Incomplete, Success }
+
+import com.wolery.owl.control.{ Console, NewlineEvent }
+import com.wolery.owl.utils.load
+
+import javafx.fxml.{ FXML ⇒ fx }
 import javafx.scene.Scene
 import javafx.stage.Stage
-import control.{Console,NewlineEvent}
-
-import utils.load
-
-import scala.tools.nsc.interpreter._
-import scala.tools.nsc.Settings
-import javax.script._
-import java.io.{BufferedReader, StringReader, PrintWriter}
-import Results._
-import ConsoleView.prefs
-import java.io.Writer
 
 //****************************************************************************
-
-class ConsoleWriter (console: Console) extends Writer
-{
-  def close: Unit = {}
-
-  def flush: Unit = {}
-
-  def x : Int = 3
-  def x_=(x:Int) :Unit= {}
-
-  def write(array: Array[Char],offset: ℕ,length: ℕ): Unit =
-  {
-    console.appendText(new String(array.slice(offset,offset + length)))
-  }
-}
 
 class ConsoleView
 {
   val settings = new scala.tools.nsc.Settings
-  settings.processArgumentString(prefs.compiler())
-  prefs.compiler("-deprecation")
+  settings.processArgumentString(preferences.compiler())
 
-  val prompt1: String = prefs.prompt1()
-  def prompt2: String = prefs.prompt2()
+  val prompt1: String = preferences.prompt1()
+  val prompt2: String = preferences.prompt2()
 
   @fx var m_text: Console = _
       var m_intp: IMain   = _
@@ -71,7 +50,7 @@ class ConsoleView
 
   def initialize() =
   {
-    m_intp = new IMain(settings,new PrintWriter(new ConsoleWriter(m_text)))
+    m_intp = new IMain(settings,m_text.getPrintWriter)
 
     m_text.setOnNewline(onNewline(_))
 
@@ -88,13 +67,6 @@ class ConsoleView
 
 object ConsoleView
 {
-  object prefs extends utils.Preferences(owl.getClass)
-  {
-    val compiler = string("compiler","-deprecation -feature -Xlint")
-    val prompt1  = string("prompt1","scala> ")
-    val prompt2  = string("prompt2","    | ")
-  }
-
   def apply(stage: Stage): Unit =
   {
     val (r,c) = load.view[ConsoleView]("ConsoleView")

@@ -35,28 +35,25 @@ class Console extends TextArea
 
   private
   var m_pos: ℕ = 0
-  
+
   private
   var m_rdy: Bool = true
-  
+
   def getBuffer: String =
   {
     getText.substring(m_pos)
   }
 
-  final
   def getOnNewline: Handler =
   {
     onNewlineProperty.get()
   }
 
-  final
   def setOnNewline(handler: Handler) =
   {
     onNewlineProperty.set(handler)
   }
 
-  final
   val onNewlineProperty: ObjectProperty[Handler] =
   {
     new SimpleObjectProperty(this,"onNewline")
@@ -77,6 +74,21 @@ class Console extends TextArea
         m_rdy = true
       }
     }
+  }
+
+  def getPrintWriter: java.io.PrintWriter =
+  {
+    object writer extends java.io.Writer
+    {
+      def close: Unit = {}
+      def flush: Unit = {}
+      def write(array: Array[Char],offset: ℕ,length: ℕ): Unit =
+      {
+        appendText(new String(array.slice(offset,offset + length)))
+      }
+    }
+
+    new java.io.PrintWriter(writer,true)
   }
 }
 

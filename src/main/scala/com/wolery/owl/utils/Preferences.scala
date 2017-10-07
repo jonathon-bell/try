@@ -24,20 +24,19 @@ import java.util.prefs.{Preferences ⇒ JavaPreferences}
  *
  * @author Jonathon Bell
  */
-trait Preference[α] // = Property?
+trait Preference[α]
 {
   def name              : String
-  def default           : α
   def value             : α
   def value_=(value: α) : Unit
+  def reset()           : Unit
 
-  def reset()           : Unit   = update(default)
-  def apply()           : α      = value
-  def apply (value: α)  : Unit   = value_=(value)
-  def update(value: α)  : Unit   = value_=(value)
+  final def apply()         : α      = value
+  final def apply (value: α): Unit   = value_=(value)
+  final def update(value: α): Unit   = value_=(value)
 
-  override
-  def toString()        : String = apply.toString
+  override final
+  def toString()        : String = s"Preference($name, $value)"
 }
 
 /**
@@ -45,36 +44,55 @@ trait Preference[α] // = Property?
  *
  * @author Jonathon Bell
  */
-abstract class Preferences(private val m_imp: JavaPreferences)
+class Preferences(private val m_imp: JavaPreferences)
 {
-  def this(path: String)                     = this(JavaPreferences.userRoot.node(path))
-  def this(clazz: Class[_])                  = this(JavaPreferences.userNodeForPackage(clazz))
-  def this(parent: Preferences,path: String) = this(parent.m_imp.node(path))
+  def this(path: String)                    = this(JavaPreferences.userRoot.node(path))
+  def this(clss: Class[_])                  = this(JavaPreferences.userNodeForPackage(clss))
+  def this(prefs: Preferences,path: String) = this(prefs.m_imp.node(path))
 
-  def construct[α](get: (String,α) ⇒ α,
-                   put: (String,α) ⇒ Unit)(n: String,d: α): Preference[α] =
+  def node(path: String): Preferences =
+  {
+    new Preferences(m_imp.node(path))
+  }
+
+  private
+  def atomic[α](print: α ⇒ String,
+                parse: String ⇒ α)
+                (key: String,default: α)
+                : Preference[α] =
   {
     new Preference[α]
     {
-      val name              : String = n
-      val default           : α      = d
-      def value             : α      = get(name,default)
-      def value_=(value: α) : Unit   = put(name,value)
-//    def reset()           : Unit   = update(default)
-//    def apply()           : α      = value
-//    def apply (value: α)  : Unit   = value_=(value)
-//    def update(value: α)  : Unit   = value_=(value)
+      val dflt              : String = print(default)
+      val name              : String = key
+      def value             : α      = parse(m_imp.get(key,dflt))
+      def value_=(value: α) : Unit   = m_imp.put(key,print(value))
+      def reset()           : Unit   = m_imp.remove(name)
     }
   }
 
-  type Constructor[α] = (String,α) ⇒ Preference[α]
+  private
+  def sequence[α](parse: String ⇒ α): Sequence[α] =
+  {
+    atomic(_.mkString("◇"),_.split("◇").map(parse))
+  }
 
-  val string: Constructor[String] = construct(m_imp.get _,       m_imp.put _)
-  val bool  : Constructor[Bool]   = construct(m_imp.getBoolean _,m_imp.putBoolean _)
-  val int   : Constructor[Int]    = construct(m_imp.getInt _,    m_imp.putInt _)
-  val long  : Constructor[Long]   = construct(m_imp.getLong _,   m_imp.putLong _)
-  val float : Constructor[Float]  = construct(m_imp.getFloat _,  m_imp.putFloat _)
-  val double: Constructor[Double] = construct(m_imp.getDouble _, m_imp.putDouble _)
+  type Atomic[α]   = (String,α) ⇒ Preference[α]
+  type Sequence[α] = (String,Seq[α]) ⇒ Preference[Seq[α]]
+
+  val string : Atomic[String]   = atomic(_.toString,identity)
+  val bool   : Atomic[Bool]     = atomic(_.toString,_.toBoolean)
+  val int    : Atomic[Int]      = atomic(_.toString,_.toInt)
+  val long   : Atomic[Long]     = atomic(_.toString,_.toLong)
+  val float  : Atomic[Float]    = atomic(_.toString,_.toFloat)
+  val double : Atomic[Double]   = atomic(_.toString,_.toDouble)
+
+  val strings: Sequence[String] = sequence(identity)
+  val bools  : Sequence[Bool]   = sequence(_.toBoolean)
+  val ints   : Sequence[Int]    = sequence(_.toInt)
+  val longs  : Sequence[Long]   = sequence(_.toLong)
+  val floats : Sequence[Float]  = sequence(_.toFloat)
+  val doubles: Sequence[Double] = sequence(_.toDouble)
 }
 
 //****************************************************************************
