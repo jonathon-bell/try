@@ -14,13 +14,12 @@
 
 package com.wolery.owl
 
-import scala.tools.nsc.interpreter.IMain
-import scala.tools.nsc.interpreter.Results.{ Error, Incomplete, Success }
+import scala.tools.nsc.interpreter.Results.Incomplete
 
 import com.wolery.owl.control.{ Console, NewlineEvent }
 import com.wolery.owl.utils.load
-
-import javafx.fxml.{ FXML ⇒ fx }
+import preferences._
+import javafx.fxml.{FXML ⇒ fx}
 import javafx.scene.Scene
 import javafx.stage.Stage
 
@@ -28,38 +27,41 @@ import javafx.stage.Stage
 
 class ConsoleView
 {
-  val settings = new scala.tools.nsc.Settings
-  settings.processArgumentString(preferences.compiler())
+ @fx
+  var m_cons : Console = _
+  var m_buff : String  = ""
 
-  val prompt1: String = preferences.prompt1()
-  val prompt2: String = preferences.prompt2()
-
-  @fx var m_text: Console = _
-      var m_intp: IMain   = _
-      var m_buff: String  = ""
-
-  def interpret(code: String): Unit =
+  def initialize(): Unit =
   {
-    m_intp.interpret(code) match
+    m_cons.setPrompt(prompt1())
+
+    interpreter.bind("xx","Double",7.8)
+    interpreter.writer = m_cons.writer
+  }
+
+  def onNewline(e: NewlineEvent): Unit =
+  {
+    m_buff += e.line.trim
+
+    if (m_buff.isEmpty)
     {
-      case Success    ⇒ m_buff = "";    m_text.appendText(prompt1)
-      case Error      ⇒ m_buff = "";    m_text.appendText(prompt1)
-      case Incomplete ⇒ m_buff += code; m_text.appendText(prompt2)
-     }
+      m_cons.setPrompt(prompt1())
+    }
+    else
+    if (interpreter.interpret(m_buff) == Incomplete)
+    {
+      m_cons.setPrompt(prompt2())
+    }
+    else
+    {
+      m_cons.setPrompt(prompt1())
+      m_buff = ""
+    }
   }
 
-  def initialize() =
+  def onClose(): Unit =
   {
-    m_intp = new IMain(settings,m_text.getPrintWriter)
-
-    m_text.setOnNewline(onNewline(_))
-
-    m_intp.bind("xx", "Double", 3.0)
-  }
-
-  def onNewline(e: NewlineEvent) =
-  {
-    interpret(m_buff + e.text)
+    interpreter.writer = null
   }
 }
 
@@ -71,11 +73,12 @@ object ConsoleView
   {
     val (r,c) = load.view[ConsoleView]("ConsoleView")
 
-    stage.setTitle    ("Owl - Console")
-    stage.setMinWidth (r.getPrefWidth)
-    stage.setMinHeight(r.getPrefHeight)
-    stage.setScene    (new Scene(r))
-    stage.show        ()
+    stage.setTitle         ("Owl - Console")
+    stage.setMinWidth      (r.getPrefWidth)
+    stage.setMinHeight     (r.getPrefHeight)
+    stage.setScene         (new Scene(r))
+    stage.setOnCloseRequest(_ ⇒ c.onClose())
+    stage.show             ()
   }
 }
 

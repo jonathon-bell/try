@@ -15,49 +15,30 @@
 package com.wolery.owl
 package control
 
-import javafx.beans.property.{ObjectProperty,SimpleObjectProperty}
-import javafx.event.{ActionEvent,EventHandler}
+import java.io.Writer
+
+import javafx.beans.property.{ ObjectProperty, SimpleObjectProperty }
+import javafx.event.{ ActionEvent, EventHandler }
 import javafx.scene.control.TextArea
 
-/**
- * @author Jonathon Bell
- */
-class NewlineEvent(val text: String) extends ActionEvent
+//****************************************************************************
 
-/**
- * buffer
- * onNewline
- * @author Jonathon Bell
- */
+class NewlineEvent(val line: String) extends ActionEvent
+
+//****************************************************************************
+
 class Console extends TextArea
 {
   type Handler = EventHandler[NewlineEvent]
 
-  private
   var m_pos: ℕ = 0
-
-  private
   var m_rdy: Bool = true
 
-  def getBuffer: String =
-  {
-    getText.substring(m_pos)
-  }
+  def getBuffer: String                 = getText.substring(m_pos)
 
-  def getOnNewline: Handler =
-  {
-    onNewlineProperty.get()
-  }
-
-  def setOnNewline(handler: Handler) =
-  {
-    onNewlineProperty.set(handler)
-  }
-
-  val onNewlineProperty: ObjectProperty[Handler] =
-  {
-    new SimpleObjectProperty(this,"onNewline")
-  }
+  def getOnNewline                  : Handler   = onNewlineProperty.get()
+  def setOnNewline(handler: Handler): Unit      = onNewlineProperty.set(handler)
+  val onNewlineProperty:ObjectProperty[Handler] = new SimpleObjectProperty(this,"onNewline")
 
   override
   def replaceText(start: ℕ,end: ℕ,text: String) =
@@ -66,29 +47,37 @@ class Console extends TextArea
     {
       super.replaceText(start,end,text)
 
-      if (m_rdy && text.contains("\n"))
+      if (m_rdy && text.contains(preferences.eol))
       {
-        m_rdy = false
-        getOnNewline.handle(new NewlineEvent(getBuffer))
-        m_pos = getLength
-        m_rdy = true
+        val e = new NewlineEvent(getBuffer)
+      //foo(fireEvent(e))
+        foo(getOnNewline.handle(e))
       }
     }
   }
 
-  def getPrintWriter: java.io.PrintWriter =
+  private
+  def foo(action: ⇒ Unit): Unit =
   {
-    object writer extends java.io.Writer
-    {
-      def close: Unit = {}
-      def flush: Unit = {}
-      def write(array: Array[Char],offset: ℕ,length: ℕ): Unit =
-      {
-        appendText(new String(array.slice(offset,offset + length)))
-      }
-    }
+    m_rdy = false
+    action
+    m_rdy = true
+    m_pos = getLength
+  }
 
-    new java.io.PrintWriter(writer,true)
+  def setPrompt(prompt: String): Unit =
+  {
+    foo(appendText(prompt))
+  }
+
+  val writer = new Writer
+  {
+    def close: Unit = {}
+    def flush: Unit = {}
+    def write(array: Array[Char],offset: ℕ,length: ℕ): Unit =
+    {
+      appendText(new String(array.slice(offset,offset + length)))
+    }
   }
 }
 
