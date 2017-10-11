@@ -22,6 +22,7 @@ import preferences._
 import javafx.fxml.{FXML ⇒ fx}
 import javafx.scene.Scene
 import javafx.stage.Stage
+import javafx.scene.input.{KeyCode,KeyEvent,KeyCombination,KeyCodeCombination}
 
 //****************************************************************************
 
@@ -33,10 +34,9 @@ class ConsoleView
 
   def initialize(): Unit =
   {
-    m_cons.setPrompt(prompt1())
-
     interpreter.bind("xx","Double",7.8)
     interpreter.writer = m_cons.writer
+    m_cons.appendText(prompt1())
   }
 
   def onNewline(e: NewlineEvent): Unit =
@@ -45,16 +45,16 @@ class ConsoleView
 
     if (m_buff.isEmpty)
     {
-      m_cons.setPrompt(prompt1())
+      m_cons.appendText(prompt1())
     }
     else
     if (interpreter.interpret(m_buff) == Incomplete)
     {
-      m_cons.setPrompt(prompt2())
+      m_cons.appendText(prompt2())
     }
     else
     {
-      m_cons.setPrompt(prompt1())
+      m_cons.appendText(prompt1())
       m_buff = ""
     }
   }
