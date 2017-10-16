@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project xmlns=             "http://maven.apache.org/POM/4.0.0" 
+<project xmlns=             "http://maven.apache.org/POM/4.0.0"
          xmlns:xsi=         "http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>com.wolery</groupId>
+    <artifactId>pom</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <relativePath>../pom/pom.xml</relativePath>
+  </parent>
+  
   <groupId>com.wolery.try</groupId>
   <artifactId>try</artifactId>
-  <version>0.1.0</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>try</name>
@@ -16,120 +23,51 @@
   <url>https://github.com/wolery/try</url>
   <inceptionYear>January 2016</inceptionYear>
   
-  <organization>
-    <url>https://github.com/wolery</url>
-    <name>Wolery</name>
-  </organization>
-  
-  <developers>
-    <developer>
-      <id>jonathon</id>
-      <name>Jonathon Bell</name>
-      <email>jonathon.a.bell@gmail.com</email>
-      <url>https://github.com/jonathon-bell</url>
-      <timezone>US/Eastern</timezone>
-    </developer>
-  </developers>
-
   <scm>
     <url>https://github.com/wolery/try</url>
     <connection>scm:git:git://github.com/wolery/try.git</connection>
     <developerConnection>scm:git:git@github.com:jonathon-bell/try.git</developerConnection>
   </scm>
 
-  <prerequisites>
-    <maven>3.0.4</maven>
-  </prerequisites>
-
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
-
   <dependencies>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
-      <version>2.12.2</version>
-    </dependency>
-    <dependency>
-      <groupId>org.scalatest</groupId>
-      <artifactId>scalatest_2.12</artifactId>
-      <version>3.0.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scalacheck</groupId>
-      <artifactId>scalacheck_2.12</artifactId>
-      <version>1.13.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.1.5</version>
-    </dependency>
-
-    <dependency>
-      <groupId>de.codecentric.centerdevice</groupId>
-      <artifactId>centerdevice-nsmenufx</artifactId>
-      <version>2.1.4</version>
-    </dependency>
-    <dependency>
-      <groupId>org.backuity</groupId>
-      <artifactId>ansi-interpolator_2.12</artifactId>
-      <version>1.1.0</version>
-      <scope>provided</scope>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.wolery.owl</groupId>
-      <artifactId>owl</artifactId>
-      <version>1.0.0</version>
-    </dependency>
+      <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-compiler</artifactId>
+        <version>2.12.2</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-library</artifactId>
+        <version>2.12.2</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.scala-lang</groupId>
+        <artifactId>scala-reflect</artifactId>
+        <version>2.12.2</version>
+        <scope>compile</scope>
+      </dependency>
   </dependencies>
 
    <build>
-    <sourceDirectory>src/main/scala</sourceDirectory>
-    <testSourceDirectory>src/test/scala</testSourceDirectory>
-
     <plugins>
-
+    
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
       </plugin>
 
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
-        <version>3.2.1</version>
-        <executions>
-          <execution>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4.3</version>
-        <configuration>
-          <createDependencyReducedPom>false</createDependencyReducedPom>
-        </configuration>
         <executions>
           <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
             <configuration>
               <transformers>
                 <transformer
@@ -141,7 +79,7 @@
                     <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
                     <Artifact-Id>${project.artifactId}</Artifact-Id>
                     <Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
-                    <Main-Class>com.wolery.owl.owl</Main-Class>
+                    <Main-Class>com.wolery.Main</Main-Class>
                   </manifestEntries>
                 </transformer>
               </transformers>
