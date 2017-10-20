@@ -32,32 +32,13 @@
   <dependencies>
     <dependency>
       <groupId>org.scala-lang</groupId>
-      <artifactId>scala-compiler</artifactId>
-      <version>2.12.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-      <version>2.12.2</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-reflect</artifactId>
-      <version>2.12.2</version>
-      <scope>compile</scope>
     </dependency>
   </dependencies>
 
    <build>
     <plugins>
     
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
@@ -77,6 +58,7 @@
                     <Implementation-Version>${project.version}</Implementation-Version>
                     <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>
                     <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+                    <BOGUS>some random text</BOGUS>
                     <Artifact-Id>${project.artifactId}</Artifact-Id>
                     <Build-Timestamp>${maven.build.timestamp}</Build-Timestamp>
                     <Main-Class>com.wolery.Main</Main-Class>
