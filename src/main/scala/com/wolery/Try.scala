@@ -14,9 +14,10 @@
 
 package com.wolery
 
+import owl.util.Logging
 import java.util.jar.Manifest
 
-object Main
+object Main extends Logging
 {
   def getManifestAttributes: Map[String,String] =
   {
