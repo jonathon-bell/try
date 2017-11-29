@@ -31,8 +31,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
+      <groupId>com.wolery.owl</groupId>
+      <artifactId>owl-core</artifactId> 
+      <version>1.0.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
