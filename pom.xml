@@ -13,12 +13,12 @@
     <relativePath>../pom/pom.xml</relativePath>
   </parent>
   
-  <groupId>com.wolery.try</groupId>
-  <artifactId>try</artifactId>
+  <groupId>com.wolery.zed</groupId>
+  <artifactId>zed</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>Try</name>
+  <name>Zed</name>
   <description>Experimental Project</description>
   <url>https://github.com/wolery/try</url>
   <inceptionYear>January 2016</inceptionYear>
@@ -30,7 +30,7 @@
   </scm>
 
   <properties>
-    <project.build.mainClass>com.wolery.Main</project.build.mainClass>
+    <project.build.mainClass>com.wolery.zed.Main</project.build.mainClass>
   </properties>
 
   <dependencies>

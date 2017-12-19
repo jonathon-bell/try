@@ -12,9 +12,9 @@
 //*                                                                   (| v |)
 //**********************************************************************w*w***
 
-package com.wolery
+package com.wolery.zed
 
-import owl.util.Logging
+import com.wolery.owl.util.Logging
 import java.util.jar.Manifest
 
 object Main extends Logging
