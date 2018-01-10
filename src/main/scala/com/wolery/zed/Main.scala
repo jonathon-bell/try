@@ -34,11 +34,31 @@ object Main extends Logging
     map.toMap
   }
 
+//  def main(args: Array[String]): Unit =
+//  {
+//  for ((k,v) <-getManifestAttributes)
+//    println(k + ": " + v)
+//  }
   def main(args: Array[String]): Unit =
   {
-  for ((k,v) <-getManifestAttributes)
-    println(k + ": " + v)
+    CreateSequence.main(args)
   }
 }
 
 //****************************************************************************
+/*
+
+create sequence
+  form code
+  from command line
+  from DSL
+  from Pattern/Key/Scale/Groove/ gui
+  from davsed file
+
+save S to file
+drag drop to Logic
+
+animate sequence master=logic
+animate sequence master=owl, slave=logic
+
+*/
