@@ -20,13 +20,13 @@
 
   <name>Zed</name>
   <description>Experimental Project</description>
-  <url>https://github.com/wolery/try</url>
+  <url>https://github.com/jonathon-bell/zed</url>
   <inceptionYear>January 2016</inceptionYear>
   
   <scm>
     <url>https://github.com/jonathon-bell/try</url>
-    <connection>scm:git:git://github.com/jonathon-bell/try.git</connection>
-    <developerConnection>scm:git:git@github.com:jonathon-bell/try.git</developerConnection>
+    <connection>scm:git:git://github.com/jonathon-bell/zed.git</connection>
+    <developerConnection>scm:git:git@github.com:jonathon-bell/zed.git</developerConnection>
   </scm>
 
   <properties>

@@ -12,37 +12,22 @@
 //*                                                                   (| v |)
 //**********************************************************************w*w***
 
-package com.wolery.zed
+package com.wolery
+package zed
 
 import com.wolery.owl.util.Logging
-import java.util.jar.Manifest
 
 object Main extends Logging
 {
-  def getManifestAttributes: Map[String,String] =
-  {
-    val manifest = new Manifest(Thread.currentThread
-                               .getContextClassLoader
-                               .getResourceAsStream("META-INF/MANIFEST.MF"))
-    val map = collection.mutable.Map[String,String]()
-
-    manifest.getMainAttributes.forEach
-    {
-      case (k,v) ⇒ map += k.toString → v.toString
-    }
-
-    map.toMap
-  }
-
-//  def main(args: Array[String]): Unit =
-//  {
-//  for ((k,v) <-getManifestAttributes)
-//    println(k + ": " + v)
-//  }
   def main(args: Array[String]): Unit =
   {
-    CreateSequence.main(args)
+    for ((k, v) ← owl.util.manifest.attributes)
+      println(k + ": " + v)
   }
+//  def main(args: Array[String]): Unit =
+//  {
+//    CreateSequence.main(args)
+//  }
 }
 
 //****************************************************************************
