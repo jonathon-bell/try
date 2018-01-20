@@ -15,7 +15,9 @@
 package com.wolery
 package zed
 
-import com.wolery.owl.util.Logging
+import owl.util.Logging
+
+//****************************************************************************
 
 object Main extends Logging
 {
@@ -24,26 +26,6 @@ object Main extends Logging
     for ((k, v) ← owl.util.manifest.attributes)
       println(k + ": " + v)
   }
-//  def main(args: Array[String]): Unit =
-//  {
-//    CreateSequence.main(args)
-//  }
 }
 
 //****************************************************************************
-/*
-
-create sequence
-  form code
-  from command line
-  from DSL
-  from Pattern/Key/Scale/Groove/ gui
-  from davsed file
-
-save S to file
-drag drop to Logic
-
-animate sequence master=logic
-animate sequence master=owl, slave=logic
-
-*/
