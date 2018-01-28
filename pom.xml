@@ -48,15 +48,13 @@
 
   <dependencies>
       <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>owl-core</artifactId>
-        <version>${project.version}</version>
+        <groupId>com.wolery</groupId>
+        <artifactId>nest</artifactId>
       </dependency>
   </dependencies>
 
   <build>
     <plugins>
-
       <plugin>
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>

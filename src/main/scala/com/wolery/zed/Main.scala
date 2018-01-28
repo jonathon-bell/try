@@ -15,7 +15,7 @@
 package com.wolery
 package zed
 
-import owl.util.Logging
+import util.Logging
 
 //****************************************************************************
 
@@ -23,7 +23,7 @@ object Main extends Logging
 {
   def main(args: Array[String]): Unit =
   {
-    for ((k, v) ← owl.util.manifest.attributes)
+    for ((k, v) ← util.manifest.attributes)
       println(k + ": " + v)
   }
 }
