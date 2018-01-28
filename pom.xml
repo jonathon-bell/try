@@ -59,12 +59,10 @@
         <groupId>net.alchim31.maven</groupId>
         <artifactId>scala-maven-plugin</artifactId>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
       </plugin>
-
       <plugin>
         <artifactId>exec-maven-plugin</artifactId>
         <groupId>org.codehaus.mojo</groupId>
@@ -72,7 +70,6 @@
           <executable>etc/bind.sh</executable>
         </configuration>
       </plugin>
-
     </plugins>
   </build>
 </project>
