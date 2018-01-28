@@ -47,6 +47,10 @@
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>com.wolery</groupId>
+      <artifactId>nest</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
