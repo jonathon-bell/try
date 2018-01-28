@@ -15,11 +15,9 @@
 package com.wolery
 package zed
 
-import util.Logging
-
 //****************************************************************************
 
-object Main extends Logging
+object Main extends util.Logging
 {
   def main(args: Array[String]): Unit =
   {
