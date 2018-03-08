@@ -13,6 +13,6 @@
 #**                                                                   (| v |)
 #***********************************************************************w*w***
 
-cat etc/launch.sh target/zed-*.jar > zed && chmod +x zed
+cat etc/launch.sh target/zed-*.jar > target/zed && chmod +x target/zed
 
 #*****************************************************************************
