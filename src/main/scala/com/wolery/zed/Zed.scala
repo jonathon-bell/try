@@ -17,7 +17,7 @@ package zed
 
 //****************************************************************************
 
-object Main extends util.Logging
+object zed extends util.Logging
 {
   def main(args: Array[String]): Unit =
   {
