@@ -33,7 +33,7 @@
   <name>Zed</name>
   <description>A disposable command line application for testing out ideas.</description>
   <url>https://github.com/jonathon-bell/zed</url>
-  <inceptionYear>January 2016</inceptionYear>
+  <inceptionYear>2016</inceptionYear>
   
   <scm>
     <url>https://github.com/jonathon-bell/zed</url>
