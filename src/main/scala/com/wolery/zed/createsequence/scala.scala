@@ -17,8 +17,9 @@ package com.wolery.zed
 
 //****************************************************************************
 
-import java.io.{ File, IOException }
-import javax.sound.midi.{ InvalidMidiDataException, MidiEvent, MidiSystem, Sequence, ShortMessage, Track }
+import java.io.File
+
+import javax.sound.midi.{MidiEvent, MidiSystem, Sequence, ShortMessage, Track}
 
 //****************************************************************************
 
